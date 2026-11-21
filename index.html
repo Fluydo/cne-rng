@@ -1343,18 +1343,36 @@ main {
    COMPREHENSIVE MOBILE RESPONSIVE STYLES
    ========================================================= */
 @media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button, .tab-link, .btn-action, .user-tag, .stat-item, .roll-equipped-line, .ghost-btn {
+    touch-action: manipulation;
+  }
+
+  body {
+    padding-bottom: 2rem;
+  }
+
   header {
-    padding: 0.85rem 1rem !important;
+    padding: 0.7rem 0.85rem !important;
+  }
+  .brand {
+    gap: 0.35rem !important;
+  }
+  .brand-badge {
+    padding: 0.18rem 0.45rem !important;
+    font-size: 0.75rem !important;
   }
   .brand-title {
     font-size: 1.15rem !important;
   }
   .nav-stats {
-    gap: 0.5rem !important;
+    gap: 0.35rem !important;
   }
   .stat-item {
-    padding: 0.25rem 0.6rem !important;
-    font-size: 0.78rem !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
   }
   .stat-label {
     display: none !important;
@@ -1368,8 +1386,8 @@ main {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     white-space: nowrap !important;
-    padding: 0.4rem 1rem 1rem !important;
-    gap: 1.25rem !important;
+    padding: 0.4rem 0.85rem 0.85rem !important;
+    gap: 0.5rem !important;
     scrollbar-width: none;
   }
   .tab-nav::-webkit-scrollbar {
@@ -1379,114 +1397,245 @@ main {
     display: none !important;
   }
   .tab-link {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
     flex-shrink: 0 !important;
+    padding: 0.45rem 0.85rem !important;
+    border-radius: 999px !important;
   }
 
+  main {
+    padding: 0 0.65rem 2rem !important;
+  }
+
+  /* PITY BAR ON MOBILE */
+  .pity-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0.4rem 0 0.85rem !important;
+  }
+
+  /* SLOT REEL ON MOBILE */
+  .summon-stage {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
   .slot-reel-open {
     width: 100% !important;
-    max-width: 95vw !important;
+    max-width: 100% !important;
     height: 240px !important;
+    border-radius: 14px !important;
   }
   .reel-crosshair {
     height: 65px !important;
+    border-top: 2px solid rgba(245, 197, 24, 0.85) !important;
+    border-bottom: 2px solid rgba(245, 197, 24, 0.85) !important;
+    box-shadow: inset 0 0 15px rgba(245, 197, 24, 0.12), 0 0 12px rgba(245, 197, 24, 0.25) !important;
   }
   .reel-item {
     height: 65px !important;
-    padding: 0 0.85rem !important;
-    gap: 0.65rem !important;
+    padding: 0 0.55rem !important;
+    gap: 0.45rem !important;
+    box-sizing: border-box !important;
   }
   .reel-item .rarity-tag {
-    min-width: 72px !important;
-    font-size: 0.65rem !important;
-    padding: 0.2rem 0.45rem !important;
+    min-width: 66px !important;
+    max-width: 72px !important;
+    font-size: 0.6rem !important;
+    padding: 0.18rem 0.35rem !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
   }
   .reel-item-name {
-    font-size: 1rem !important;
+    font-size: 0.92rem !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   .reel-item .rounded-stars-row {
-    gap: 2px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+    gap: 1.5px !important;
   }
   .reel-item .rounded-star-svg {
-    width: 11px !important;
-    height: 11px !important;
+    width: 9px !important;
+    height: 9px !important;
   }
 
+  /* REVEAL SCREEN ON MOBILE */
   .reveal-floating {
-    max-width: 95vw !important;
-    padding: 0 0.5rem;
+    max-width: 94vw !important;
+    width: 100% !important;
+    padding: 1.4rem 0.85rem !important;
   }
   .reveal-floating .reveal-name {
-    font-size: 1.85rem !important;
-    margin: 0.8rem auto 0.4rem !important;
+    font-size: 1.7rem !important;
+    margin: 0.6rem auto 0.35rem !important;
+    line-height: 1.2 !important;
   }
   .reveal-floating .rounded-stars-row {
-    gap: 5px !important;
+    gap: 3px !important;
   }
   .reveal-floating .rounded-star-svg {
-    width: 17px !important;
-    height: 17px !important;
+    width: 14px !important;
+    height: 14px !important;
   }
   .reveal-stats-row {
-    gap: 1.8rem !important;
-    margin: 1rem 0 1.8rem !important;
+    gap: 1.4rem !important;
+    margin: 0.85rem 0 1.4rem !important;
+  }
+  .reveal-floating .btn-action {
+    width: 100% !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.95rem !important;
+    justify-content: center !important;
   }
 
+  /* SUMMON BUTTONS ON MOBILE */
   .summon-actions {
     flex-direction: column !important;
     width: 100% !important;
-    max-width: 92vw !important;
-    gap: 0.75rem !important;
+    max-width: 100% !important;
+    gap: 0.65rem !important;
+    margin-top: 1rem !important;
   }
   .summon-actions .btn-action {
     width: 100% !important;
     justify-content: center !important;
-    padding: 0.85rem 1.2rem !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.95rem !important;
   }
   .roll-equipped-line {
-    max-width: 92vw !important;
+    max-width: 100% !important;
     width: 100% !important;
-    font-size: 0.8rem !important;
-    padding: 0.55rem 0.85rem !important;
+    font-size: 0.78rem !important;
+    padding: 0.45rem 0.75rem !important;
+    min-height: 38px !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    gap: 0.4rem !important;
+    gap: 0.35rem !important;
   }
 
+  /* MULTI PULL ON MOBILE */
   .multi-grid-open {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.65rem !important;
+    gap: 0.5rem !important;
   }
   .multi-slot {
-    padding: 0.75rem 0.5rem !important;
+    padding: 0.65rem 0.45rem !important;
   }
   .multi-slot-name {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
   .multi-slot .rounded-star-svg {
-    width: 10px !important;
-    height: 10px !important;
-    gap: 2px !important;
+    width: 9px !important;
+    height: 9px !important;
+    gap: 1.5px !important;
   }
-
-  .compendium-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-    gap: 0.75rem !important;
-  }
-
-  .modal-open {
-    width: 94vw !important;
-    max-height: 88vh !important;
-    padding: 1.3rem 1.1rem !important;
-  }
-  .items-modal-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+  .multi-actions {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-direction: column !important;
     gap: 0.65rem !important;
   }
+  .multi-actions .btn-action {
+    width: 100% !important;
+    justify-content: center !important;
+  }
 
+  /* COMPENDIUM & INVENTORY ON MOBILE */
+  .filter-bar {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 0.45rem !important;
+    scrollbar-width: none;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    gap: 0.4rem !important;
+  }
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-btn {
+    flex-shrink: 0 !important;
+    font-size: 0.72rem !important;
+    padding: 0.35rem 0.65rem !important;
+  }
+  .compendium-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.6rem !important;
+  }
+  .compendium-item {
+    padding: 0.75rem 0.6rem !important;
+  }
+  .compendium-item-name {
+    font-size: 0.85rem !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .compendium-item .rounded-star-svg {
+    width: 9px !important;
+    height: 9px !important;
+  }
+
+  /* UPGRADES ON MOBILE */
+  .upgrades-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  .upgrade-card {
+    padding: 1rem 0.85rem !important;
+  }
+
+  /* QUESTS & MILESTONES ON MOBILE */
+  .missions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  .mission-card {
+    padding: 0.85rem !important;
+  }
   .mission-reward-line {
     flex-wrap: wrap !important;
-    gap: 0.4rem !important;
+    gap: 0.35rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* LEADERBOARD ON MOBILE */
+  .table-responsive {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  table th, table td {
+    padding: 0.55rem 0.45rem !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* MODALS ON MOBILE */
+  .modal-overlay {
+    padding: 0.5rem !important;
+    align-items: center !important;
+  }
+  .modal-open {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 88vh !important;
+    padding: 1.15rem 0.95rem !important;
+    border-radius: 16px !important;
+    overflow-y: auto !important;
+  }
+  .items-modal-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
   }
 }
 </style>
@@ -2822,9 +2971,12 @@ function performSingleRoll() {
     track.appendChild(item);
   });
 
-  const ITEM_HEIGHT = 75;
+  const reelContainer = document.querySelector('.slot-reel-open');
+  const firstItem = track.querySelector('.reel-item');
+  const ITEM_HEIGHT = (firstItem && firstItem.getBoundingClientRect().height > 0) ? firstItem.getBoundingClientRect().height : (window.innerWidth <= 768 ? 65 : 75);
+  const CONTAINER_HEIGHT = (reelContainer && reelContainer.getBoundingClientRect().height > 0) ? reelContainer.getBoundingClientRect().height : (window.innerWidth <= 768 ? 240 : 270);
   const TARGET_INDEX = 30;
-  const CONTAINER_CENTER = 270 / 2;
+  const CONTAINER_CENTER = CONTAINER_HEIGHT / 2;
   const FINAL_TRANSLATE = TARGET_INDEX * ITEM_HEIGHT - (CONTAINER_CENTER - ITEM_HEIGHT / 2);
 
   const duration = Math.max(1600, 3600 - gameState.upgrades.speed * 200);
@@ -4201,12 +4353,31 @@ function initReel() {
     `;
     track.appendChild(item);
   });
-  const ITEM_HEIGHT = 75;
+  const reelContainer = document.querySelector('.slot-reel-open');
+  const firstItem = track.querySelector('.reel-item');
+  const ITEM_HEIGHT = (firstItem && firstItem.getBoundingClientRect().height > 0) ? firstItem.getBoundingClientRect().height : (window.innerWidth <= 768 ? 65 : 75);
+  const CONTAINER_HEIGHT = (reelContainer && reelContainer.getBoundingClientRect().height > 0) ? reelContainer.getBoundingClientRect().height : (window.innerWidth <= 768 ? 240 : 270);
   const TARGET_INDEX = 17;
-  const CONTAINER_CENTER = 270 / 2;
+  const CONTAINER_CENTER = CONTAINER_HEIGHT / 2;
   const INITIAL_TRANSLATE = TARGET_INDEX * ITEM_HEIGHT - (CONTAINER_CENTER - ITEM_HEIGHT / 2);
   track.style.transform = `translateY(-${INITIAL_TRANSLATE}px)`;
 }
+
+// Re-align roulette position on mobile orientation change or window resize
+window.addEventListener('resize', () => {
+  if (!isRolling) {
+    const track = document.getElementById('reelTrack');
+    if (!track) return;
+    const reelContainer = document.querySelector('.slot-reel-open');
+    const firstItem = track.querySelector('.reel-item');
+    const itemHeight = (firstItem && firstItem.getBoundingClientRect().height > 0) ? firstItem.getBoundingClientRect().height : (window.innerWidth <= 768 ? 65 : 75);
+    const containerHeight = (reelContainer && reelContainer.getBoundingClientRect().height > 0) ? reelContainer.getBoundingClientRect().height : (window.innerWidth <= 768 ? 240 : 270);
+    const TARGET_INDEX = 17;
+    const containerCenter = containerHeight / 2;
+    const INITIAL_TRANSLATE = TARGET_INDEX * itemHeight - (containerCenter - itemHeight / 2);
+    track.style.transform = `translateY(-${INITIAL_TRANSLATE}px)`;
+  }
+});
 
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyA74ep4HC9ehikVIQP75H5zvkV6UwyLOyA",
