@@ -1,0 +1,215 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: /users/{userId}
+    // Document ID: Firebase Auth UID
+    // Fields:
+    //   - username: string (required, 1-64 chars) - User display name
+    //   - pfp: string (optional, 0-1000 chars) - Avatar URL
+    //   - created_at: timestamp (optional, immutable once set) - Account creation time
+    //   - updated_at: timestamp (optional) - Profile last updated time
+    //
+    // Collection: /game_states/{userId}
+    // Document ID: Firebase Auth UID
+    // Fields:
+    //   - state_json: string (required, 2-200000 chars) - Serialized game state
+    //   - username: string (optional, 1-64 chars) - Owner display name
+    //   - updated_at: timestamp (optional) - Time of state save
+    //   - total_rolls: number (optional, >= 0) - Total roll count
+    //   - coins: number (optional, >= 0) - Current coins balance
+    //   - unique: number (optional, >= 0) - Unique discoveries count
+    //   - best_pull_tier: string (optional, 1-32 chars) - Highest rarity tier achieved
+    //   - title: string (optional, 1-64 chars) - Equipped title name
+    //   - title_class: string (optional, 1-64 chars) - CSS class for equipped title
+    //
+    // Collection: /leaderboard/{userId}
+    // Document ID: Firebase Auth UID
+    // Fields:
+    //   - username: string (required, 1-64 chars) - Player username
+    //   - pfp: string (optional, 0-1000 chars) - Player avatar
+    //   - unique: number (optional, >= 0) - Total unique discoveries
+    //   - total_rolls: number (optional, >= 0) - Total rolls completed
+    //   - best_pull_tier: string (optional, 1-32 chars) - Highest rarity tier
+    //   - coins: number (optional, >= 0) - Coins count
+    //   - title: string (optional, 1-64 chars) - Equipped title
+    //   - title_class: string (optional, 1-64 chars) - Equipped title CSS class
+    //   - equipped_title: string (optional, 1-64 chars) - Alias for equipped title
+    //   - equipped_title_class: string (optional, 1-64 chars) - Alias for equipped title CSS class
+    //   - updated_at: timestamp (optional) - Ranking update timestamp
+    //
+    // Collection: /live_feed/{feedId}
+    // Document ID: Auto-generated document ID
+    // Fields:
+    //   - username: string (required, 1-64 chars) - Puller username
+    //   - character: string (required, 1-64 chars) - Pulled character name
+    //   - tier: string (required, 1-32 chars) - Character tier
+    //   - timestamp: timestamp (optional) - Pull time
+    //   - created_at: timestamp (optional) - Pull time alias
+    //   - user_id: string (optional, 1-128 chars) - Firebase Auth UID
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Global Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function isCreatedAtPreserved() {
+      return !('created_at' in resource.data) ||
+             !('created_at' in request.resource.data) ||
+             request.resource.data.created_at == resource.data.created_at;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return hasOnlyAllowedFields(['username', 'pfp', 'created_at', 'updated_at']) &&
+             data.username is string &&
+             data.username.size() >= 1 &&
+             data.username.size() <= 64 &&
+             (!('pfp' in data) || (data.pfp is string && data.pfp.size() <= 1000)) &&
+             (!('created_at' in data) || data.created_at is timestamp) &&
+             (!('updated_at' in data) || data.updated_at is timestamp);
+    }
+
+    function isValidGameState(data) {
+      return hasOnlyAllowedFields([
+               'state_json', 'username', 'updated_at', 'total_rolls',
+               'coins', 'unique', 'best_pull_tier', 'title', 'title_class'
+             ]) &&
+             hasRequiredFields(['state_json']) &&
+             data.state_json is string &&
+             data.state_json.size() >= 2 &&
+             data.state_json.size() <= 200000 &&
+             (!('username' in data) || (data.username is string && data.username.size() <= 64)) &&
+             (!('updated_at' in data) || data.updated_at is timestamp) &&
+             (!('total_rolls' in data) || (data.total_rolls is number && data.total_rolls >= 0)) &&
+             (!('coins' in data) || (data.coins is number && data.coins >= 0)) &&
+             (!('unique' in data) || (data.unique is number && data.unique >= 0)) &&
+             (!('best_pull_tier' in data) || (data.best_pull_tier is string && data.best_pull_tier.size() <= 32)) &&
+             (!('title' in data) || (data.title is string && data.title.size() <= 64)) &&
+             (!('title_class' in data) || (data.title_class is string && data.title_class.size() <= 64));
+    }
+
+    function isValidLeaderboardEntry(data) {
+      return hasOnlyAllowedFields([
+               'username', 'pfp', 'unique', 'total_rolls',
+               'best_pull_tier', 'coins', 'title', 'title_class',
+               'equipped_title', 'equipped_title_class', 'updated_at'
+             ]) &&
+             data.username is string &&
+             data.username.size() >= 1 &&
+             data.username.size() <= 64 &&
+             (!('pfp' in data) || (data.pfp is string && data.pfp.size() <= 1000)) &&
+             (!('unique' in data) || (data.unique is number && data.unique >= 0)) &&
+             (!('total_rolls' in data) || (data.total_rolls is number && data.total_rolls >= 0)) &&
+             (!('best_pull_tier' in data) || (data.best_pull_tier is string && data.best_pull_tier.size() <= 32)) &&
+             (!('coins' in data) || (data.coins is number && data.coins >= 0)) &&
+             (!('title' in data) || (data.title is string && data.title.size() <= 64)) &&
+             (!('title_class' in data) || (data.title_class is string && data.title_class.size() <= 64)) &&
+             (!('equipped_title' in data) || (data.equipped_title is string && data.equipped_title.size() <= 64)) &&
+             (!('equipped_title_class' in data) || (data.equipped_title_class is string && data.equipped_title_class.size() <= 64)) &&
+             (!('updated_at' in data) || data.updated_at is timestamp);
+    }
+
+    function isValidFeedItem(data) {
+      return hasOnlyAllowedFields(['username', 'character', 'tier', 'timestamp', 'created_at', 'user_id']) &&
+             hasRequiredFields(['username', 'character', 'tier']) &&
+             data.username is string &&
+             data.username.size() >= 1 &&
+             data.username.size() <= 64 &&
+             data.character is string &&
+             data.character.size() >= 1 &&
+             data.character.size() <= 64 &&
+             data.tier is string &&
+             data.tier.size() >= 1 &&
+             data.tier.size() <= 32 &&
+             (!('timestamp' in data) || data.timestamp is timestamp) &&
+             (!('created_at' in data) || data.created_at is timestamp) &&
+             (!('user_id' in data) || (data.user_id is string && data.user_id == request.auth.uid));
+    }
+
+    // ===============================================================
+    // Default Deny Root
+    // ===============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // 1. User Profiles
+    match /users/{userId} {
+      // Authenticated users can read user profiles
+      allow read: if isAuthenticated();
+
+      // Users can only create their own profile with validated fields
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+
+      // Users can only update their own profile; preserves created_at if set
+      allow update: if isOwner(userId) &&
+                       isValidUser(request.resource.data) &&
+                       isCreatedAtPreserved();
+
+      allow delete: if false;
+    }
+
+    // 2. Game States
+    match /game_states/{userId} {
+      // Authenticated users can read game states
+      allow read: if isAuthenticated();
+
+      // Users can only create or update their own game state
+      allow create, update: if isOwner(userId) && isValidGameState(request.resource.data);
+
+      allow delete: if false;
+    }
+
+    // 3. Leaderboard
+    match /leaderboard/{userId} {
+      // Publicly readable by all users (authenticated or unauthenticated)
+      allow read: if true;
+
+      // Writable only by the matching authenticated user
+      allow create, update: if isOwner(userId) && isValidLeaderboardEntry(request.resource.data);
+
+      allow delete: if false;
+    }
+
+    // 4. Live Feed
+    match /live_feed/{feedId} {
+      // Publicly readable by all users
+      allow read: if true;
+
+      // Any authenticated user can create pull announcements
+      allow create: if isAuthenticated() && isValidFeedItem(request.resource.data);
+
+      // Strictly no update or delete on live announcements
+      allow update, delete: if false;
+    }
+  }
+}
