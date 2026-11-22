@@ -7,50 +7,23 @@ service cloud.firestore {
     // ===============================================================
     //
     // Collection: /users/{userId}
-    // Document ID: Firebase Auth UID
-    // Fields:
-    //   - username: string (required, 1-64 chars) - User display name
-    //   - pfp: string (optional, 0-1000 chars) - Avatar URL
-    //   - created_at: timestamp (optional, immutable once set) - Account creation time
-    //   - updated_at: timestamp (optional) - Profile last updated time
+    // Fields: username, pfp, created_at, updated_at,
+    //         bio, equipped_font, equipped_border, equipped_theme,
+    //         name_font, avatar_border, profile_theme
     //
     // Collection: /game_states/{userId}
-    // Document ID: Firebase Auth UID
-    // Fields:
-    //   - state_json: string (required, 2-200000 chars) - Serialized game state
-    //   - username: string (optional, 1-64 chars) - Owner display name
-    //   - updated_at: timestamp (optional) - Time of state save
-    //   - total_rolls: number (optional, >= 0) - Total roll count
-    //   - coins: number (optional, >= 0) - Current coins balance
-    //   - unique: number (optional, >= 0) - Unique discoveries count
-    //   - best_pull_tier: string (optional, 1-32 chars) - Highest rarity tier achieved
-    //   - title: string (optional, 1-64 chars) - Equipped title name
-    //   - title_class: string (optional, 1-64 chars) - CSS class for equipped title
+    // Fields: state_json, username, updated_at, total_rolls,
+    //         coins, unique, best_pull_tier, title, title_class,
+    //         equipped_title, equipped_title_class
     //
     // Collection: /leaderboard/{userId}
-    // Document ID: Firebase Auth UID
-    // Fields:
-    //   - username: string (required, 1-64 chars) - Player username
-    //   - pfp: string (optional, 0-1000 chars) - Player avatar
-    //   - unique: number (optional, >= 0) - Total unique discoveries
-    //   - total_rolls: number (optional, >= 0) - Total rolls completed
-    //   - best_pull_tier: string (optional, 1-32 chars) - Highest rarity tier
-    //   - coins: number (optional, >= 0) - Coins count
-    //   - title: string (optional, 1-64 chars) - Equipped title
-    //   - title_class: string (optional, 1-64 chars) - Equipped title CSS class
-    //   - equipped_title: string (optional, 1-64 chars) - Alias for equipped title
-    //   - equipped_title_class: string (optional, 1-64 chars) - Alias for equipped title CSS class
-    //   - updated_at: timestamp (optional) - Ranking update timestamp
+    // Fields: username, pfp, unique, total_rolls, best_pull_tier,
+    //         coins, title, title_class, equipped_title,
+    //         equipped_title_class, updated_at,
+    //         bio, equipped_font, equipped_border, equipped_theme
     //
     // Collection: /live_feed/{feedId}
-    // Document ID: Auto-generated document ID
-    // Fields:
-    //   - username: string (required, 1-64 chars) - Puller username
-    //   - character: string (required, 1-64 chars) - Pulled character name
-    //   - tier: string (required, 1-32 chars) - Character tier
-    //   - timestamp: timestamp (optional) - Pull time
-    //   - created_at: timestamp (optional) - Pull time alias
-    //   - user_id: string (optional, 1-128 chars) - Firebase Auth UID
+    // Fields: username, character, tier, timestamp, created_at, user_id
     //
     // ===============================================================
 
@@ -85,24 +58,36 @@ service cloud.firestore {
     // ===============================================================
 
     function isValidUser(data) {
-      return hasOnlyAllowedFields(['username', 'pfp', 'created_at', 'updated_at']) &&
+      return hasOnlyAllowedFields([
+                 'username', 'pfp', 'created_at', 'updated_at',
+                 'bio', 'equipped_font', 'equipped_border', 'equipped_theme',
+                 'name_font', 'avatar_border', 'profile_theme'
+               ]) &&
              data.username is string &&
              data.username.size() >= 1 &&
              data.username.size() <= 64 &&
              (!('pfp' in data) || (data.pfp is string && data.pfp.size() <= 1000)) &&
              (!('created_at' in data) || data.created_at is timestamp) &&
-             (!('updated_at' in data) || data.updated_at is timestamp);
+             (!('updated_at' in data) || data.updated_at is timestamp) &&
+             (!('bio' in data) || (data.bio is string && data.bio.size() <= 500)) &&
+             (!('equipped_font' in data) || (data.equipped_font is string && data.equipped_font.size() <= 128)) &&
+             (!('equipped_border' in data) || (data.equipped_border is string && data.equipped_border.size() <= 128)) &&
+             (!('equipped_theme' in data) || (data.equipped_theme is string && data.equipped_theme.size() <= 128)) &&
+             (!('name_font' in data) || (data.name_font is string && data.name_font.size() <= 128)) &&
+             (!('avatar_border' in data) || (data.avatar_border is string && data.avatar_border.size() <= 128)) &&
+             (!('profile_theme' in data) || (data.profile_theme is string && data.profile_theme.size() <= 128));
     }
 
     function isValidGameState(data) {
       return hasOnlyAllowedFields([
-               'state_json', 'username', 'updated_at', 'total_rolls',
-               'coins', 'unique', 'best_pull_tier', 'title', 'title_class'
-             ]) &&
+                 'state_json', 'username', 'updated_at', 'total_rolls',
+                 'coins', 'unique', 'best_pull_tier', 'title', 'title_class',
+                 'equipped_title', 'equipped_title_class'
+               ]) &&
              hasRequiredFields(['state_json']) &&
              data.state_json is string &&
              data.state_json.size() >= 2 &&
-             data.state_json.size() <= 200000 &&
+             data.state_json.size() <= 500000 &&
              (!('username' in data) || (data.username is string && data.username.size() <= 64)) &&
              (!('updated_at' in data) || data.updated_at is timestamp) &&
              (!('total_rolls' in data) || (data.total_rolls is number && data.total_rolls >= 0)) &&
@@ -110,15 +95,18 @@ service cloud.firestore {
              (!('unique' in data) || (data.unique is number && data.unique >= 0)) &&
              (!('best_pull_tier' in data) || (data.best_pull_tier is string && data.best_pull_tier.size() <= 32)) &&
              (!('title' in data) || (data.title is string && data.title.size() <= 64)) &&
-             (!('title_class' in data) || (data.title_class is string && data.title_class.size() <= 64));
+             (!('title_class' in data) || (data.title_class is string && data.title_class.size() <= 64)) &&
+             (!('equipped_title' in data) || (data.equipped_title is string && data.equipped_title.size() <= 64)) &&
+             (!('equipped_title_class' in data) || (data.equipped_title_class is string && data.equipped_title_class.size() <= 64));
     }
 
     function isValidLeaderboardEntry(data) {
       return hasOnlyAllowedFields([
-               'username', 'pfp', 'unique', 'total_rolls',
-               'best_pull_tier', 'coins', 'title', 'title_class',
-               'equipped_title', 'equipped_title_class', 'updated_at'
-             ]) &&
+                 'username', 'pfp', 'unique', 'total_rolls',
+                 'best_pull_tier', 'coins', 'title', 'title_class',
+                 'equipped_title', 'equipped_title_class', 'updated_at',
+                 'bio', 'equipped_font', 'equipped_border', 'equipped_theme'
+               ]) &&
              data.username is string &&
              data.username.size() >= 1 &&
              data.username.size() <= 64 &&
@@ -131,6 +119,10 @@ service cloud.firestore {
              (!('title_class' in data) || (data.title_class is string && data.title_class.size() <= 64)) &&
              (!('equipped_title' in data) || (data.equipped_title is string && data.equipped_title.size() <= 64)) &&
              (!('equipped_title_class' in data) || (data.equipped_title_class is string && data.equipped_title_class.size() <= 64)) &&
+             (!('bio' in data) || (data.bio is string && data.bio.size() <= 500)) &&
+             (!('equipped_font' in data) || (data.equipped_font is string && data.equipped_font.size() <= 128)) &&
+             (!('equipped_border' in data) || (data.equipped_border is string && data.equipped_border.size() <= 128)) &&
+             (!('equipped_theme' in data) || (data.equipped_theme is string && data.equipped_theme.size() <= 128)) &&
              (!('updated_at' in data) || data.updated_at is timestamp);
     }
 
@@ -164,51 +156,32 @@ service cloud.firestore {
 
     // 1. User Profiles
     match /users/{userId} {
-      // Authenticated users can read user profiles
       allow read: if isAuthenticated();
-
-      // Users can only create their own profile with validated fields
       allow create: if isOwner(userId) && isValidUser(request.resource.data);
-
-      // Users can only update their own profile; preserves created_at if set
       allow update: if isOwner(userId) &&
                        isValidUser(request.resource.data) &&
                        isCreatedAtPreserved();
-
       allow delete: if false;
     }
 
     // 2. Game States
     match /game_states/{userId} {
-      // Authenticated users can read game states
       allow read: if isAuthenticated();
-
-      // Users can only create or update their own game state
       allow create, update: if isOwner(userId) && isValidGameState(request.resource.data);
-
       allow delete: if false;
     }
 
     // 3. Leaderboard
     match /leaderboard/{userId} {
-      // Publicly readable by all users (authenticated or unauthenticated)
       allow read: if true;
-
-      // Writable only by the matching authenticated user
       allow create, update: if isOwner(userId) && isValidLeaderboardEntry(request.resource.data);
-
       allow delete: if false;
     }
 
     // 4. Live Feed
     match /live_feed/{feedId} {
-      // Publicly readable by all users
       allow read: if true;
-
-      // Any authenticated user can create pull announcements
       allow create: if isAuthenticated() && isValidFeedItem(request.resource.data);
-
-      // Strictly no update or delete on live announcements
       allow update, delete: if false;
     }
   }

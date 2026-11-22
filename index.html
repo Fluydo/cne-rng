@@ -25,8 +25,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<!-- Fonts: Plus Jakarta Sans (rarity tags), Outfit (UI & buttons), Syne (headings), JetBrains Mono (stats) -->
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<!-- Fonts: Plus Jakarta Sans, Outfit, Syne, JetBrains Mono, Cinzel, Orbitron, Press Start 2P -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Press+Start+2P&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <!-- Canvas Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <!-- Lucide Icons -->
@@ -1338,6 +1338,150 @@ main {
   color: #fbbf24;
   border: 1px solid rgba(245, 158, 11, 0.35);
 }
+.role-tag.role-owner {
+  background: rgba(245, 197, 24, 0.18);
+  color: #fef08a;
+  border: 1px solid rgba(245, 197, 24, 0.45);
+}
+.role-tag.role-driver {
+  background: rgba(56, 189, 248, 0.16);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+.role-tag.role-mystery {
+  background: rgba(236, 72, 153, 0.16);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+/* =========================================================
+   PROFILE FONTS, BORDERS, THEMES & SEARCH INPUTS
+   ========================================================= */
+.font-outfit { font-family: 'Outfit', sans-serif !important; }
+.font-syne { font-family: 'Syne', sans-serif !important; }
+.font-jetbrains { font-family: 'JetBrains Mono', monospace !important; }
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+.font-cinzel { font-family: 'Cinzel', serif !important; }
+.font-orbitron { font-family: 'Orbitron', sans-serif !important; }
+.font-pressstart { font-family: 'Press Start 2P', cursive !important; font-size: 0.75em !important; }
+
+.border-none { border: 2px solid transparent !important; }
+.border-gold { border: 2.5px solid #f5c518 !important; box-shadow: 0 0 10px rgba(245, 197, 24, 0.6) !important; }
+.border-neon { border: 2.5px solid #38bdf8 !important; box-shadow: 0 0 12px rgba(56, 189, 248, 0.7) !important; }
+.border-mythic { border: 2.5px solid #ec4899 !important; box-shadow: 0 0 14px rgba(236, 72, 153, 0.7) !important; }
+.border-legend { border: 2.5px solid #ffffff !important; box-shadow: 0 0 14px #fef08a, 0 0 6px #f59e0b !important; }
+.border-emerald { border: 2.5px solid #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.7) !important; }
+.border-rainbow { border: 2.5px solid #c084fc !important; box-shadow: 0 0 15px rgba(192, 132, 252, 0.8), 0 0 8px #38bdf8 !important; }
+
+.theme-default { background: rgba(14, 15, 23, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); }
+.theme-neon { background: radial-gradient(circle at 80% 20%, rgba(56,189,248,0.18) 0%, rgba(15,23,42,0.95) 70%); border: 1px solid rgba(56,189,248,0.3); }
+.theme-royal { background: radial-gradient(circle at 50% 0%, rgba(245,197,24,0.18) 0%, rgba(20,15,5,0.95) 75%); border: 1px solid rgba(245,197,24,0.35); }
+.theme-mythic { background: radial-gradient(circle at 20% 80%, rgba(236,72,153,0.2) 0%, rgba(26,10,30,0.95) 75%); border: 1px solid rgba(236,72,153,0.35); }
+.theme-void { background: radial-gradient(circle at 50% 50%, rgba(99,102,241,0.22) 0%, rgba(8,8,16,0.98) 75%); border: 1px solid rgba(99,102,241,0.35); }
+.theme-emerald { background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.2) 0%, rgba(6,22,18,0.95) 75%); border: 1px solid rgba(16,185,129,0.35); }
+
+/* SEARCH BAR COMPONENT */
+.search-bar-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.2rem;
+}
+.search-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.search-input:focus {
+  border-color: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 15px rgba(245, 197, 24, 0.15);
+}
+.search-icon-inside {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+/* HIGH-ROLLER SHOP STYLES */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+.shop-card {
+  background: rgba(14, 15, 23, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.shop-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 197, 24, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+.shop-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+.shop-item-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.shop-item-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+.shop-item-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.shop-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.shop-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
 
 /* =========================================================
    COMPREHENSIVE MOBILE RESPONSIVE STYLES
@@ -1671,7 +1815,7 @@ main {
     </div>
     <div class="stat-item cyan">
       <span class="stat-label">Collection</span>
-      <span class="stat-val" id="navProgress">0 / 33</span>
+      <span class="stat-val" id="navProgress">0 / 85</span>
     </div>
   </div>
 
@@ -1700,6 +1844,7 @@ main {
   <button class="tab-link" id="tabBtn-collection" onclick="switchTab('collection')">Compendium <span class="tab-key">5</span></button>
   <button class="tab-link" id="tabBtn-quests" onclick="switchTab('quests')">Quests & Milestones <span class="tab-key">6</span></button>
   <button class="tab-link" id="tabBtn-leaderboard" onclick="switchTab('leaderboard')">Leaderboard <span class="tab-key">7</span></button>
+  <button class="tab-link" id="tabBtn-shop" onclick="switchTab('shop')">Shop <span class="tab-key">8</span></button>
 </nav>
 
 <main>
@@ -1850,6 +1995,9 @@ main {
       <button class="sub-tab-btn active" id="invTabChars" onclick="switchInvSubTab('chars')">Characters</button>
       <button class="sub-tab-btn" id="invTabItems" onclick="switchInvSubTab('items')">Consumable Items</button>
     </div>
+    <div class="search-bar-wrap" style="margin:0.75rem 0 1rem;">
+      <input class="search-input" id="inventorySearchInput" type="text" placeholder="🔍 Search inventory..." oninput="renderInventoryView()"/>
+    </div>
 
     <div id="invSubChars">
       <div class="compendium-grid-open" id="inventoryCharsGrid"></div>
@@ -1865,6 +2013,9 @@ main {
     <div class="sub-nav-tabs">
       <button class="sub-tab-btn active" id="collTabChars" onclick="switchCollSubTab('chars')">Characters</button>
       <button class="sub-tab-btn" id="collTabItems" onclick="switchCollSubTab('items')">Items Encyclopedia</button>
+    </div>
+    <div class="search-bar-wrap" style="margin:0.75rem 0 1rem;">
+      <input class="search-input" id="compendiumSearchInput" type="text" placeholder="🔍 Search characters..." oninput="renderCollectionView()"/>
     </div>
 
     <div class="filter-group" id="collectionFilters">
@@ -1895,11 +2046,14 @@ main {
 
   <!-- LEADERBOARD -->
   <div class="view-section" id="view-leaderboard">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
       <h2 style="font-family:'Syne'; font-size:1.6rem; font-weight:800;">Rankings</h2>
       <button class="ghost-btn" onclick="fetchLeaderboard()">
         <i data-lucide="refresh-cw" style="width:16px;height:16px;"></i> Refresh
       </button>
+    </div>
+    <div class="search-bar-wrap" style="margin-bottom:1.25rem;">
+      <input class="search-input" id="leaderboardSearchInput" type="text" placeholder="🔍 Search players..." oninput="renderLeaderboardFromCache()"/>
     </div>
 
     <div class="table-responsive">
@@ -1923,7 +2077,35 @@ main {
     </div>
   </div>
 
+  <!-- SHOP VIEW -->
+  <div class="view-section" id="view-shop">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <h2 style="font-family:'Syne'; font-size:1.6rem; font-weight:800;">💰 Prestige Shop</h2>
+      <span style="font-family:'JetBrains Mono'; font-size:0.85rem; color:var(--accent-gold);" id="shopCoinDisplay">0 coins</span>
+    </div>
+    <div class="filter-group" id="shopFilters" style="margin-bottom:1.5rem;">
+      <button class="filter-tab active" onclick="filterShop('ALL')">All</button>
+      <button class="filter-tab" onclick="filterShop('BOOSTERS')">Boosters</button>
+      <button class="filter-tab" onclick="filterShop('THEMES')">Themes</button>
+      <button class="filter-tab" onclick="filterShop('BORDERS')">Borders</button>
+      <button class="filter-tab" onclick="filterShop('FONTS')">Name Fonts</button>
+      <button class="filter-tab" onclick="filterShop('TITLES')">Titles</button>
+    </div>
+    <div class="shop-grid" id="shopGrid"></div>
+  </div>
+
 </main>
+
+<!-- PLAYER PROFILE MODAL -->
+<div class="modal-overlay" id="playerProfileModal" onclick="closePlayerProfileModal(event)">
+  <div class="modal-open" onclick="event.stopPropagation()" style="max-width:420px;">
+    <div class="modal-header">
+      <h3>Player Profile</h3>
+      <button class="ghost-btn" onclick="document.getElementById('playerProfileModal').style.display='none'">✕</button>
+    </div>
+    <div id="playerProfileContent" style="text-align:center; padding:0.5rem 0 1rem;"></div>
+  </div>
+</div>
 
 <!-- ITEM SELECTION POPUP MODAL -->
 <div class="modal-overlay" id="itemSelectModal" onclick="closeItemSelectModal(event)">
@@ -1973,6 +2155,26 @@ main {
         <div class="custom-dropdown-menu" id="titleDropdownMenu"></div>
       </div>
       <input type="hidden" id="editTitleInput" value="Novice"/>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Bio / Description</label>
+      <textarea id="editBioInput" placeholder="Tell your story..." style="width:100%;background:var(--bg-card);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:0.6rem 0.75rem;font-size:0.85rem;resize:vertical;min-height:70px;font-family:inherit;box-sizing:border-box;"></textarea>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Name Font</label>
+      <select id="editFontInput" style="width:100%;background:var(--bg-card);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:inherit;"></select>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Avatar Border</label>
+      <select id="editBorderInput" style="width:100%;background:var(--bg-card);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:inherit;"></select>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Profile Theme</label>
+      <select id="editThemeInput" style="width:100%;background:var(--bg-card);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;padding:0.6rem 0.75rem;font-size:0.85rem;font-family:inherit;"></select>
     </div>
 
     <button class="btn-action" onclick="saveProfileChanges()" style="margin-top:1.2rem; justify-content:center;">
@@ -2219,58 +2421,95 @@ const COIN_REWARDS = {
 const PITY_THRESHOLD = 45;
 
 const CHARACTERS = {
-  // TRANSCENDENT (10★)
-  "Deus do CNE":               { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "Teacher" },
+  // TRANSCENDENT (10★) - Color: #10b981
+  "Filipa":                    { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "Owner" },
+  "Oscar Komunakiev":          { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "Student" },
+  "Rui Azevedo":               { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "Owner" },
+  "Macaca Marta":              { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "???" },
+  "Professora Paula":          { tier: "TRANSCENDENT", stars: 10, color: "#10b981", animClass: "anim-transcendent", role: "Teacher" },
 
-  // LEGEND (FIFA ICON - 9★)
-  "Professora Vera":           { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Teacher" },
-  "Rafael":                    { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Gonçalo Lopes":             { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Pedro Lopes":               { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Rita":                      { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Leonor Pacheco":            { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Simão Costa":               { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "Student" },
-  "Dona Elisabete":            { tier: "LEGEND",       stars: 9,  color: "#ffffff", animClass: "anim-fifa-legend", role: "School Assistant" },
+  // LEGEND (FIFA ICON - 9★) - Color: #f5c518
+  "Professora Vera":           { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Rafael":                    { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Gonçalo Lopes":             { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Pedro Lopes":               { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Rita":                      { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Leonor Pacheco":            { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Simão Costa":               { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Dona Elisabete":            { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Auxiliar" },
+  "Ana Gil":                   { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Duarte Castro":             { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Mariana Ferreira":          { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "João Freitas":              { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "João Barros":               { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Professor João":            { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Professor Pedro Graça":     { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "João Gil":                  { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Naomi":                     { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Luís Afonso":               { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Student" },
+  "Sofia Monteiro":            { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Senhor Luís":               { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Driver" },
+  "Professora Alexandra":      { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Professora Ana Martins":    { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Professora Claudia":        { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
+  "Professora Suzie":          { tier: "LEGEND",       stars: 9,  color: "#f5c518", animClass: "anim-fifa-legend", role: "Teacher" },
 
-  // SECRET (8★)
+  // SECRET (8★) - Color: #6366f1
   "Professor Paulo":           { tier: "SECRET",       stars: 8,  color: "#6366f1", animClass: "anim-secret",      role: "Teacher" },
+  "Dona Andrea":               { tier: "SECRET",       stars: 8,  color: "#6366f1", animClass: "anim-secret",      role: "Auxiliar" },
+  "Carro do acidente":         { tier: "SECRET",       stars: 8,  color: "#6366f1", animClass: "anim-secret",      role: "???" },
+  "Rocky":                     { tier: "SECRET",       stars: 8,  color: "#6366f1", animClass: "anim-secret",      role: "???" },
+  "Professor Celso":           { tier: "SECRET",       stars: 8,  color: "#6366f1", animClass: "anim-secret",      role: "Teacher" },
 
-  // CELESTIAL (7★)
-  "Professora Omnipresente":   { tier: "CELESTIAL",    stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "Teacher" },
+  // CELESTIAL (7★) - Color: #06b6d4
+  "Dona Joana":                { tier: "CELESTIAL",    stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "Auxiliar" },
+  "Professora Anabela":        { tier: "CELESTIAL",    stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "Teacher" },
+  "Explosao Ice Tea":          { tier: "CELESTIAL",    stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "???" },
+  "Professora Abelha Maia":    { tier: "CELESTIAL",    stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "Teacher" },
+  "Professora Margarida Pacheco": { tier: "CELESTIAL", stars: 7,  color: "#06b6d4", animClass: "anim-celestial",   role: "Teacher" },
 
-  // MYTHIC (6★)
+  // MYTHIC (6★) - Color: #ec4899
   "Professor Miguel":          { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Alexandre":                 { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Student" },
+  "Professor Henrique":        { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Professora Ana Rita Castro":{ tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Professora Rafaela Montinho":{ tier: "MYTHIC",      stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Professora Daniela":        { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Professora Rita":           { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Owner" },
+  "Professora Deolinda":       { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Teacher" },
+  "Leonor Carneiro":           { tier: "MYTHIC",       stars: 6,  color: "#ec4899", animClass: "anim-mythic",      role: "Student" },
 
-  // LEGENDARY (5★)
+  // LEGENDARY (5★) - Color: #f59e0b
   "Professora Sandra Borges":  { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Teacher" },
   "Professor Adalberto":       { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Teacher" },
   "Professora de Macs":        { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Teacher" },
-  "Pedrinho Eu Mesmo":         { tier: "LEGENDARY",    stars: 5,  color: "#00f2fe", role: "Student" },
+  "Pedrinho Eu Mesmo":         { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Student" },
+  "Dona Graça":                { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Auxiliar" },
+  "Dona Anabela":              { tier: "LEGENDARY",    stars: 5,  color: "#f59e0b", role: "Auxiliar" },
 
-  // EPIC (4★)
+  // EPIC (4★) - Color: #a855f7
   "Professora Iara":           { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
   "Professor Bruno":           { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
   "Professor Pedro":           { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
   "Professora Laura":          { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
   "Professora Aurea":          { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
   "Professor Simão":           { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Teacher" },
-  "Afonso Cabrito":            { tier: "EPIC",         stars: 4,  color: "#ef4444", role: "Student" },
+  "Afonso":                    { tier: "EPIC",         stars: 4,  color: "#a855f7", role: "Student" },
 
-  // RARE (3★)
-  "Mariana das Tessouras":     { tier: "RARE",         stars: 3,  color: "#f59e0b", role: "School Assistant" },
+  // RARE (3★) - Color: #3b82f6
+  "Mariana Silva":             { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Auxiliar" },
   "Kika":                      { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Student" },
   "Maria Barbosa":             { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Student" },
   "Leonor Campos":             { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Student" },
   "Raquel":                    { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Student" },
   "Rodrigo":                   { tier: "RARE",         stars: 3,  color: "#3b82f6", role: "Student" },
 
-  // COMMON (2★)
-  "Benny Balofs":              { tier: "COMMON",       stars: 2,  color: "#a855f7", role: "Student" },
+  // COMMON (2★) - Color: #8e9aaf
+  "Bernardo":                  { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Tiago":                     { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Diogo":                     { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Sousa":                     { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "João Maria":                { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
-  "Mariana Silva":             { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Margarida":                 { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Mariana Soares":            { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
   "Martim":                    { tier: "COMMON",       stars: 2,  color: "#8e9aaf", role: "Student" },
@@ -2289,6 +2528,12 @@ function renderRoleTag(role) {
     return `<span class="role-tag role-student"><i data-lucide="user"></i>Student</span>`;
   } else if (role === 'School Assistant' || role === 'Auxiliar') {
     return `<span class="role-tag role-auxiliar"><i data-lucide="shield"></i>Auxiliar</span>`;
+  } else if (role === 'Owner') {
+    return `<span class="role-tag role-owner"><i data-lucide="crown"></i>Owner</span>`;
+  } else if (role === 'Driver') {
+    return `<span class="role-tag role-driver"><i data-lucide="navigation"></i>Driver</span>`;
+  } else if (role === '???') {
+    return `<span class="role-tag role-mystery"><i data-lucide="sparkles"></i>???</span>`;
   }
   return `<span class="role-tag">${role}</span>`;
 }
@@ -2462,31 +2707,30 @@ const QUEST_POOL = [
   }
 ];
 
-/* EXPANDED MILESTONES WITH PRESTIGE TITLES */
+/* EXPANDED MILESTONES WITH PRESTIGE TITLES, THEMES, FONTS & BORDERS */
 const MILESTONES = [
   { id: "m_first", title: "First Step", desc: "Complete your initial summon.", progress: (s) => s.total_rolls >= 1 ? "Done" : "0 / 1", isDone: (s) => s.total_rolls >= 1, titleReward: "Seeker", titleClass: "title-seeker" },
   { id: "m_10_rolls", title: "Rolling In", desc: "Reach 10 total summons.", progress: (s) => `${Math.min(10, s.total_rolls)} / 10`, isDone: (s) => s.total_rolls >= 10, titleReward: "Roller", titleClass: "title-roller" },
   { id: "m_25_rolls", title: "Determined", desc: "Reach 25 total summons.", progress: (s) => `${Math.min(25, s.total_rolls)} / 25`, isDone: (s) => s.total_rolls >= 25, titleReward: "Striker", titleClass: "title-striker" },
-  { id: "m_50_rolls", title: "Fortune Hunter", desc: "Reach 50 total summons.", progress: (s) => `${Math.min(50, s.total_rolls)} / 50`, isDone: (s) => s.total_rolls >= 50, titleReward: "Gambler", titleClass: "title-gambler" },
-  { id: "m_100_rolls", title: "Obsessed", desc: "Accumulate 100 total summons.", progress: (s) => `${Math.min(100, s.total_rolls)} / 100`, isDone: (s) => s.total_rolls >= 100, titleReward: "Gacha Fiend", titleClass: "title-fiend" },
-  { id: "m_250_rolls", title: "The Grinder", desc: "Reach 250 total summons.", progress: (s) => `${Math.min(250, s.total_rolls)} / 250`, isDone: (s) => s.total_rolls >= 250, titleReward: "Veteran", titleClass: "title-veteran" },
-  { id: "m_500_rolls", title: "Centurion Roll", desc: "Perform 500 total summons.", progress: (s) => `${Math.min(500, s.total_rolls)} / 500`, isDone: (s) => s.total_rolls >= 500, titleReward: "Grandmaster", titleClass: "title-grandmaster" },
-  { id: "m_1000_rolls", title: "Ascended Soul", desc: "Perform 1,000 total summons.", progress: (s) => `${Math.min(1000, s.total_rolls)} / 1000`, isDone: (s) => s.total_rolls >= 1000, titleReward: "Immortal", titleClass: "title-immortal" },
-  { id: "m_2500_rolls", title: "Lord of Infinity", desc: "Perform 2,500 total summons.", progress: (s) => `${Math.min(2500, s.total_rolls)} / 2500`, isDone: (s) => s.total_rolls >= 2500, titleReward: "Omnipotent", titleClass: "title-omnipotent" },
+  { id: "m_50_rolls", title: "Fortune Hunter", desc: "Reach 50 total summons.", progress: (s) => `${Math.min(50, s.total_rolls)} / 50`, isDone: (s) => s.total_rolls >= 50, titleReward: "Gambler", titleClass: "title-gambler", borderReward: "border-gold", borderName: "Golden Champion" },
+  { id: "m_100_rolls", title: "Obsessed", desc: "Accumulate 100 total summons.", progress: (s) => `${Math.min(100, s.total_rolls)} / 100`, isDone: (s) => s.total_rolls >= 100, titleReward: "Gacha Fiend", titleClass: "title-fiend", borderReward: "border-neon", borderName: "Cyber Neon" },
+  { id: "m_250_rolls", title: "The Grinder", desc: "Reach 250 total summons.", progress: (s) => `${Math.min(250, s.total_rolls)} / 250`, isDone: (s) => s.total_rolls >= 250, titleReward: "Veteran", titleClass: "title-veteran", fontReward: "font-jakarta", fontName: "Plus Jakarta" },
+  { id: "m_500_rolls", title: "Centurion Roll", desc: "Perform 500 total summons.", progress: (s) => `${Math.min(500, s.total_rolls)} / 500`, isDone: (s) => s.total_rolls >= 500, titleReward: "Grandmaster", titleClass: "title-grandmaster", themeReward: "theme-neon", themeName: "Cyberpunk Matrix" },
+  { id: "m_1000_rolls", title: "Ascended Soul", desc: "Perform 1,000 total summons.", progress: (s) => `${Math.min(1000, s.total_rolls)} / 1000`, isDone: (s) => s.total_rolls >= 1000, titleReward: "Immortal", titleClass: "title-immortal", fontReward: "font-orbitron", fontName: "Orbitron Sci-Fi" },
+  { id: "m_2500_rolls", title: "Lord of Infinity", desc: "Perform 2,500 total summons.", progress: (s) => `${Math.min(2500, s.total_rolls)} / 2500`, isDone: (s) => s.total_rolls >= 2500, titleReward: "Omnipotent", titleClass: "title-omnipotent", borderReward: "border-rainbow", borderName: "Chromatic Prismatic" },
 
   { id: "m_5_chars", title: "Budding Curator", desc: "Discover 5 unique characters.", progress: (s) => `${Math.min(5, Object.keys(s.inventory).length)} / 5`, isDone: (s) => Object.keys(s.inventory).length >= 5, titleReward: "Scout", titleClass: "title-scout" },
-  { id: "m_10_chars", title: "Curator", desc: "Discover 10 unique characters.", progress: (s) => `${Math.min(10, Object.keys(s.inventory).length)} / 10`, isDone: (s) => Object.keys(s.inventory).length >= 10, titleReward: "Curator", titleClass: "title-curator" },
-  { id: "m_15_chars", title: "Museum Director", desc: "Discover 15 unique characters.", progress: (s) => `${Math.min(15, Object.keys(s.inventory).length)} / 15`, isDone: (s) => Object.keys(s.inventory).length >= 15, titleReward: "Archivist", titleClass: "title-archivist" },
-  { id: "m_20_chars", title: "Master of Roster", desc: "Discover 20 unique characters.", progress: (s) => `${Math.min(20, Object.keys(s.inventory).length)} / 20`, isDone: (s) => Object.keys(s.inventory).length >= 20, titleReward: "Collector Supreme", titleClass: "title-collector-supreme" },
-  { id: "m_all_chars", title: "Complete Pantheon", desc: "Discover all unique characters in compendium.", progress: (s) => `${Object.keys(s.inventory).length} / ${ALL_CHAR_NAMES.length}`, isDone: (s) => Object.keys(s.inventory).length >= ALL_CHAR_NAMES.length, titleReward: "Living Legend", titleClass: "title-living-legend" },
+  { id: "m_15_chars", title: "Curator", desc: "Discover 15 unique characters.", progress: (s) => `${Math.min(15, Object.keys(s.inventory).length)} / 15`, isDone: (s) => Object.keys(s.inventory).length >= 15, titleReward: "Curator", titleClass: "title-curator", fontReward: "font-cinzel", fontName: "Cinzel Royal" },
+  { id: "m_30_chars", title: "Museum Director", desc: "Discover 30 unique characters.", progress: (s) => `${Math.min(30, Object.keys(s.inventory).length)} / 30`, isDone: (s) => Object.keys(s.inventory).length >= 30, titleReward: "Archivist", titleClass: "title-archivist", themeReward: "theme-royal", themeName: "Golden Sovereign" },
+  { id: "m_all_chars", title: "Complete Pantheon", desc: "Discover all unique characters in compendium.", progress: (s) => `${Object.keys(s.inventory).length} / ${ALL_CHAR_NAMES.length}`, isDone: (s) => Object.keys(s.inventory).length >= ALL_CHAR_NAMES.length, titleReward: "Living Legend", titleClass: "title-living-legend", themeReward: "theme-emerald", themeName: "Emerald Royalty" },
 
-  { id: "m_fifa_legend", title: "FIFA Icon", desc: "Summon any FIFA Legend rarity discovery.", progress: (s) => TIER_STRENGTH[s.best_pull_tier] >= 8 ? "Done" : "0 / 1", isDone: (s) => TIER_STRENGTH[s.best_pull_tier] >= 8, titleReward: "Galáctico", titleClass: "title-galactico" },
-  { id: "m_celestial", title: "Cosmic Touch", desc: "Summon a Celestial rarity discovery.", progress: (s) => TIER_STRENGTH[s.best_pull_tier] >= 6 ? "Done" : "0 / 1", isDone: (s) => TIER_STRENGTH[s.best_pull_tier] >= 6, titleReward: "Blessed", titleClass: "title-blessed" },
-  { id: "m_secret", title: "Shadow Walker", desc: "Summon Professor Paulo (SECRET).", progress: (s) => !!s.inventory["Professor Paulo"] ? "Done" : "0 / 1", isDone: (s) => !!s.inventory["Professor Paulo"], titleReward: "Master", titleClass: "title-master" },
-  { id: "m_god", title: "The Sovereign", desc: "Summon Deus do CNE (TRANSCENDENT).", progress: (s) => !!s.inventory["Deus do CNE"] ? "Done" : "0 / 1", isDone: (s) => !!s.inventory["Deus do CNE"], titleReward: "Ascended", titleClass: "title-ascended" },
+  { id: "m_fifa_legend", title: "FIFA Icon", desc: "Summon any FIFA Legend rarity discovery.", progress: (s) => TIER_STRENGTH[s.best_pull_tier] >= 8 ? "Done" : "0 / 1", isDone: (s) => TIER_STRENGTH[s.best_pull_tier] >= 8, titleReward: "Galáctico", titleClass: "title-galactico", borderReward: "border-legend", borderName: "FIFA Icon Crest" },
+  { id: "m_celestial", title: "Cosmic Touch", desc: "Summon a Celestial rarity discovery.", progress: (s) => TIER_STRENGTH[s.best_pull_tier] >= 6 ? "Done" : "0 / 1", isDone: (s) => TIER_STRENGTH[s.best_pull_tier] >= 6, titleReward: "Blessed", titleClass: "title-blessed", borderReward: "border-mythic", borderName: "Solar Flare" },
+  { id: "m_secret", title: "Shadow Walker", desc: "Summon any SECRET rarity discovery.", progress: (s) => (s.best_pull_tier === 'SECRET' || s.best_pull_tier === 'LEGEND' || s.best_pull_tier === 'TRANSCENDENT') ? "Done" : "0 / 1", isDone: (s) => (s.best_pull_tier === 'SECRET' || s.best_pull_tier === 'LEGEND' || s.best_pull_tier === 'TRANSCENDENT'), titleReward: "Master", titleClass: "title-master", themeReward: "theme-void", themeName: "Abyssal Void" },
+  { id: "m_god", title: "The Sovereign", desc: "Summon any TRANSCENDENT discovery.", progress: (s) => TIER_STRENGTH[s.best_pull_tier] >= 9 ? "Done" : "0 / 1", isDone: (s) => TIER_STRENGTH[s.best_pull_tier] >= 9, titleReward: "Ascended", titleClass: "title-ascended", borderReward: "border-emerald", borderName: "Transcendent Flame" },
 
-  { id: "m_coins_10k", title: "Wealthy Merchant", desc: "Accumulate at least 10,000 Coins.", progress: (s) => `${Math.min(10000, s.coins)} / 10000`, isDone: (s) => s.coins >= 10000, titleReward: "Merchant", titleClass: "title-merchant" },
   { id: "m_coins_50k", title: "Tycoon Empire", desc: "Accumulate at least 50,000 Coins.", progress: (s) => `${Math.min(50000, s.coins)} / 50000`, isDone: (s) => s.coins >= 50000, titleReward: "Tycoon", titleClass: "title-tycoon" },
+  { id: "m_coins_1m", title: "Seven Figures", desc: "Accumulate at least 1,000,000 Coins.", progress: (s) => `${Math.min(1000000, s.coins)} / 1000000`, isDone: (s) => s.coins >= 1000000, titleReward: "Millionaire", titleClass: "title-millionaire", fontReward: "font-pressstart", fontName: "8-Bit Pixel" },
   { id: "m_upgrade_speed", title: "Supersonic", desc: "Max out the Roll Speed upgrade.", progress: (s) => `${s.upgrades.speed} / 8`, isDone: (s) => s.upgrades.speed >= 8, titleReward: "Flash", titleClass: "title-flash" },
   { id: "m_upgrade_luck", title: "Favored by Gods", desc: "Max out the Luck upgrade.", progress: (s) => `${s.upgrades.luck} / 10`, isDone: (s) => s.upgrades.luck >= 10, titleReward: "Fortune Incarnate", titleClass: "title-fortune" },
 ];
@@ -2504,9 +2748,18 @@ function getDefaultGameState() {
     equipped_title: "Novice",
     equipped_title_class: "title-novice",
     unlocked_titles: [{ title: "Novice", cssClass: "title-novice" }],
+    profile_bio: "CNE RNG Summoner",
+    equipped_font: "font-outfit",
+    unlocked_fonts: ["font-outfit", "font-syne", "font-jetbrains"],
+    equipped_border: "border-none",
+    unlocked_borders: ["border-none", "border-gold"],
+    equipped_theme: "theme-default",
+    unlocked_themes: ["theme-default", "theme-neon"],
     equipped_item: "",
     completed_quests: [],
     completed_milestones: [],
+    cycle_completed_quests: [],
+    active_quest_ids: [],
     cycle_stats: {
       rolls: 0,
       multi_pulls: 0,
@@ -2521,7 +2774,16 @@ function getDefaultGameState() {
   };
 }
 
-let userSession = { username: "Guest", token: null, pfp: "" };
+let userSession = {
+  username: "Guest",
+  token: null,
+  pfp: "",
+  bio: "CNE RNG Summoner",
+  name_font: "font-outfit",
+  avatar_border: "border-none",
+  profile_theme: "theme-default"
+};
+let isCloudStateLoaded = false;
 let gameState = getDefaultGameState();
 
 let currentTab = "roll";
@@ -2723,6 +2985,7 @@ function switchTab(tabId) {
   if (tabId === 'upgrades') renderUpgradesView();
   if (tabId === 'quests') renderMissionsView();
   if (tabId === 'leaderboard') fetchLeaderboard();
+  if (tabId === 'shop') renderShopView();
   if (tabId === 'multi') {
     document.getElementById('multiCountLabel').textContent = 10 + gameState.upgrades.spins * 2;
   }
@@ -3241,13 +3504,28 @@ function switchInvSubTab(tab) {
 }
 
 function renderInventoryView() {
+  const searchQ = (document.getElementById('inventorySearchInput')?.value || '').toLowerCase().trim();
+
   if (currentInvSub === 'chars') {
     const grid = document.getElementById('inventoryCharsGrid');
     grid.innerHTML = '';
-    const ownedChars = ALL_CHAR_NAMES.filter(n => (gameState.inventory[n] || 0) > 0);
+    let ownedChars = ALL_CHAR_NAMES.filter(n => (gameState.inventory[n] || 0) > 0);
 
     if (!ownedChars.length) {
       grid.innerHTML = '<div style="color:var(--text-muted); padding:1rem 0;">No characters owned yet. Roll to summon!</div>';
+      return;
+    }
+
+    if (searchQ) {
+      ownedChars = ownedChars.filter(n =>
+        n.toLowerCase().includes(searchQ) ||
+        (CHARACTERS[n].role || '').toLowerCase().includes(searchQ) ||
+        CHARACTERS[n].tier.toLowerCase().includes(searchQ)
+      );
+    }
+
+    if (!ownedChars.length) {
+      grid.innerHTML = `<div style="color:var(--text-muted); padding:1rem 0;">No characters match "${searchQ}".</div>`;
       return;
     }
 
@@ -3280,10 +3558,22 @@ function renderInventoryView() {
   } else {
     const grid = document.getElementById('inventoryItemsGrid');
     grid.innerHTML = '';
-    const ownedItems = Object.keys(gameState.items).filter(n => (gameState.items[n] || 0) > 0);
+    let ownedItems = Object.keys(gameState.items).filter(n => (gameState.items[n] || 0) > 0);
 
     if (!ownedItems.length) {
       grid.innerHTML = '<div style="color:var(--text-muted); padding:1rem 0;">No consumable items in inventory. Complete quests or roll to find items!</div>';
+      return;
+    }
+
+    if (searchQ) {
+      ownedItems = ownedItems.filter(n =>
+        n.toLowerCase().includes(searchQ) ||
+        (ITEMS[n].desc || '').toLowerCase().includes(searchQ)
+      );
+    }
+
+    if (!ownedItems.length) {
+      grid.innerHTML = `<div style="color:var(--text-muted); padding:1rem 0;">No items match "${searchQ}".</div>`;
       return;
     }
 
@@ -3379,10 +3669,24 @@ function filterCollection(tier) {
 function renderCollectionView() {
   const grid = document.getElementById('compendiumGrid');
   grid.innerHTML = '';
+  const searchQ = (document.getElementById('compendiumSearchInput')?.value || '').toLowerCase().trim();
 
   if (currentCollSub === 'chars') {
     document.getElementById('collectionFilters').style.display = 'flex';
-    const sortedChars = [...ALL_CHAR_NAMES].sort((a, b) => TIER_STRENGTH[CHARACTERS[b].tier] - TIER_STRENGTH[CHARACTERS[a].tier]);
+    let sortedChars = [...ALL_CHAR_NAMES].sort((a, b) => TIER_STRENGTH[CHARACTERS[b].tier] - TIER_STRENGTH[CHARACTERS[a].tier]);
+
+    if (searchQ) {
+      sortedChars = sortedChars.filter(name =>
+        name.toLowerCase().includes(searchQ) ||
+        (CHARACTERS[name].role || '').toLowerCase().includes(searchQ) ||
+        CHARACTERS[name].tier.toLowerCase().includes(searchQ)
+      );
+    }
+
+    if (!sortedChars.length) {
+      grid.innerHTML = `<div style="color:var(--text-muted); padding:1rem 0;">No characters match "${searchQ}".</div>`;
+      return;
+    }
 
     sortedChars.forEach(name => {
       const c = CHARACTERS[name];
@@ -3412,7 +3716,18 @@ function renderCollectionView() {
     lucide.createIcons();
   } else {
     document.getElementById('collectionFilters').style.display = 'none';
-    ALL_ITEM_NAMES.forEach(name => {
+    let itemsToShow = ALL_ITEM_NAMES;
+    if (searchQ) {
+      itemsToShow = itemsToShow.filter(name =>
+        name.toLowerCase().includes(searchQ) ||
+        (ITEMS[name].desc || '').toLowerCase().includes(searchQ)
+      );
+    }
+    if (!itemsToShow.length) {
+      grid.innerHTML = `<div style="color:var(--text-muted); padding:1rem 0;">No items match "${searchQ}".</div>`;
+      return;
+    }
+    itemsToShow.forEach(name => {
       const it = ITEMS[name];
       const isDiscovered = (gameState.discovered_items || []).includes(name);
 
@@ -3448,6 +3763,8 @@ function switchMissionSubTab(subTab) {
 const QUEST_CYCLE_MS = 12 * 60 * 60 * 1000;
 
 function checkAndRefreshQuests(force = false) {
+  // Guard: don't overwrite cloud state before it has loaded
+  if (useFirebase && !isCloudStateLoaded && !force) return;
   const now = Date.now();
   const lastRefresh = gameState.quest_cycle_start || 0;
   if (force || now - lastRefresh >= QUEST_CYCLE_MS || !gameState.active_quest_ids || !gameState.active_quest_ids.length) {
@@ -3508,7 +3825,20 @@ function checkMissions() {
       if (m.titleReward && !gameState.unlocked_titles.some(t => t.title === m.titleReward)) {
         gameState.unlocked_titles.push({ title: m.titleReward, cssClass: m.titleClass });
       }
-      showToast("Milestone Achieved!", `${m.title} (Prestige Title: ${m.titleReward})`);
+      if (m.borderReward) {
+        if (!gameState.unlocked_borders) gameState.unlocked_borders = ['border-none'];
+        if (!gameState.unlocked_borders.includes(m.borderReward)) gameState.unlocked_borders.push(m.borderReward);
+      }
+      if (m.fontReward) {
+        if (!gameState.unlocked_fonts) gameState.unlocked_fonts = ['font-outfit'];
+        if (!gameState.unlocked_fonts.includes(m.fontReward)) gameState.unlocked_fonts.push(m.fontReward);
+      }
+      if (m.themeReward) {
+        if (!gameState.unlocked_themes) gameState.unlocked_themes = ['theme-default'];
+        if (!gameState.unlocked_themes.includes(m.themeReward)) gameState.unlocked_themes.push(m.themeReward);
+      }
+      const rewardDesc = m.borderReward ? `Border: ${m.borderName}` : m.fontReward ? `Font: ${m.fontName}` : m.themeReward ? `Theme: ${m.themeName}` : (m.titleReward ? `Title: ${m.titleReward}` : 'Reward unlocked');
+      showToast("Milestone Achieved!", `${m.title} (${rewardDesc})`);
       saveState();
       updateUserProfileUI();
     }
@@ -3716,8 +4046,11 @@ function tryInitFirebase(config) {
               if (typeof renderUpgradesView === 'function') renderUpgradesView();
               if (typeof renderActiveQuests === 'function') renderActiveQuests();
             }
+            // Mark cloud state as loaded — saveState() and checkAndRefreshQuests() may now run safely
+            isCloudStateLoaded = true;
           } catch(e) {
             console.warn('Firestore game_states sync notice:', e.message);
+            isCloudStateLoaded = true; // Allow saves even if cloud load fails
           }
         }
       } else {
@@ -3976,6 +4309,7 @@ function handleLogout() {
   }
   userSession = { username: 'Guest', token: null, pfp: '', firebaseUser: null };
   gameState = getDefaultGameState();
+  isCloudStateLoaded = false;
   localStorage.removeItem('cne_auth_token_v4');
   updateUserProfileUI();
   updateHeaderStats();
@@ -3983,7 +4317,252 @@ function handleLogout() {
   showToast('Logged Out', 'You are now in guest mode.');
 }
 
+/* =========================================================
+   SHOP
+   ========================================================= */
+const SHOP_ITEMS = [
+  // BOOSTERS
+  { id: 'booster_reroll5',  cat: 'BOOSTERS', name: 'Quest Reroll x5',   desc: 'Refresh all active quests 5 times.',      icon: '🔄', cost: 2_000_000,   color: '#f59e0b' },
+  { id: 'booster_shoe5',   cat: 'BOOSTERS', name: 'Silver Horseshoe x5',desc: 'Boost luck on 5 rolls.',                   icon: '🧲', cost: 1_500_000,   color: '#3b82f6' },
+  { id: 'booster_clover3', cat: 'BOOSTERS', name: 'Golden Clover x3',   desc: 'Triple your luck for 3 pulls.',            icon: '🍀', cost: 3_000_000,   color: '#10b981' },
+  { id: 'booster_orb1',    cat: 'BOOSTERS', name: 'Celestial Orb x1',   desc: 'Guarantee a Celestial+ character.',        icon: '🔮', cost: 10_000_000,  color: '#06b6d4' },
+  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',     desc: 'Guarantee a Secret+ character.',           icon: '⭐', cost: 25_000_000,  color: '#6366f1' },
+  // THEMES
+  { id: 'theme_midnight',  cat: 'THEMES',   name: 'Midnight Theme',     desc: 'Deep blue-black profile background.',     icon: '🌙', cost: 5_000_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
+  { id: 'theme_crimson',   cat: 'THEMES',   name: 'Crimson Theme',      desc: 'Fiery red prestige background.',           icon: '🔥', cost: 8_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
+  { id: 'theme_emerald',   cat: 'THEMES',   name: 'Emerald Theme',      desc: 'Lush green champion background.',          icon: '💚', cost: 8_000_000,   color: '#10b981',  unlockKey: 'theme-emerald' },
+  { id: 'theme_gold',      cat: 'THEMES',   name: 'Gold Theme',         desc: 'Elite golden prestige background.',        icon: '🏆', cost: 50_000_000,  color: '#f5c518',  unlockKey: 'theme-gold' },
+  { id: 'theme_void',      cat: 'THEMES',   name: 'Void Theme',         desc: 'Mysterious purple void background.',       icon: '🌀', cost: 100_000_000, color: '#a855f7',  unlockKey: 'theme-void' },
+  // BORDERS
+  { id: 'border_gold',     cat: 'BORDERS',  name: 'Gold Border',        desc: 'Gleaming gold avatar ring.',               icon: '🥇', cost: 10_000_000,  color: '#f5c518',  unlockKey: 'border-gold' },
+  { id: 'border_rainbow',  cat: 'BORDERS',  name: 'Rainbow Border',     desc: 'Animated rainbow avatar ring.',            icon: '🌈', cost: 50_000_000,  color: '#ec4899',  unlockKey: 'border-rainbow' },
+  { id: 'border_fire',     cat: 'BORDERS',  name: 'Fire Border',        desc: 'Blazing fire avatar ring.',                icon: '🔥', cost: 75_000_000,  color: '#f59e0b',  unlockKey: 'border-fire' },
+  { id: 'border_void',     cat: 'BORDERS',  name: 'Void Border',        desc: 'Pulsing purple void avatar ring.',         icon: '💜', cost: 150_000_000, color: '#a855f7',  unlockKey: 'border-void' },
+  // FONTS
+  { id: 'font_cinzel',     cat: 'FONTS',    name: 'Cinzel Serif',       desc: 'Majestic roman serif username font.',      icon: '✍️', cost: 5_000_000,   color: '#e5c97e',  unlockKey: 'font-cinzel' },
+  { id: 'font_orbitron',   cat: 'FONTS',    name: 'Orbitron Tech',      desc: 'Futuristic tech username font.',           icon: '🤖', cost: 5_000_000,   color: '#06b6d4',  unlockKey: 'font-orbitron' },
+  { id: 'font_press',      cat: 'FONTS',    name: 'Pixel Press',        desc: 'Retro pixel game username font.',          icon: '👾', cost: 15_000_000,  color: '#a855f7',  unlockKey: 'font-press' },
+  // TITLES
+  { id: 'title_whale',     cat: 'TITLES',   name: 'The Whale',          desc: 'Reserved for big spenders.',              icon: '🐋', cost: 20_000_000,  color: '#06b6d4',  unlockKey: 'The Whale',     titleClass: 'title-celestial' },
+  { id: 'title_mogul',     cat: 'TITLES',   name: 'CNE Mogul',          desc: 'You own this school.',                    icon: '💰', cost: 50_000_000,  color: '#f5c518',  unlockKey: 'CNE Mogul',     titleClass: 'title-legend' },
+  { id: 'title_god',       cat: 'TITLES',   name: 'CNE God',            desc: 'The highest honour.',                     icon: '⚡', cost: 500_000_000, color: '#10b981',  unlockKey: 'CNE God',       titleClass: 'title-transcendent' },
+];
+
+let currentShopFilter = 'ALL';
+
+function filterShop(cat) {
+  currentShopFilter = cat;
+  document.querySelectorAll('#shopFilters .filter-tab').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderShopView();
+}
+
+function renderShopView() {
+  const coinDisp = document.getElementById('shopCoinDisplay');
+  if (coinDisp) coinDisp.textContent = (gameState.coins || 0).toLocaleString() + ' coins';
+
+  const grid = document.getElementById('shopGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const items = currentShopFilter === 'ALL' ? SHOP_ITEMS : SHOP_ITEMS.filter(i => i.cat === currentShopFilter);
+
+  items.forEach(item => {
+    const owned = isShopItemOwned(item);
+    const canAfford = gameState.coins >= item.cost;
+    const card = document.createElement('div');
+    card.className = 'shop-card';
+    card.innerHTML = `
+      <div class="shop-card-top">
+        <div style="font-size:2rem; line-height:1;">${item.icon}</div>
+        <div style="flex:1;">
+          <div style="font-weight:800; font-size:1rem; color:${item.color};">${item.name}</div>
+          <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem; line-height:1.4;">${item.desc}</div>
+          <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.3rem; text-transform:uppercase; letter-spacing:0.06em;">${item.cat}</div>
+        </div>
+      </div>
+      <div class="shop-card-bottom">
+        <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--accent-gold); font-size:0.9rem;">💰 ${item.cost.toLocaleString()}</span>
+        ${owned
+          ? `<button class="btn-action" style="background:rgba(16,185,129,0.15);border-color:#10b981;color:#10b981;padding:0.4rem 1rem;font-size:0.78rem;" disabled>✓ Owned</button>`
+          : `<button class="btn-action" style="padding:0.4rem 1rem;font-size:0.78rem;${!canAfford ? 'opacity:0.4;' : ''}" onclick="buyShopItem('${item.id}')" ${!canAfford ? 'disabled' : ''}>Buy</button>`
+        }
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function isShopItemOwned(item) {
+  if (item.cat === 'BOOSTERS') return false; // consumable, always purchasable
+  if (item.cat === 'THEMES') return (gameState.unlocked_themes || []).includes(item.unlockKey);
+  if (item.cat === 'BORDERS') return (gameState.unlocked_borders || []).includes(item.unlockKey);
+  if (item.cat === 'FONTS')   return (gameState.unlocked_fonts || []).includes(item.unlockKey);
+  if (item.cat === 'TITLES')  return (gameState.unlocked_titles || []).includes(item.unlockKey);
+  return false;
+}
+
+function buyShopItem(itemId) {
+  if (!userSession.token) { showToast('Sign In Required', 'Please sign in to use the shop.'); return; }
+  const item = SHOP_ITEMS.find(i => i.id === itemId);
+  if (!item) return;
+  if (gameState.coins < item.cost) { showToast('Not Enough Coins', `You need ${item.cost.toLocaleString()} coins.`); return; }
+
+  gameState.coins -= item.cost;
+
+  if (item.cat === 'BOOSTERS') {
+    const boosterMap = {
+      'booster_reroll5': ['Quest Reroll', 5],
+      'booster_shoe5':   ['Silver Horseshoe', 5],
+      'booster_clover3': ['Golden Clover', 3],
+      'booster_orb1':    ['Celestial Orb', 1],
+      'booster_master1': ['Master Roll', 1],
+    };
+    const [itemName, qty] = boosterMap[item.id] || ['Quest Reroll', 1];
+    addItemToInventory(itemName, qty);
+    showToast(`Purchased!`, `${item.icon} ${item.name} added to inventory.`);
+  } else if (item.cat === 'THEMES') {
+    if (!gameState.unlocked_themes) gameState.unlocked_themes = [];
+    if (!gameState.unlocked_themes.includes(item.unlockKey)) gameState.unlocked_themes.push(item.unlockKey);
+    showToast(`Theme Unlocked!`, `${item.icon} ${item.name} is now available in your profile.`);
+  } else if (item.cat === 'BORDERS') {
+    if (!gameState.unlocked_borders) gameState.unlocked_borders = [];
+    if (!gameState.unlocked_borders.includes(item.unlockKey)) gameState.unlocked_borders.push(item.unlockKey);
+    showToast(`Border Unlocked!`, `${item.icon} ${item.name} is now available in your profile.`);
+  } else if (item.cat === 'FONTS') {
+    if (!gameState.unlocked_fonts) gameState.unlocked_fonts = [];
+    if (!gameState.unlocked_fonts.includes(item.unlockKey)) gameState.unlocked_fonts.push(item.unlockKey);
+    showToast(`Font Unlocked!`, `${item.icon} ${item.name} is now available in your profile.`);
+  } else if (item.cat === 'TITLES') {
+    if (!gameState.unlocked_titles) gameState.unlocked_titles = [];
+    if (!gameState.unlocked_titles.includes(item.unlockKey)) {
+      gameState.unlocked_titles.push(item.unlockKey);
+      TITLES.push({ title: item.unlockKey, cssClass: item.titleClass || 'title-novice' });
+    }
+    showToast(`Title Unlocked!`, `${item.icon} "${item.unlockKey}" is now available as your prestige title.`);
+  }
+
+  updateHeaderStats();
+  saveState();
+  renderShopView();
+  if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+}
+
+/* =========================================================
+   LEADERBOARD PLAYER PROFILE MODAL
+   ========================================================= */
+let cachedLeaderboardData = [];
+
+function openPlayerProfileModal(uid, row) {
+  const modal = document.getElementById('playerProfileModal');
+  const content = document.getElementById('playerProfileContent');
+  if (!modal || !content) return;
+
+  const username = row.username || 'Unknown';
+  const pfp = row.pfp || '';
+  const title = row.equipped_title || row.title || 'Novice';
+  const titleClass = row.equipped_title_class || row.title_class || 'title-novice';
+  const bio = row.bio || 'A mysterious summoner…';
+  const unique = row.unique || 0;
+  const totalRolls = row.total_rolls || 0;
+  const bestTier = row.best_pull_tier || 'COMMON';
+  const coins = row.coins || 0;
+  const fontClass = row.equipped_font || 'font-outfit';
+  const borderClass = row.equipped_border || 'border-none';
+  const themeClass = row.equipped_theme || 'theme-default';
+
+  const modalBox = modal.querySelector('.modal-open');
+  if (modalBox) {
+    modalBox.className = `modal-open ${themeClass}`;
+  }
+
+  content.innerHTML = `
+    <div style="margin-bottom:1rem;">
+      ${pfp
+        ? `<img src="${pfp}" class="${borderClass}" style="width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto 0.75rem;display:block;" onerror="this.style.display='none'">`
+        : `<div class="${borderClass}" style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;font-size:2rem;">👤</div>`
+      }
+      <div class="${fontClass}" style="font-size:1.3rem;font-weight:800;color:#fff;">${username}</div>
+      <span class="title-badge ${titleClass}" style="margin-top:0.3rem;display:inline-block;">${title}</span>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.75rem;font-style:italic;line-height:1.5;padding:0 0.5rem;">"${bio}"</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;text-align:center;margin-top:1rem;">
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem;">
+        <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">Collection</div>
+        <div style="font-family:'JetBrains Mono';font-weight:700;color:#fff;font-size:1.1rem;">${unique}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem;">
+        <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">Total Rolls</div>
+        <div style="font-family:'JetBrains Mono';font-weight:700;color:#fff;font-size:1.1rem;">${totalRolls.toLocaleString()}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem;">
+        <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">Top Pull</div>
+        <span class="rarity-tag bg-tier-${bestTier.toLowerCase()}" style="font-size:0.72rem;">${bestTier}</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:0.75rem;">
+        <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">Coins</div>
+        <div style="font-family:'JetBrains Mono';font-weight:700;color:var(--accent-gold);font-size:1rem;">💰 ${coins.toLocaleString()}</div>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = 'flex';
+  lucide.createIcons();
+}
+
+function closePlayerProfileModal(e) {
+  if (!e || e.target.id === 'playerProfileModal') {
+    document.getElementById('playerProfileModal').style.display = 'none';
+  }
+}
+
+function renderLeaderboardFromCache() {
+  const query = (document.getElementById('leaderboardSearchInput')?.value || '').toLowerCase().trim();
+  const tbody = document.getElementById('leaderboardBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  let data = cachedLeaderboardData;
+  if (query) data = data.filter(r => (r.username || '').toLowerCase().includes(query));
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:1.5rem 0; color:var(--text-muted);">No players found.</td></tr>';
+    return;
+  }
+
+  data.forEach((entry, i) => {
+    const { uid, row, globalRank } = entry;
+    const isUser = userSession.token && uid === userSession.token;
+    const tr = document.createElement('tr');
+    if (isUser) tr.className = 'is-me';
+    tr.innerHTML = `
+      <td><span style="font-family:'JetBrains Mono'; font-weight:700; opacity:0.6;">#${globalRank}</span></td>
+      <td>
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          ${row.pfp ? `<img src="${row.pfp}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">` : ''}
+          <div>
+            <span style="font-weight:700;">${row.username || 'Unknown'}</span>
+            ${row.equipped_title || row.title ? `<span class="title-badge ${row.equipped_title_class || row.title_class || 'title-novice'}" style="font-size:0.65rem; margin-left:0.4rem;">${row.equipped_title || row.title}</span>` : ''}
+          </div>
+          <button class="char-info-btn" onclick='openPlayerProfileModal("${uid}", ${JSON.stringify(row).replace(/'/g, "&#39;")})' title="View Profile" style="margin-left:auto;">
+            <i data-lucide="info" style="width:12px;height:12px;"></i>
+          </button>
+        </div>
+      </td>
+      <td style="font-family:'JetBrains Mono'; font-weight:700;">${row.unique || 0}</td>
+      <td style="font-family:'JetBrains Mono';">${(row.total_rolls || 0).toLocaleString()}</td>
+      <td><span class="rarity-tag bg-tier-${(row.best_pull_tier || 'COMMON').toLowerCase()}">${row.best_pull_tier || 'COMMON'}</span></td>
+      <td style="font-family:'JetBrains Mono'; font-weight:700; color:var(--accent-gold);">${(row.coins || 0).toLocaleString()}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  lucide.createIcons();
+}
+
 function saveState() {
+  // Guard: don't overwrite cloud state before it has loaded from Firestore
+  if (useFirebase && !isCloudStateLoaded) return;
   if (useFirebase && firebaseDb) {
     const uid = (firebaseAuth && firebaseAuth.currentUser) ? firebaseAuth.currentUser.uid : userSession.token;
     if (uid) {
@@ -4022,6 +4601,12 @@ function saveState() {
         coins: Number(gameState.coins) || 0,
         title: titleName,
         title_class: titleClass,
+        equipped_title: titleName,
+        equipped_title_class: titleClass,
+        bio: userSession.bio || gameState.profile_bio || '',
+        equipped_font: gameState.equipped_font || userSession.name_font || 'font-outfit',
+        equipped_border: gameState.equipped_border || userSession.avatar_border || 'border-none',
+        equipped_theme: gameState.equipped_theme || userSession.profile_theme || 'theme-default',
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).catch(e => console.warn('[Firestore] Leaderboard sync notice:', e.message));
     }
@@ -4044,28 +4629,12 @@ async function fetchLeaderboard() {
   if (useFirebase && firebaseDb) {
     try {
       const snap = await firebaseDb.collection('leaderboard').orderBy('unique', 'desc').limit(50).get();
-      tbody.innerHTML = '';
       if (snap.empty) {
         tbody.innerHTML = '<tr><td colspan="6" style="padding:1.5rem 0; color:var(--text-muted);">No players yet.</td></tr>';
         return;
       }
-      snap.docs.forEach((doc, i) => {
-        const row = doc.data();
-        const isUser = userSession.token && doc.id === userSession.token;
-        const tr = document.createElement('tr');
-        if (isUser) tr.className = 'is-me';
-        const pfpHtml = row.pfp ? `<img src="${row.pfp}" class="user-pfp-thumb" style="margin-right:6px;" alt="pfp"/>` : '';
-        const tClass = row.equipped_title_class || getTitleClassByName(row.equipped_title);
-        tr.innerHTML = `
-          <td style="font-family:'JetBrains Mono'; font-weight:700;">#${i + 1}</td>
-          <td>${pfpHtml}${row.username || 'Unknown'} ${row.equipped_title ? `<span class="title-badge ${tClass}" style="margin-left:4px;">${row.equipped_title}</span>` : ''} ${isUser ? '<span style="color:var(--accent-gold); font-size:0.75rem; margin-left:4px;">(YOU)</span>' : ''}</td>
-          <td style="font-family:'JetBrains Mono';">${row.unique || 0} / ${ALL_CHAR_NAMES.length}</td>
-          <td style="font-family:'JetBrains Mono';">${(row.total_rolls || 0).toLocaleString()}</td>
-          <td><span class="rarity-tag bg-tier-${(row.best_pull_tier || 'COMMON').toLowerCase()}">${row.best_pull_tier || 'COMMON'}</span></td>
-          <td style="font-family:'JetBrains Mono'; font-weight:700; color:var(--accent-gold);">${(row.coins || 0).toLocaleString()}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+      cachedLeaderboardData = snap.docs.map((doc, i) => ({ uid: doc.id, row: doc.data(), globalRank: i + 1 }));
+      renderLeaderboardFromCache();
     } catch(e) {
       tbody.innerHTML = `<tr><td colspan="6" style="padding:1rem 0; color:#f87171; font-size:0.85rem;">Failed to load: ${e.message}</td></tr>`;
     }
@@ -4082,22 +4651,8 @@ async function fetchLeaderboard() {
       tbody.innerHTML = '<tr><td colspan="6" style="padding:1.5rem 0; color:var(--text-muted);">No recorded players yet.</td></tr>';
       return;
     }
-    data.forEach((row, i) => {
-      const isUser = userSession.token && row.username === userSession.username;
-      const tr = document.createElement('tr');
-      if (isUser) tr.className = 'is-me';
-      const pfpHtml = row.pfp ? `<img src="${row.pfp}" class="user-pfp-thumb" style="margin-right:6px;" alt="pfp"/>` : '';
-      const tClass = row.title_class || getTitleClassByName(row.title);
-      tr.innerHTML = `
-        <td style="font-family:'JetBrains Mono'; font-weight:700;">#${row.rank || i + 1}</td>
-        <td>${pfpHtml}${row.username} ${row.title ? `<span class="title-badge ${tClass}" style="margin-left:4px;">${row.title}</span>` : ''} ${isUser ? '<span style="color:var(--accent-gold); font-size:0.75rem; margin-left:4px;">(YOU)</span>' : ''}</td>
-        <td style="font-family:'JetBrains Mono';">${row.unique} / ${ALL_CHAR_NAMES.length}</td>
-        <td style="font-family:'JetBrains Mono';">${row.total_rolls.toLocaleString()}</td>
-        <td><span class="rarity-tag bg-tier-${(row.best_pull_tier || 'COMMON').toLowerCase()}">${row.best_pull_tier || 'COMMON'}</span></td>
-        <td style="font-family:'JetBrains Mono'; font-weight:700; color:var(--accent-gold);">${row.coins.toLocaleString()}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+    cachedLeaderboardData = data.map((row, i) => ({ uid: row.username, row, globalRank: row.rank || i + 1 }));
+    renderLeaderboardFromCache();
   } catch(err) {
     tbody.innerHTML = `<tr><td colspan="6" style="padding:1rem 0; color:var(--text-muted); font-size:0.85rem;">Leaderboard requires Firebase (cloud) or backend server at localhost:8000.</td></tr>`;
   }
@@ -4108,6 +4663,10 @@ async function saveProfileChanges() {
 
   const newName = document.getElementById('editUsernameInput').value.trim();
   const newPfp = document.getElementById('editPfpInput').value.trim();
+  const newBio = document.getElementById('editBioInput') ? document.getElementById('editBioInput').value.trim() : (userSession.bio || '');
+  const newFont = document.getElementById('editFontInput') ? document.getElementById('editFontInput').value : (gameState.equipped_font || 'font-outfit');
+  const newBorder = document.getElementById('editBorderInput') ? document.getElementById('editBorderInput').value : (gameState.equipped_border || 'border-none');
+  const newTheme = document.getElementById('editThemeInput') ? document.getElementById('editThemeInput').value : (gameState.equipped_theme || 'theme-default');
 
   if (!newName) { showToast('Error', 'Username cannot be empty.'); return; }
 
@@ -4116,7 +4675,25 @@ async function saveProfileChanges() {
   const prevPfp = userSession.pfp;
   userSession.username = newName;
   userSession.pfp = newPfp;
-  localStorage.setItem('cne_auth_token_v4', JSON.stringify({ username: newName, token: userSession.token, pfp: newPfp }));
+  userSession.bio = newBio;
+  userSession.name_font = newFont;
+  userSession.avatar_border = newBorder;
+  userSession.profile_theme = newTheme;
+
+  gameState.profile_bio = newBio;
+  gameState.equipped_font = newFont;
+  gameState.equipped_border = newBorder;
+  gameState.equipped_theme = newTheme;
+
+  localStorage.setItem('cne_auth_token_v4', JSON.stringify({
+    username: newName,
+    token: userSession.token,
+    pfp: newPfp,
+    bio: newBio,
+    name_font: newFont,
+    avatar_border: newBorder,
+    profile_theme: newTheme
+  }));
 
   const chosenTitle = document.getElementById('editTitleInput') ? (document.getElementById('editTitleInput').value || 'Novice') : (gameState.equipped_title || 'Novice');
   gameState.equipped_title = chosenTitle;
@@ -4133,10 +4710,13 @@ async function saveProfileChanges() {
       firebaseDb.collection('users').doc(uid).set({
         username: newName,
         pfp: newPfp,
+        bio: newBio,
+        name_font: newFont,
+        avatar_border: newBorder,
+        profile_theme: newTheme,
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).catch(e => {
         console.warn('Profile Firestore sync notice:', e.message);
-        // Don't rollback — local update is good enough, will sync next time
       });
     }
   } else if (!useFirebase) {
@@ -4194,6 +4774,72 @@ function openProfileModal() {
 
   document.getElementById('editUsernameInput').value = userSession.username;
   document.getElementById('editPfpInput').value = userSession.pfp || "";
+  if (document.getElementById('editBioInput')) {
+    document.getElementById('editBioInput').value = userSession.bio || gameState.profile_bio || "";
+  }
+
+  // Populate Name Font dropdown
+  const fontSelect = document.getElementById('editFontInput');
+  if (fontSelect) {
+    fontSelect.innerHTML = '';
+    const fonts = gameState.unlocked_fonts || ['font-outfit'];
+    const fontLabels = {
+      'font-outfit': 'Outfit (Default)',
+      'font-cinzel': 'Cinzel (Roman Serif)',
+      'font-orbitron': 'Orbitron (Sci-Fi)',
+      'font-press': 'Press Start 2P (Pixel)'
+    };
+    fonts.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f;
+      opt.textContent = fontLabels[f] || f;
+      if (f === (gameState.equipped_font || userSession.name_font)) opt.selected = true;
+      fontSelect.appendChild(opt);
+    });
+  }
+
+  // Populate Border dropdown
+  const borderSelect = document.getElementById('editBorderInput');
+  if (borderSelect) {
+    borderSelect.innerHTML = '';
+    const borders = gameState.unlocked_borders || ['border-none'];
+    const borderLabels = {
+      'border-none': 'No Border',
+      'border-gold': 'Gold Ring',
+      'border-rainbow': 'Rainbow Prism',
+      'border-fire': 'Blazing Fire',
+      'border-void': 'Void Aura'
+    };
+    borders.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b;
+      opt.textContent = borderLabels[b] || b;
+      if (b === (gameState.equipped_border || userSession.avatar_border)) opt.selected = true;
+      borderSelect.appendChild(opt);
+    });
+  }
+
+  // Populate Theme dropdown
+  const themeSelect = document.getElementById('editThemeInput');
+  if (themeSelect) {
+    themeSelect.innerHTML = '';
+    const themes = gameState.unlocked_themes || ['theme-default'];
+    const themeLabels = {
+      'theme-default': 'Default Dark',
+      'theme-midnight': 'Midnight Blue',
+      'theme-crimson': 'Crimson Red',
+      'theme-emerald': 'Emerald Green',
+      'theme-gold': 'Elite Gold',
+      'theme-void': 'Purple Void'
+    };
+    themes.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = themeLabels[t] || t;
+      if (t === (gameState.equipped_theme || userSession.profile_theme)) opt.selected = true;
+      themeSelect.appendChild(opt);
+    });
+  }
 
   renderCustomTitleDropdown();
   document.getElementById('profileModal').style.display = 'flex';
@@ -4277,7 +4923,9 @@ function closeProfileModal(e) {
 
 function updateUserProfileUI() {
   const isAuth = !!userSession.token;
-  document.getElementById('userNameDisplay').textContent = isAuth ? userSession.username : "Sign In";
+  const nameEl = document.getElementById('userNameDisplay');
+  nameEl.textContent = isAuth ? userSession.username : "Sign In";
+  nameEl.className = isAuth ? (gameState.equipped_font || userSession.name_font || 'font-outfit') : '';
   document.getElementById('logoutBtn').style.display = isAuth ? 'inline-flex' : 'none';
 
   const badge = document.getElementById('equippedTitleBadge');
@@ -4293,6 +4941,7 @@ function updateUserProfileUI() {
   const userIcon = document.getElementById('userStatusIcon');
   if (isAuth && userSession.pfp) {
     pfpImg.src = userSession.pfp;
+    pfpImg.className = `user-pfp-thumb ${gameState.equipped_border || userSession.avatar_border || ''}`;
     pfpImg.style.display = 'inline-block';
     userIcon.style.display = 'none';
   } else {
