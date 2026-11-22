@@ -35,6 +35,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
 <style>
 :root {
@@ -281,109 +282,438 @@ header {
   border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
-.title-celestial { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.45); box-shadow: 0 0 10px rgba(6, 182, 212, 0.35); font-weight: 800; }
-.title-legend { background: linear-gradient(135deg, #f59e0b, #fef08a); color: #78350f; border: 1px solid #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.45); font-weight: 800; }
-.title-transcendent { background: linear-gradient(135deg, #10b981, #06b6d4, #a855f7); color: #fff; border: 1px solid #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.5); font-weight: 800; }
+.title-celestial { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.45); font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.04em; }
+.title-legend { background: linear-gradient(135deg, #f59e0b, #fef08a); color: #78350f; border: 1px solid #f59e0b; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.04em; }
+.title-transcendent { background: linear-gradient(135deg, #10b981, #06b6d4, #a855f7); color: #fff; border: 1px solid #10b981; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.04em; }
 
+/* CNE MOGUL: No glow, no outline, exact rarity tag font, blurred money behind text */
 .title-mogul {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: linear-gradient(135deg, #14532d 0%, #1e3a1f 35%, #78350f 80%, #b45309 100%);
-  background-size: 200% 200%;
-  animation: mogulGoldShine 3s ease infinite;
-  color: #fef08a !important;
+  justify-content: center;
+  background: #14532d;
+  color: #bbf7d0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
-  border: 1.5px solid #f59e0b;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6), inset 0 0 6px rgba(254, 240, 138, 0.35);
-  padding: 0.15rem 0.65rem 0.15rem 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  padding: 0.22rem 0.65rem 0.22rem 0.55rem;
+  border-radius: 6px;
   overflow: hidden;
-  text-shadow: 0 0 5px rgba(245, 197, 24, 0.7);
+}
+.title-mogul span.title-txt, .title-mogul {
+  position: relative;
+  z-index: 2;
 }
 .title-mogul::before {
   content: '💵';
   position: absolute;
-  top: -14px;
-  left: 10%;
-  font-size: 0.68rem;
-  opacity: 0.9;
+  top: -12px;
+  left: 12%;
+  font-size: 0.62rem;
+  opacity: 0.45;
+  filter: blur(1.5px);
+  z-index: 1;
   animation: dropMoney1 2.2s linear infinite;
   pointer-events: none;
 }
 .title-mogul::after {
   content: '🪙';
   position: absolute;
-  top: -14px;
-  right: 12%;
-  font-size: 0.65rem;
-  opacity: 0.9;
+  top: -12px;
+  right: 15%;
+  font-size: 0.58rem;
+  opacity: 0.45;
+  filter: blur(1.5px);
+  z-index: 1;
   animation: dropMoney2 2.7s linear infinite 1.2s;
   pointer-events: none;
 }
 @keyframes dropMoney1 {
   0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  20% { opacity: 0.95; }
-  80% { opacity: 0.95; }
-  100% { transform: translateY(34px) rotate(45deg); opacity: 0; }
+  25% { opacity: 0.5; }
+  75% { opacity: 0.5; }
+  100% { transform: translateY(32px) rotate(45deg); opacity: 0; }
 }
 @keyframes dropMoney2 {
   0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  25% { opacity: 0.95; }
-  75% { opacity: 0.95; }
-  100% { transform: translateY(34px) rotate(-40deg); opacity: 0; }
-}
-@keyframes mogulGoldShine {
-  0% { background-position: 0% 50%; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
-  50% { background-position: 100% 50%; box-shadow: 0 0 16px rgba(234, 179, 8, 0.85), inset 0 0 8px rgba(254, 240, 138, 0.5); border-color: #fde047; }
-  100% { background-position: 0% 50%; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+  25% { opacity: 0.5; }
+  75% { opacity: 0.5; }
+  100% { transform: translateY(32px) rotate(-40deg); opacity: 0; }
 }
 
+/* CNE GOD: No glow, no outline, exact rarity tag font, Apple-style jewel crown */
 .title-god {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: linear-gradient(135deg, #064e3b, #0d9488 40%, #0284c7 80%, #10b981 100%);
-  background-size: 200% 200%;
-  animation: godShimmer 3s ease infinite, godGlow 2s ease-in-out infinite alternate;
-  color: #fef08a !important;
+  justify-content: center;
+  background: #064e3b;
+  color: #a7f3d0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
-  border: 1.5px solid #34d399;
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.65), 0 0 20px rgba(6, 182, 212, 0.45);
-  padding: 0.15rem 0.85rem 0.15rem 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  padding: 0.22rem 0.85rem 0.22rem 0.55rem;
+  border-radius: 6px;
   overflow: visible !important;
-  text-shadow: 0 0 6px rgba(254, 240, 138, 0.8);
 }
 .title-god::after {
-  content: '👑';
+  content: '';
   position: absolute;
-  top: -10px;
-  right: -8px;
-  font-size: 0.9rem;
-  transform: rotate(22deg);
-  filter: drop-shadow(0 0 4px #fbbf24);
-  animation: crownBob 2s ease-in-out infinite alternate;
+  top: -9px;
+  right: -7px;
+  width: 17px;
+  height: 17px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="%23FFAC33" d="M35.632 11.516c-.347-.84-1.282-1.258-2.127-.912l-6.845 2.738-5.385-9.328c-.461-.798-1.469-1.077-2.274-.614-.236.136-.43.33-.566.566l-5.385 9.328-6.845-2.738c-.845-.346-1.78.072-2.127.912-.347.84.072 1.78.912 2.127l3.864 16.038c.174.721.819 1.229 1.562 1.229h19.155c.743 0 1.388-.508 1.562-1.229l3.864-16.038c.245-.595.127-1.267-.29-1.579z"/><path fill="%23FFCC4D" d="M18 6.577l4.731 8.195c.277.48.81.761 1.363.714l8.243-.703-3.238 13.447H6.901L3.663 14.783l8.243.703c.553.047 1.086-.234 1.363-.714L18 6.577z"/><circle fill="%23DD2E44" cx="18" cy="24" r="2.5"/><circle fill="%2355ACEE" cx="10" cy="24" r="2"/><circle fill="%2355ACEE" cx="26" cy="24" r="2"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: rotate(18deg);
   pointer-events: none;
 }
-@keyframes crownBob {
-  0% { transform: rotate(18deg) scale(0.95); }
-  100% { transform: rotate(26deg) scale(1.12); filter: drop-shadow(0 0 8px #fef08a); }
+
+/* THE WHALE: Whale under tag centered horizontally outside border */
+.title-whale {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0369a1;
+  color: #bae6fd !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  overflow: visible !important;
+  margin-bottom: 12px !important;
 }
-@keyframes godShimmer {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-@keyframes godGlow {
-  0% { box-shadow: 0 0 10px rgba(52, 211, 153, 0.5), 0 0 15px rgba(6, 182, 212, 0.35); border-color: #34d399; }
-  100% { box-shadow: 0 0 18px rgba(52, 211, 153, 0.95), 0 0 28px rgba(250, 204, 21, 0.65); border-color: #fde047; }
+.title-whale::after {
+  content: '🐋';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.15rem;
+  line-height: 1;
+  pointer-events: none;
 }
 
-@keyframes titleGradient {
+/* PHOENIX SOVEREIGN: Bird wings underneath tag */
+.title-phoenix {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #991b1b;
+  color: #fed7aa !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  overflow: visible !important;
+  margin-bottom: 12px !important;
+}
+.title-phoenix::after {
+  content: '🦅';
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* DRAGON SLAYER: Oriental Dragon underneath tag */
+.title-dragon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #854d0e;
+  color: #fef08a !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  overflow: visible !important;
+  margin-bottom: 12px !important;
+}
+.title-dragon::after {
+  content: '🐉';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.15rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* CYBER RONIN: Crossed katanas underneath tag */
+.title-ronin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e1b4b;
+  color: #c7d2fe !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  overflow: visible !important;
+  margin-bottom: 12px !important;
+}
+.title-ronin::after {
+  content: '⚔️';
+  position: absolute;
+  bottom: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.95rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ASTRAL ARCHON: Planet Saturn ring underneath tag */
+.title-astral {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #312e81;
+  color: #e0e7ff !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none !important;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  overflow: visible !important;
+  margin-bottom: 12px !important;
+}
+.title-astral::after {
+  content: '🪐';
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.05rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* NAME ANIMATIONS */
+.name-anim-none {}
+.name-anim-glitch {
+  display: inline-block;
+  animation: glitchAnim 2.5s infinite;
+  text-shadow: 2px 0 #06b6d4, -2px 0 #f43f5e;
+}
+@keyframes glitchAnim {
+  0%, 100% { transform: translate(0); text-shadow: 2px 0 #06b6d4, -2px 0 #f43f5e; }
+  15% { transform: translate(-2px, 1px); text-shadow: -2px 0 #06b6d4, 2px 0 #f43f5e; }
+  17% { transform: translate(2px, -1px); }
+  20% { transform: translate(0); }
+  65% { transform: translate(1px, -1px); text-shadow: 1px 0 #06b6d4, -1px 0 #f43f5e; }
+  68% { transform: translate(0); }
+}
+
+.name-anim-wave {
+  display: inline-block;
+  animation: waveLetters 2s ease-in-out infinite;
+}
+@keyframes waveLetters {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.08); filter: brightness(1.2); }
+}
+
+.name-anim-rainbow {
+  background: linear-gradient(90deg, #f43f5e, #f59e0b, #10b981, #06b6d4, #a855f7, #f43f5e);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowShift 3s linear infinite;
+  display: inline-block;
+}
+@keyframes rainbowShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.name-anim-flame {
+  display: inline-block;
+  color: #ffedd5 !important;
+  text-shadow: 0 -2px 6px #f97316, 0 -6px 14px #ef4444;
+  animation: flameFlicker 1.8s ease-in-out infinite alternate;
+}
+@keyframes flameFlicker {
+  0% { text-shadow: 0 -2px 6px #f97316, 0 -6px 14px #ef4444; transform: scaleY(1); }
+  100% { text-shadow: 0 -3px 9px #fbbf24, 0 -8px 20px #dc2626; transform: scaleY(1.05); }
+}
+
+.name-anim-neon {
+  color: #67e8f9 !important;
+  text-shadow: 0 0 5px #06b6d4, 0 0 10px #0891b2, 0 0 20px #0e7490;
+  animation: neonHum 2s infinite alternate;
+  display: inline-block;
+}
+@keyframes neonHum {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; text-shadow: 0 0 5px #06b6d4, 0 0 10px #0891b2, 0 0 20px #0e7490; }
+  20%, 24%, 55% { opacity: 0.6; text-shadow: none; }
+}
+
+/* PROFILE WRAPS / LINE FRAMES */
+.discord-profile-card.wrap-cyber, tr.wrap-cyber {
+  border: 2px solid #06b6d4 !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4), inset 0 0 10px rgba(6, 182, 212, 0.15) !important;
+  background-image: radial-gradient(circle at top right, rgba(6, 182, 212, 0.12), transparent 70%) !important;
+}
+.discord-profile-card.wrap-gold, tr.wrap-gold {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4), inset 0 0 12px rgba(245, 158, 11, 0.2) !important;
+  background-image: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, transparent 60%) !important;
+}
+.discord-profile-card.wrap-void, tr.wrap-void {
+  border: 2px solid #a855f7 !important;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.45), inset 0 0 14px rgba(168, 85, 247, 0.25) !important;
+  background-image: radial-gradient(circle at bottom, rgba(168, 85, 247, 0.18), transparent 75%) !important;
+}
+.discord-profile-card.wrap-holo, tr.wrap-holo {
+  border: 2px solid #ec4899 !important;
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.35), 0 0 25px rgba(6, 182, 212, 0.25) !important;
+}
+.discord-profile-card.wrap-sakura, tr.wrap-sakura {
+  border: 2px solid #f472b6 !important;
+  box-shadow: 0 0 15px rgba(244, 114, 182, 0.4), inset 0 0 10px rgba(244, 114, 182, 0.15) !important;
+}
+
+/* ANIMATED BORDERS */
+.border-butterflies {
+  position: relative;
+  box-shadow: 0 0 0 2px #38bdf8, 0 0 14px rgba(56, 189, 248, 0.6) !important;
+  animation: butterfliesOrbit 4s linear infinite;
+}
+@keyframes butterfliesOrbit {
+  0% { box-shadow: 0 0 0 2px #38bdf8, 0 0 14px rgba(56, 189, 248, 0.6); }
+  50% { box-shadow: 0 0 0 2px #ec4899, 0 0 18px rgba(236, 72, 153, 0.7); }
+  100% { box-shadow: 0 0 0 2px #38bdf8, 0 0 14px rgba(56, 189, 248, 0.6); }
+}
+
+.border-sakura {
+  box-shadow: 0 0 0 2px #f472b6, 0 0 12px rgba(244, 114, 182, 0.5) !important;
+  animation: sakuraPulse 3s ease-in-out infinite alternate;
+}
+@keyframes sakuraPulse {
+  0% { box-shadow: 0 0 0 2px #f472b6, 0 0 10px rgba(244, 114, 182, 0.4); }
+  100% { box-shadow: 0 0 0 3px #fb7185, 0 0 20px rgba(251, 113, 133, 0.8); }
+}
+
+.border-lightning {
+  box-shadow: 0 0 0 2px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.8) !important;
+  animation: lightningFlicker 0.4s steps(2, start) infinite;
+}
+@keyframes lightningFlicker {
+  0%, 100% { box-shadow: 0 0 0 2px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.85); }
+  50% { box-shadow: 0 0 0 3px #67e8f9, 0 0 26px rgba(103, 232, 249, 1); }
+}
+
+.border-stardust {
+  box-shadow: 0 0 0 2px #a855f7, 0 0 18px rgba(168, 85, 247, 0.75) !important;
+  animation: stardustSpin 6s linear infinite;
+}
+@keyframes stardustSpin {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* ANIMATED & ANIME THEMES */
+.discord-profile-card.theme-anime-cyber {
+  background: linear-gradient(180deg, #090919 0%, #150d2a 50%, #080816 100%) !important;
+}
+.discord-banner.theme-anime-cyber {
+  background: linear-gradient(135deg, #2e0854, #083358, #ff007f) !important;
+  background-size: 200% 200% !important;
+  animation: animeCyberBanner 6s ease infinite !important;
+}
+@keyframes animeCyberBanner {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+.discord-profile-card.theme-anime-sakura {
+  background: linear-gradient(180deg, #1f0b18 0%, #2b1122 50%, #160711 100%) !important;
+}
+.discord-banner.theme-anime-sakura {
+  background: linear-gradient(135deg, #831843, #db2777, #fbcfe8) !important;
+  background-size: 200% 200% !important;
+  animation: sakuraBanner 5s ease infinite alternate !important;
+}
+@keyframes sakuraBanner {
+  0% { background-position: 0% 30%; }
+  100% { background-position: 100% 70%; }
+}
+
+.discord-profile-card.theme-anime-fire {
+  background: linear-gradient(180deg, #1c0a05 0%, #2d1007 50%, #130502 100%) !important;
+}
+.discord-banner.theme-anime-fire {
+  background: linear-gradient(135deg, #7c2d12, #ea580c, #facc15) !important;
+  background-size: 200% 200% !important;
+  animation: fireBanner 4s ease infinite !important;
+}
+@keyframes fireBanner {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.discord-profile-card.theme-anime-retro {
+  background: linear-gradient(180deg, #15092a 0%, #1f0d3d 50%, #0d041c 100%) !important;
+}
+.discord-banner.theme-anime-retro {
+  background: linear-gradient(135deg, #4a044e, #9333ea, #06b6d4) !important;
+  background-size: 200% 200% !important;
+  animation: animeCyberBanner 7s ease infinite !important;
+}
+
+.discord-profile-card.theme-anime-space {
+  background: linear-gradient(180deg, #030712 0%, #0f172a 50%, #020617 100%) !important;
+}
+.discord-banner.theme-anime-space {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81, #0284c7) !important;
+  background-size: 250% 250% !important;
+  animation: animeCyberBanner 8s ease infinite !important;
 }
 
 /* NAVIGATION TABS */
@@ -2328,14 +2658,14 @@ main {
 
 <!-- NAVIGATION TABS -->
 <nav class="tab-nav">
-  <button class="tab-link active" id="tabBtn-roll" onclick="switchTab('roll')">Roll <span class="tab-key">1</span></button>
-  <button class="tab-link" id="tabBtn-multi" onclick="switchTab('multi')">Multi-Pull <span class="tab-key">2</span></button>
-  <button class="tab-link" id="tabBtn-upgrades" onclick="switchTab('upgrades')">Upgrades <span class="tab-key">3</span></button>
-  <button class="tab-link" id="tabBtn-inventory" onclick="switchTab('inventory')">Inventory <span class="tab-key">4</span></button>
-  <button class="tab-link" id="tabBtn-collection" onclick="switchTab('collection')">Compendium <span class="tab-key">5</span></button>
-  <button class="tab-link" id="tabBtn-quests" onclick="switchTab('quests')">Quests & Milestones <span class="tab-key">6</span></button>
-  <button class="tab-link" id="tabBtn-leaderboard" onclick="switchTab('leaderboard')">Leaderboard <span class="tab-key">7</span></button>
-  <button class="tab-link" id="tabBtn-shop" onclick="switchTab('shop')">Shop <span class="tab-key">8</span></button>
+  <button class="tab-link active" id="tabBtn-roll" onclick="switchTab('roll')">Roll</button>
+  <button class="tab-link" id="tabBtn-multi" onclick="switchTab('multi')">Multi-Pull</button>
+  <button class="tab-link" id="tabBtn-upgrades" onclick="switchTab('upgrades')">Upgrades</button>
+  <button class="tab-link" id="tabBtn-inventory" onclick="switchTab('inventory')">Inventory</button>
+  <button class="tab-link" id="tabBtn-collection" onclick="switchTab('collection')">Compendium</button>
+  <button class="tab-link" id="tabBtn-quests" onclick="switchTab('quests')">Quests & Milestones</button>
+  <button class="tab-link" id="tabBtn-leaderboard" onclick="switchTab('leaderboard')">Leaderboard</button>
+  <button class="tab-link" id="tabBtn-shop" onclick="switchTab('shop')">Shop</button>
 </nav>
 
 <main>
@@ -2347,7 +2677,7 @@ main {
     <div class="pity-wrapper">
       <div class="pity-info">
         <span>LEGENDARY PITY</span>
-        <span id="pityCount">0 / 150</span>
+        <span id="pityCount">0 / 250</span>
       </div>
       <div class="pity-track">
         <div class="pity-fill" id="pityFill" style="width: 0%;"></div>
@@ -2579,6 +2909,8 @@ main {
       <button class="filter-tab" onclick="filterShop('BOOSTERS')">Boosters</button>
       <button class="filter-tab" onclick="filterShop('THEMES')">Themes</button>
       <button class="filter-tab" onclick="filterShop('BORDERS')">Borders</button>
+      <button class="filter-tab" onclick="filterShop('WRAPS')">Wraps</button>
+      <button class="filter-tab" onclick="filterShop('ANIMATIONS')">Animations</button>
       <button class="filter-tab" onclick="filterShop('FONTS')">Name Fonts</button>
       <button class="filter-tab" onclick="filterShop('TITLES')">Titles</button>
     </div>
@@ -2630,8 +2962,16 @@ main {
     </div>
 
     <div class="form-field-clean">
-      <label>Avatar Image URL</label>
-      <input type="text" id="editPfpInput" placeholder="https://example.com/avatar.png"/>
+      <label>Avatar Photo / GIF</label>
+      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <input type="file" id="editPfpFileInput" accept="image/*,.gif" style="display:none;" onchange="handlePfpFileSelect(event)"/>
+        <button type="button" class="btn-action secondary" onclick="document.getElementById('editPfpFileInput').click()" style="padding:0.4rem 0.8rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.4rem;">
+          <i data-lucide="upload" style="width:14px;height:14px;"></i> Choose File / GIF
+        </button>
+        <span id="editPfpFileName" style="font-size:0.75rem; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;">No file chosen</span>
+      </div>
+      <input type="hidden" id="editPfpInput"/>
+      <div id="pfpUploadProgress" style="font-size:0.75rem; color:#38bdf8; display:none; margin-top:4px;">Uploading...</div>
     </div>
 
     <div class="form-field-clean">
@@ -2690,6 +3030,30 @@ main {
         <div class="custom-dropdown-menu" id="themeDropdownMenu" style="max-height:200px;overflow-y:auto;"></div>
       </div>
       <input type="hidden" id="editThemeInput" value="theme-default"/>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Profile Wrap (Frame Style)</label>
+      <div class="custom-dropdown" id="wrapDropdownContainer">
+        <div class="custom-dropdown-trigger" id="wrapDropdownTrigger" onclick="toggleWrapDropdown(event)">
+          <span id="wrapDropdownSelected">Default Frame</span>
+          <i data-lucide="chevron-down" style="width:16px;height:16px;transition:transform 0.2s;" id="wrapDropdownChevron"></i>
+        </div>
+        <div class="custom-dropdown-menu" id="wrapDropdownMenu" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
+      <input type="hidden" id="editWrapInput" value="wrap-none"/>
+    </div>
+
+    <div class="form-field-clean">
+      <label>Name Animation</label>
+      <div class="custom-dropdown" id="animDropdownContainer">
+        <div class="custom-dropdown-trigger" id="animDropdownTrigger" onclick="toggleAnimDropdown(event)">
+          <span id="animDropdownSelected">No Animation</span>
+          <i data-lucide="chevron-down" style="width:16px;height:16px;transition:transform 0.2s;" id="animDropdownChevron"></i>
+        </div>
+        <div class="custom-dropdown-menu" id="animDropdownMenu" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
+      <input type="hidden" id="editAnimInput" value="anim-none"/>
     </div>
 
     <button class="btn-action" onclick="saveProfileChanges()" style="margin-top:0.8rem; justify-content:center;">
@@ -2933,7 +3297,7 @@ const TIER_STRENGTH = {
 const COIN_REWARDS = {
   COMMON: 10, RARE: 40, EPIC: 160, LEGENDARY: 640, MYTHIC: 2560, CELESTIAL: 5000, SECRET: 10000, LEGEND: 18000, TRANSCENDENT: 30000
 };
-const PITY_THRESHOLD = 150;
+const PITY_THRESHOLD = 250;
 
 const CHARACTERS = {
   // TRANSCENDENT (10★) - Color: #10b981
@@ -3059,9 +3423,9 @@ const ALL_CHAR_NAMES = Object.keys(CHARACTERS);
 
 const ITEMS = {
   "Master Roll": {
-    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 100,
+    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 50,
     animClass: "anim-transcendent",
-    desc: "Infuses the next roll with 100x godlike luck multiplier."
+    desc: "Infuses the next roll with 50x godlike luck multiplier."
   },
   "Celestial Orb": {
     tier: "CELESTIAL", stars: 7, luckMultiplier: 35,
@@ -3092,7 +3456,18 @@ const UPGRADE_CONFIGS = {
   spins: { max: 5, base: 350, growth: 2.4 },
 };
 
-/* 12-HOUR ROTATING QUEST POOL (HARDCORE OBJECTIVES & TIME DEDICATION) */
+function getMaxCommonCount(s) {
+  if (!s || !s.inventory) return 0;
+  let max = 0;
+  for (const [name, count] of Object.entries(s.inventory)) {
+    if (CHARACTERS[name] && CHARACTERS[name].tier === 'COMMON') {
+      if (count > max) max = count;
+    }
+  }
+  return max;
+}
+
+/* 12-HOUR ROTATING QUEST POOL (HARDCORE EXPANDED OBJECTIVES & MANUAL CLAIM) */
 const QUEST_POOL = [
   {
     id: "cq_150_rolls",
@@ -3100,7 +3475,7 @@ const QUEST_POOL = [
     desc: "Perform 150 summons during this 12h cycle.",
     progress: (s) => `${Math.min(150, (s.cycle_stats?.rolls || 0))} / 150`,
     isDone: (s) => (s.cycle_stats?.rolls || 0) >= 150,
-    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 1500
+    rewardItem: "Silver Horseshoe", rewardCount: 3, rewardCoins: 1500
   },
   {
     id: "cq_350_rolls",
@@ -3108,7 +3483,7 @@ const QUEST_POOL = [
     desc: "Perform 350 summons during this 12h cycle.",
     progress: (s) => `${Math.min(350, (s.cycle_stats?.rolls || 0))} / 350`,
     isDone: (s) => (s.cycle_stats?.rolls || 0) >= 350,
-    rewardItem: "Quest Reroll", rewardCount: 4, rewardCoins: 3500
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 3500
   },
   {
     id: "cq_600_rolls",
@@ -3116,7 +3491,39 @@ const QUEST_POOL = [
     desc: "Perform 600 summons during this 12h cycle.",
     progress: (s) => `${Math.min(600, (s.cycle_stats?.rolls || 0))} / 600`,
     isDone: (s) => (s.cycle_stats?.rolls || 0) >= 600,
-    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 7500
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 6000
+  },
+  {
+    id: "cq_1000_rolls",
+    title: "Grand Evocation",
+    desc: "Perform 1,000 summons during this 12h cycle.",
+    progress: (s) => `${Math.min(1000, (s.cycle_stats?.rolls || 0))} / 1000`,
+    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 1000,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 15000
+  },
+  {
+    id: "cq_1500_rolls",
+    title: "Infinite Summons",
+    desc: "Perform 1,500 summons during this 12h cycle.",
+    progress: (s) => `${Math.min(1500, (s.cycle_stats?.rolls || 0))} / 1500`,
+    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 1500,
+    rewardItem: "Golden Clover", rewardCount: 4, rewardCoins: 25000
+  },
+  {
+    id: "cq_50_singles",
+    title: "Solo Discipline",
+    desc: "Perform 50 Single Rolls (individual summons) during this cycle.",
+    progress: (s) => `${Math.min(50, (s.cycle_stats?.single_rolls || 0))} / 50`,
+    isDone: (s) => (s.cycle_stats?.single_rolls || 0) >= 50,
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 3000
+  },
+  {
+    id: "cq_150_singles",
+    title: "Patience of Steel",
+    desc: "Perform 150 Single Rolls (individual summons) during this cycle.",
+    progress: (s) => `${Math.min(150, (s.cycle_stats?.single_rolls || 0))} / 150`,
+    isDone: (s) => (s.cycle_stats?.single_rolls || 0) >= 150,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 8000
   },
   {
     id: "cq_20_multis",
@@ -3124,7 +3531,7 @@ const QUEST_POOL = [
     desc: "Complete 20 Multi-Pulls during this 12h cycle.",
     progress: (s) => `${Math.min(20, (s.cycle_stats?.multi_pulls || 0))} / 20`,
     isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 20,
-    rewardItem: "Quest Reroll", rewardCount: 4, rewardCoins: 4500
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 4000
   },
   {
     id: "cq_40_multis",
@@ -3132,15 +3539,15 @@ const QUEST_POOL = [
     desc: "Complete 40 Multi-Pulls during this 12h cycle.",
     progress: (s) => `${Math.min(40, (s.cycle_stats?.multi_pulls || 0))} / 40`,
     isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 40,
-    rewardItem: "Golden Clover", rewardCount: 4, rewardCoins: 9000
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 8000
   },
   {
-    id: "cq_50_singles",
-    title: "Manual Discipline",
-    desc: "Perform 50 Single Rolls (individual summons) during this cycle.",
-    progress: (s) => `${Math.min(50, (s.cycle_stats?.single_rolls || 0))} / 50`,
-    isDone: (s) => (s.cycle_stats?.single_rolls || 0) >= 50,
-    rewardItem: "Silver Horseshoe", rewardCount: 6, rewardCoins: 3000
+    id: "cq_80_multis",
+    title: "Gacha Whirlwind",
+    desc: "Complete 80 Multi-Pulls during this 12h cycle.",
+    progress: (s) => `${Math.min(80, (s.cycle_stats?.multi_pulls || 0))} / 80`,
+    isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 80,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 16000
   },
   {
     id: "cq_time_5m",
@@ -3148,7 +3555,7 @@ const QUEST_POOL = [
     desc: "Spend at least 5 minutes active during this cycle.",
     progress: (s) => `${Math.floor(Math.min(300, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 5m 00s`,
     isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 300,
-    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 2000
+    rewardItem: "Silver Horseshoe", rewardCount: 3, rewardCoins: 2000
   },
   {
     id: "cq_time_15m",
@@ -3164,7 +3571,23 @@ const QUEST_POOL = [
     desc: "Spend at least 30 minutes active during this cycle.",
     progress: (s) => `${Math.floor(Math.min(1800, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 30m 00s`,
     isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 1800,
-    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 12000
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 10000
+  },
+  {
+    id: "cq_time_45m",
+    title: "Library Resident",
+    desc: "Spend at least 45 minutes active during this cycle.",
+    progress: (s) => `${Math.floor(Math.min(2700, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 45m 00s`,
+    isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 2700,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 15000
+  },
+  {
+    id: "cq_time_60m",
+    title: "Dean's List Devotion",
+    desc: "Spend at least 60 minutes active during this cycle.",
+    progress: (s) => `${Math.floor(Math.min(3600, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 60m 00s`,
+    isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 3600,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 25000
   },
   {
     id: "cq_use_items_15",
@@ -3172,7 +3595,47 @@ const QUEST_POOL = [
     desc: "Consume 15 boost items during summons in this cycle.",
     progress: (s) => `${Math.min(15, (s.cycle_stats?.items_used || 0))} / 15`,
     isDone: (s) => (s.cycle_stats?.items_used || 0) >= 15,
-    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 3000
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 3000
+  },
+  {
+    id: "cq_use_items_30",
+    title: "Elixir Addict",
+    desc: "Consume 30 boost items during summons in this cycle.",
+    progress: (s) => `${Math.min(30, (s.cycle_stats?.items_used || 0))} / 30`,
+    isDone: (s) => (s.cycle_stats?.items_used || 0) >= 30,
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 8000
+  },
+  {
+    id: "cq_raw_luck_roll",
+    title: "Pure Instinct",
+    desc: "Perform 200 summons without using any items.",
+    progress: (s) => `${Math.min(200, (s.cycle_stats?.raw_summons || 0))} / 200`,
+    isDone: (s) => (s.cycle_stats?.raw_summons || 0) >= 200,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 7500
+  },
+  {
+    id: "cq_10_consecutive_commons",
+    title: "Commoner Luck",
+    desc: "Pull 10 Common characters in a row without breaking the streak.",
+    progress: (s) => `${Math.min(10, (s.cycle_stats?.max_consecutive_commons || 0))} / 10`,
+    isDone: (s) => (s.cycle_stats?.max_consecutive_commons || 0) >= 10,
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 4000
+  },
+  {
+    id: "cq_20_consecutive_commons",
+    title: "Iron Misfortune",
+    desc: "Pull 20 Common characters in a row without breaking the streak.",
+    progress: (s) => `${Math.min(20, (s.cycle_stats?.max_consecutive_commons || 0))} / 20`,
+    isDone: (s) => (s.cycle_stats?.max_consecutive_commons || 0) >= 20,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 10000
+  },
+  {
+    id: "cq_777_common",
+    title: "Lucky Sevens Hoard",
+    desc: "Accumulate at least 777 copies of any single COMMON card in inventory.",
+    progress: (s) => `${Math.min(777, getMaxCommonCount(s))} / 777`,
+    isDone: (s) => getMaxCommonCount(s) >= 777,
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 12000
   },
   {
     id: "cq_coins_25000",
@@ -3180,7 +3643,7 @@ const QUEST_POOL = [
     desc: "Earn 25,000 Coins from summons during this cycle.",
     progress: (s) => `${Math.min(25000, (s.cycle_stats?.coins_earned || 0))} / 25000`,
     isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 25000,
-    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 3000
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 3000
   },
   {
     id: "cq_coins_100000",
@@ -3191,12 +3654,28 @@ const QUEST_POOL = [
     rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 8000
   },
   {
+    id: "cq_coins_250000",
+    title: "Quarter Millionaire",
+    desc: "Earn 250,000 Coins from summons during this cycle.",
+    progress: (s) => `${Math.min(250000, (s.cycle_stats?.coins_earned || 0))} / 250000`,
+    isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 250000,
+    rewardItem: "Golden Clover", rewardCount: 4, rewardCoins: 15000
+  },
+  {
     id: "cq_100_students",
     title: "Student Roll Call",
     desc: "Summon 100 Students during this cycle.",
     progress: (s) => `${Math.min(100, (s.cycle_stats?.students_pulled || 0))} / 100`,
     isDone: (s) => (s.cycle_stats?.students_pulled || 0) >= 100,
-    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 3000
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 3000
+  },
+  {
+    id: "cq_300_students",
+    title: "Assembly of Scholars",
+    desc: "Summon 300 Students during this cycle.",
+    progress: (s) => `${Math.min(300, (s.cycle_stats?.students_pulled || 0))} / 300`,
+    isDone: (s) => (s.cycle_stats?.students_pulled || 0) >= 300,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 8000
   },
   {
     id: "cq_50_teachers",
@@ -3204,15 +3683,23 @@ const QUEST_POOL = [
     desc: "Summon 50 Teachers during this cycle.",
     progress: (s) => `${Math.min(50, (s.cycle_stats?.teachers_pulled || 0))} / 50`,
     isDone: (s) => (s.cycle_stats?.teachers_pulled || 0) >= 50,
-    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 6000
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 6000
   },
   {
-    id: "cq_10_auxiliares",
+    id: "cq_150_teachers",
+    title: "Department Conclave",
+    desc: "Summon 150 Teachers during this cycle.",
+    progress: (s) => `${Math.min(150, (s.cycle_stats?.teachers_pulled || 0))} / 150`,
+    isDone: (s) => (s.cycle_stats?.teachers_pulled || 0) >= 150,
+    rewardItem: "Golden Clover", rewardCount: 4, rewardCoins: 14000
+  },
+  {
+    id: "cq_15_auxiliares",
     title: "Staff Support",
-    desc: "Summon 10 Auxiliares / Staff during this cycle.",
-    progress: (s) => `${Math.min(10, (s.cycle_stats?.auxiliares_pulled || 0))} / 10`,
-    isDone: (s) => (s.cycle_stats?.auxiliares_pulled || 0) >= 10,
-    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 4000
+    desc: "Summon 15 Auxiliares / Staff during this cycle.",
+    progress: (s) => `${Math.min(15, (s.cycle_stats?.auxiliares_pulled || 0))} / 15`,
+    isDone: (s) => (s.cycle_stats?.auxiliares_pulled || 0) >= 15,
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 4000
   },
   {
     id: "cq_25_rares",
@@ -3228,7 +3715,7 @@ const QUEST_POOL = [
     desc: "Summon 15 Epic characters during this cycle.",
     progress: (s) => `${Math.min(15, (s.cycle_stats?.epics_pulled || 0))} / 15`,
     isDone: (s) => (s.cycle_stats?.epics_pulled || 0) >= 15,
-    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 5000
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 5000
   },
   {
     id: "cq_5_legendaries",
@@ -3236,15 +3723,7 @@ const QUEST_POOL = [
     desc: "Summon 5 Legendary characters during this cycle.",
     progress: (s) => `${Math.min(5, (s.cycle_stats?.legendaries_pulled || 0))} / 5`,
     isDone: (s) => (s.cycle_stats?.legendaries_pulled || 0) >= 5,
-    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 8000
-  },
-  {
-    id: "cq_fifa_pull",
-    title: "Iconic Legend",
-    desc: "Summon any FIFA Legend Icon during this cycle.",
-    progress: (s) => (s.cycle_stats?.highest_tier || 0) >= 8 ? "1 / 1" : "0 / 1",
-    isDone: (s) => (s.cycle_stats?.highest_tier || 0) >= 8,
-    rewardItem: "Master Roll", rewardCount: 1, rewardCoins: 15000
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 10000
   },
   {
     id: "cq_unique_chars_25",
@@ -3308,10 +3787,15 @@ function getDefaultGameState() {
     unlocked_borders: ["border-none"],
     equipped_theme: "theme-default",
     unlocked_themes: ["theme-default"],
+    equipped_wrap: "wrap-none",
+    unlocked_wraps: ["wrap-none"],
+    equipped_anim: "anim-none",
+    unlocked_anims: ["anim-none"],
     equipped_item: "",
     completed_quests: [],
     completed_milestones: [],
     cycle_completed_quests: [],
+    cycle_redeemed_quests: [],
     active_quest_ids: [],
     cycle_stats: {
       rolls: 0,
@@ -3319,6 +3803,7 @@ function getDefaultGameState() {
       multi_pulls: 0,
       coins_earned: 0,
       items_used: 0,
+      raw_summons: 0,
       highest_tier: 1,
       students_pulled: 0,
       teachers_pulled: 0,
@@ -3326,6 +3811,8 @@ function getDefaultGameState() {
       rares_pulled: 0,
       epics_pulled: 0,
       legendaries_pulled: 0,
+      consecutive_commons: 0,
+      max_consecutive_commons: 0,
       time_spent_seconds: 0,
       unique_pulled: []
     }
@@ -3339,7 +3826,9 @@ let userSession = {
   bio: "CNE RNG Summoner",
   name_font: "font-outfit",
   avatar_border: "border-none",
-  profile_theme: "theme-default"
+  profile_theme: "theme-default",
+  wrap: "wrap-none",
+  anim: "anim-none"
 };
 let isCloudStateLoaded = false;
 let gameState = getDefaultGameState();
@@ -3462,21 +3951,21 @@ const TIER_EXPONENTS = {
   RARE: 1.2,
   EPIC: 2.8,
   LEGENDARY: 4.8,
-  MYTHIC: 7.0,
-  CELESTIAL: 9.5,
-  SECRET: 12.0,
-  LEGEND: 14.5,
-  TRANSCENDENT: 17.5
+  MYTHIC: 7.2,
+  CELESTIAL: 10.0,
+  SECRET: 13.0,
+  LEGEND: 15.5,
+  TRANSCENDENT: 18.0
 };
 
 function calculateTierProbs(luckLevel, itemMultiplier = 1) {
-  const BASE_EXPONENT = 14.0;
-  const luckFactor = (1 + 0.10 * (luckLevel || 0)) * Math.pow(itemMultiplier, 0.75);
+  const BASE_EXPONENT = 10.0;
+  const luckFactor = (1 + 0.08 * (luckLevel || 0)) * Math.pow(itemMultiplier, 0.65);
 
   const weights = {};
   TIER_ORDER.forEach((tier) => {
     const power = TIER_EXPONENTS[tier] || 0;
-    weights[tier] = Math.pow(Math.max(1e-12, luckFactor / BASE_EXPONENT), power);
+    weights[tier] = Math.pow(Math.max(1e-22, luckFactor / BASE_EXPONENT), power);
   });
   const sum = Object.values(weights).reduce((a, b) => a + b, 0);
   const probs = {};
@@ -3489,8 +3978,8 @@ function calculateTierProbs(luckLevel, itemMultiplier = 1) {
 function selectRandomCharacter(itemMultiplier = 1) {
   if (gameState.pity_counter >= PITY_THRESHOLD) {
     gameState.pity_counter = 0;
-    const highTierPool = ALL_CHAR_NAMES.filter(n => TIER_STRENGTH[CHARACTERS[n].tier] >= 4);
-    return highTierPool[Math.floor(Math.random() * highTierPool.length)];
+    const legendaryPool = ALL_CHAR_NAMES.filter(n => CHARACTERS[n].tier === 'LEGENDARY');
+    return legendaryPool[Math.floor(Math.random() * legendaryPool.length)];
   }
 
   const probs = calculateTierProbs(gameState.upgrades ? gameState.upgrades.luck : 0, itemMultiplier);
@@ -3522,18 +4011,18 @@ function getCharacterDropOdds(charName, itemMultiplier = 1, luckLevel = null) {
   const totalInTier = ALL_CHAR_NAMES.filter(n => CHARACTERS[n].tier === tier).length;
   const charChance = probs[tier] / totalInTier;
   return {
-    oneIn: Math.round(100 / Math.max(1e-15, charChance)),
+    oneIn: Math.round(100 / Math.max(1e-22, charChance)),
     percentage: charChance < 0.00001 ? charChance.toExponential(2) : (charChance < 0.01 ? charChance.toFixed(5) : charChance.toFixed(2))
   };
 }
 
 function tryDropRandomItem() {
   const roll = Math.random();
-  if (roll < 0.0001) addItemToInventory("Master Roll");
-  else if (roll < 0.001) addItemToInventory("Celestial Orb");
-  else if (roll < 0.0035) addItemToInventory("Golden Clover");
-  else if (roll < 0.0075) addItemToInventory("Quest Reroll");
-  else if (roll < 0.015) addItemToInventory("Silver Horseshoe");
+  if (roll < 0.000005) addItemToInventory("Master Roll");
+  else if (roll < 0.00005) addItemToInventory("Celestial Orb");
+  else if (roll < 0.00018) addItemToInventory("Golden Clover");
+  else if (roll < 0.00035) addItemToInventory("Quest Reroll");
+  else if (roll < 0.0008) addItemToInventory("Silver Horseshoe");
 }
 
 function addItemToInventory(itemName, count = 1) {
@@ -3808,10 +4297,22 @@ function performSingleRoll() {
   }
 
   // Update 12-hour cycle stats
-  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
+  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, raw_summons: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, consecutive_commons: 0, max_consecutive_commons: 0, time_spent_seconds: 0, unique_pulled: [] };
   gameState.cycle_stats.rolls++;
   gameState.cycle_stats.single_rolls = (gameState.cycle_stats.single_rolls || 0) + 1;
-  if (luckMultiplier > 1) gameState.cycle_stats.items_used = (gameState.cycle_stats.items_used || 0) + 1;
+  if (luckMultiplier > 1) {
+    gameState.cycle_stats.items_used = (gameState.cycle_stats.items_used || 0) + 1;
+  } else {
+    gameState.cycle_stats.raw_summons = (gameState.cycle_stats.raw_summons || 0) + 1;
+  }
+  if (charData.tier === 'COMMON') {
+    gameState.cycle_stats.consecutive_commons = (gameState.cycle_stats.consecutive_commons || 0) + 1;
+    if (gameState.cycle_stats.consecutive_commons > (gameState.cycle_stats.max_consecutive_commons || 0)) {
+      gameState.cycle_stats.max_consecutive_commons = gameState.cycle_stats.consecutive_commons;
+    }
+  } else {
+    gameState.cycle_stats.consecutive_commons = 0;
+  }
   gameState.cycle_stats.coins_earned += COIN_REWARDS[charData.tier];
   if (TIER_STRENGTH[charData.tier] > (gameState.cycle_stats.highest_tier || 0)) {
     gameState.cycle_stats.highest_tier = TIER_STRENGTH[charData.tier];
@@ -4000,15 +4501,24 @@ function performMultiRoll() {
   tryDropRandomItem();
 
   // Update 12-hour cycle stats for multi-roll
-  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
+  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, raw_summons: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, consecutive_commons: 0, max_consecutive_commons: 0, time_spent_seconds: 0, unique_pulled: [] };
   gameState.cycle_stats.multi_pulls++;
   gameState.cycle_stats.rolls += pullCount;
+  gameState.cycle_stats.raw_summons = (gameState.cycle_stats.raw_summons || 0) + pullCount;
   gameState.cycle_stats.coins_earned += totalCoinGained;
   if (highestTierRank > (gameState.cycle_stats.highest_tier || 0)) {
     gameState.cycle_stats.highest_tier = highestTierRank;
   }
   if (!gameState.cycle_stats.unique_pulled) gameState.cycle_stats.unique_pulled = [];
   pulled.forEach(item => {
+    if (item.char.tier === 'COMMON') {
+      gameState.cycle_stats.consecutive_commons = (gameState.cycle_stats.consecutive_commons || 0) + 1;
+      if (gameState.cycle_stats.consecutive_commons > (gameState.cycle_stats.max_consecutive_commons || 0)) {
+        gameState.cycle_stats.max_consecutive_commons = gameState.cycle_stats.consecutive_commons;
+      }
+    } else {
+      gameState.cycle_stats.consecutive_commons = 0;
+    }
     if (item.char.tier === 'RARE') gameState.cycle_stats.rares_pulled = (gameState.cycle_stats.rares_pulled || 0) + 1;
     if (item.char.tier === 'EPIC') gameState.cycle_stats.epics_pulled = (gameState.cycle_stats.epics_pulled || 0) + 1;
     if (item.char.tier === 'LEGENDARY') gameState.cycle_stats.legendaries_pulled = (gameState.cycle_stats.legendaries_pulled || 0) + 1;
@@ -4394,12 +4904,36 @@ function checkAndRefreshQuests(force = false) {
     const shuffled = [...QUEST_POOL].sort(() => 0.5 - Math.random());
     gameState.active_quest_ids = shuffled.slice(0, 10).map(q => q.id);
     gameState.cycle_completed_quests = [];
-    gameState.cycle_stats = { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
+    gameState.cycle_redeemed_quests = [];
+    gameState.cycle_stats = {
+      rolls: 0,
+      single_rolls: 0,
+      multi_pulls: 0,
+      coins_earned: 0,
+      items_used: 0,
+      raw_summons: 0,
+      highest_tier: 1,
+      students_pulled: 0,
+      teachers_pulled: 0,
+      auxiliares_pulled: 0,
+      rares_pulled: 0,
+      epics_pulled: 0,
+      legendaries_pulled: 0,
+      consecutive_commons: 0,
+      max_consecutive_commons: 0,
+      time_spent_seconds: 0,
+      unique_pulled: []
+    };
     saveState();
   }
 }
 
 function useQuestRerollItem() {
+  const redeemedCount = (gameState.cycle_redeemed_quests || []).length;
+  if (redeemedCount > 0) {
+    showToast("Reroll Locked!", "You already claimed a quest reward in this 12h cycle. Rerolls are locked until the cycle resets.");
+    return;
+  }
   const rerolls = gameState.items["Quest Reroll"] || 0;
   if (rerolls <= 0) {
     showToast("No Quest Rerolls!", "Discover Quest Rerolls during summons or milestones.");
@@ -4407,11 +4941,29 @@ function useQuestRerollItem() {
   }
   gameState.items["Quest Reroll"]--;
   checkAndRefreshQuests(true);
-  confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+  if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
   showToast("Quests Rerolled!", "Fresh quests have arrived for this cycle.");
   updateEquippedItemDisplay();
   renderMissionsView();
   saveState();
+}
+
+function redeemQuest(questId) {
+  if (!gameState.cycle_redeemed_quests) gameState.cycle_redeemed_quests = [];
+  if (gameState.cycle_redeemed_quests.includes(questId)) return;
+  const q = QUEST_POOL.find(x => x.id === questId);
+  if (!q || !q.isDone(gameState)) return;
+
+  gameState.cycle_redeemed_quests.push(questId);
+  if (!gameState.completed_quests.includes(questId)) gameState.completed_quests.push(questId);
+  if (q.rewardCoins) gameState.coins += q.rewardCoins;
+  if (q.rewardItem) addItemToInventory(q.rewardItem, q.rewardCount || 1);
+
+  showToast("Reward Claimed!", `+${formatAbbrev(q.rewardCoins)} Coins & ${q.rewardCount}x ${q.rewardItem}`);
+  if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+  saveState();
+  updateHeaderStats();
+  renderMissionsView();
 }
 
 function getQuestCountdownString() {
@@ -4432,12 +4984,8 @@ function checkMissions() {
   activeQuests.forEach(q => {
     if (!gameState.cycle_completed_quests.includes(q.id) && q.isDone(gameState)) {
       gameState.cycle_completed_quests.push(q.id);
-      if (!gameState.completed_quests.includes(q.id)) gameState.completed_quests.push(q.id);
-      if (q.rewardCoins) gameState.coins += q.rewardCoins;
-      if (q.rewardItem) addItemToInventory(q.rewardItem, q.rewardCount || 1);
-      showToast("Quest Completed!", `${q.title} (+${q.rewardCoins} Coins & ${q.rewardItem})`);
+      showToast("Quest Ready to Claim!", `"${q.title}" complete! Claim your reward in Quests.`);
       saveState();
-      updateHeaderStats();
     }
   });
 
@@ -4473,6 +5021,7 @@ function renderMissionsView() {
   container.innerHTML = '';
 
   if (currentMissionSubTab === 'quests') {
+    const hasClaimed = (gameState.cycle_redeemed_quests || []).length > 0;
     // 12-Hour Cycle Banner & Reroll Button
     const banner = document.createElement('div');
     banner.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem; padding:0.75rem 1rem; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.07);';
@@ -4481,11 +5030,14 @@ function renderMissionsView() {
         <i data-lucide="clock" style="width:16px;height:16px; color:#38bdf8;"></i>
         <span>12h Refresh in: <b id="questCountdownLabel" style="color:#fff; font-family:'JetBrains Mono';">${getQuestCountdownString()}</b></span>
       </div>
-      <button class="btn-action secondary" onclick="useQuestRerollItem()" style="padding:0.4rem 0.9rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.5rem; border:1px solid rgba(255,255,255,0.12);">
-        <div style="width:18px;height:18px; flex-shrink:0;">${ITEM_SVGS["Quest Reroll"]}</div>
-        <span>Reroll Quests</span>
-        <span style="font-family:'JetBrains Mono'; color:var(--accent-gold); font-weight:700;">(×${gameState.items["Quest Reroll"] || 0})</span>
-      </button>
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        ${hasClaimed ? '<span style="font-size:0.72rem; color:#f87171; font-weight:600;">⚠️ Reroll locked (reward already claimed this cycle)</span>' : ''}
+        <button class="btn-action secondary" onclick="useQuestRerollItem()" style="padding:0.4rem 0.9rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.5rem; border:1px solid rgba(255,255,255,0.12); ${hasClaimed ? 'opacity:0.45; cursor:not-allowed;' : ''}">
+          <div style="width:18px;height:18px; flex-shrink:0;">${ITEM_SVGS["Quest Reroll"]}</div>
+          <span>Reroll Quests</span>
+          <span style="font-family:'JetBrains Mono'; color:var(--accent-gold); font-weight:700;">(×${gameState.items["Quest Reroll"] || 0})</span>
+        </button>
+      </div>
     `;
     container.appendChild(banner);
 
@@ -4493,17 +5045,25 @@ function renderMissionsView() {
     const activeQuests = QUEST_POOL.filter(q => activeIds.includes(q.id));
 
     activeQuests.forEach(q => {
-      const isDone = (gameState.cycle_completed_quests || []).includes(q.id);
+      const isCompleted = (gameState.cycle_completed_quests || []).includes(q.id) || q.isDone(gameState);
+      const isClaimed = (gameState.cycle_redeemed_quests || []).includes(q.id);
       const it = ITEMS[q.rewardItem];
       const card = document.createElement('div');
       card.className = 'mission-card';
 
+      let statusBadge = '';
+      if (isClaimed) {
+        statusBadge = `<span class="rarity-tag" style="background:#1e293b; color:#94a3b8; border:1px solid rgba(255,255,255,0.1);">CLAIMED ✓</span>`;
+      } else if (isCompleted) {
+        statusBadge = `<span class="rarity-tag bg-tier-transcendent">READY TO CLAIM</span>`;
+      } else {
+        statusBadge = `<span class="rarity-tag bg-tier-common">IN PROGRESS</span>`;
+      }
+
       card.innerHTML = `
         <div class="mission-header">
           <span class="mission-title">${q.title}</span>
-          <span class="rarity-tag ${isDone ? 'bg-tier-transcendent' : 'bg-tier-common'}">
-            ${isDone ? 'COMPLETED' : 'IN PROGRESS'}
-          </span>
+          ${statusBadge}
         </div>
         <div class="mission-desc">${q.desc}</div>
 
@@ -4517,8 +5077,16 @@ function renderMissionsView() {
           <span style="font-weight:700;">${q.rewardItem}</span>
           <div class="rounded-stars-row" style="width:auto; margin:0; gap:2px; flex-shrink:0;">${renderRoundedStars(it.stars, 10)}</div>
           <span style="font-family:'JetBrains Mono'; color:var(--accent-gold); font-weight:700;">(×${q.rewardCount})</span>
-          <span style="color:var(--text-muted); font-size:0.75rem; margin-left:8px;">+ ${q.rewardCoins} Coins</span>
+          <span style="color:var(--text-muted); font-size:0.75rem; margin-left:8px;">+ ${formatAbbrev(q.rewardCoins)} Coins</span>
         </div>
+
+        ${isCompleted && !isClaimed ? `
+          <div style="margin-top:0.85rem; padding-top:0.65rem; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:flex-end;">
+            <button class="btn-action" onclick="redeemQuest('${q.id}')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; padding:0.45rem 1.1rem; font-size:0.82rem; font-weight:800; display:inline-flex; align-items:center; gap:0.4rem; box-shadow:0 0 12px rgba(16,185,129,0.35);">
+              🎁 Claim Reward
+            </button>
+          </div>
+        ` : ''}
       `;
       container.appendChild(card);
     });
@@ -4583,7 +5151,11 @@ function getTitleClassByName(titleName) {
     "Ascended": "title-ascended",
     "CNE Mogul": "title-mogul",
     "CNE God": "title-god",
-    "The Whale": "title-celestial"
+    "The Whale": "title-whale",
+    "Phoenix Sovereign": "title-phoenix",
+    "Dragon Slayer": "title-dragon",
+    "Cyber Ronin": "title-ronin",
+    "Astral Archon": "title-astral"
   };
   return map[titleName] || 'title-novice';
 }
@@ -4594,6 +5166,7 @@ function getTitleClassByName(titleName) {
 let firebaseApp = null;
 let firebaseAuth = null;
 let firebaseDb = null;
+let firebaseStorage = null;
 let useFirebase = false;
 
 const FIREBASE_CONFIG_KEY = 'cne_firebase_config_v1';
@@ -4610,6 +5183,13 @@ function tryInitFirebase(config) {
     }
     firebaseAuth = firebase.auth(firebaseApp);
     firebaseDb = firebase.firestore(firebaseApp);
+    if (firebase.storage) {
+      try {
+        firebaseStorage = firebase.storage(firebaseApp);
+      } catch(e) {
+        console.warn('Firebase Storage init notice:', e.message);
+      }
+    }
 
     // Enable offline persistence so Firestore works even with slow connections
     firebaseDb.enablePersistence({ synchronizeTabs: true }).catch(err => {
@@ -4657,6 +5237,8 @@ function tryInitFirebase(config) {
               if (ud.name_font) { userSession.name_font = ud.name_font; gameState.equipped_font = ud.name_font; }
               if (ud.avatar_border) { userSession.avatar_border = ud.avatar_border; gameState.equipped_border = ud.avatar_border; }
               if (ud.profile_theme) { userSession.profile_theme = ud.profile_theme; gameState.equipped_theme = ud.profile_theme; }
+              if (ud.wrap) { userSession.wrap = ud.wrap; gameState.equipped_wrap = ud.wrap; }
+              if (ud.anim) { userSession.anim = ud.anim; gameState.equipped_anim = ud.anim; }
               if (ud.equipped_title) { userSession.equipped_title = ud.equipped_title; gameState.equipped_title = ud.equipped_title; }
               if (ud.equipped_title_class) { gameState.equipped_title_class = ud.equipped_title_class; }
               localStorage.setItem('cne_auth_token_v4', JSON.stringify({
@@ -4666,7 +5248,9 @@ function tryInitFirebase(config) {
                 bio: userSession.bio || '',
                 name_font: userSession.name_font || 'font-outfit',
                 avatar_border: userSession.avatar_border || 'border-none',
-                profile_theme: userSession.profile_theme || 'theme-default'
+                profile_theme: userSession.profile_theme || 'theme-default',
+                wrap: userSession.wrap || 'wrap-none',
+                anim: userSession.anim || 'anim-none'
               }));
               updateUserProfileUI();
             }
@@ -4691,6 +5275,8 @@ function tryInitFirebase(config) {
               if (gameState.equipped_font)   { userSession.name_font = gameState.equipped_font; }
               if (gameState.equipped_border)  { userSession.avatar_border = gameState.equipped_border; }
               if (gameState.equipped_theme)   { userSession.profile_theme = gameState.equipped_theme; }
+              if (gameState.equipped_wrap)    { userSession.wrap = gameState.equipped_wrap; }
+              if (gameState.equipped_anim)    { userSession.anim = gameState.equipped_anim; }
               if (gameState.profile_bio)      { userSession.bio = gameState.profile_bio; }
               updateHeaderStats();
               updateEquippedItemDisplay();
@@ -5000,26 +5586,51 @@ const SHOP_ITEMS = [
   { id: 'booster_shoe5',   cat: 'BOOSTERS', name: 'Silver Horseshoe x5',  desc: 'Boost luck by 2x on 5 rolls.',           itemName: 'Silver Horseshoe',  cost: 187_500,     color: '#3b82f6' },
   { id: 'booster_clover3', cat: 'BOOSTERS', name: 'Golden Clover x3',     desc: '5x luck boost for 3 pulls.',             itemName: 'Golden Clover',     cost: 375_000,     color: '#10b981' },
   { id: 'booster_orb1',    cat: 'BOOSTERS', name: 'Celestial Orb x1',     desc: 'Cosmic 35x luck boost on next roll.',    itemName: 'Celestial Orb',     cost: 1_250_000,   color: '#06b6d4' },
-  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Massive 100x godlike luck boost on roll.',itemName: 'Master Roll',      cost: 3_125_000,   color: '#6366f1' },
+  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Massive 50x godlike luck boost on roll.', itemName: 'Master Roll',      cost: 3_125_000,   color: '#6366f1' },
   // THEMES (50% Off)
-  { id: 'theme_midnight',  cat: 'THEMES',   name: 'Midnight Theme',       desc: 'Deep blue-black Discord card theme.',    icon: '🌙', cost: 1_250_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
-  { id: 'theme_crimson',   cat: 'THEMES',   name: 'Crimson Theme',        desc: 'Fiery red Discord card theme.',          icon: '🔥', cost: 2_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
-  { id: 'theme_emerald',   cat: 'THEMES',   name: 'Emerald Theme',        desc: 'Lush green champion card theme.',        icon: '💚', cost: 2_000_000,   color: '#10b981',  unlockKey: 'theme-emerald' },
-  { id: 'theme_gold',      cat: 'THEMES',   name: 'Gold Theme',           desc: 'Elite golden prestige card theme.',      icon: '🏆', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'theme-gold' },
-  { id: 'theme_void',      cat: 'THEMES',   name: 'Void Theme',           desc: 'Mysterious purple void card theme.',     icon: '🌀', cost: 25_000_000,  color: '#a855f7',  unlockKey: 'theme-void' },
+  { id: 'theme_midnight',     cat: 'THEMES',   name: 'Midnight Theme',       desc: 'Deep blue-black Discord card theme.',    icon: '🌙', cost: 1_250_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
+  { id: 'theme_crimson',      cat: 'THEMES',   name: 'Crimson Theme',        desc: 'Fiery red Discord card theme.',          icon: '🔥', cost: 2_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
+  { id: 'theme_emerald',      cat: 'THEMES',   name: 'Emerald Theme',        desc: 'Lush green champion card theme.',        icon: '💚', cost: 2_000_000,   color: '#10b981',  unlockKey: 'theme-emerald' },
+  { id: 'theme_gold',         cat: 'THEMES',   name: 'Gold Theme',           desc: 'Elite golden prestige card theme.',      icon: '🏆', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'theme-gold' },
+  { id: 'theme_void',         cat: 'THEMES',   name: 'Void Theme',           desc: 'Mysterious purple void card theme.',     icon: '🌀', cost: 25_000_000,  color: '#a855f7',  unlockKey: 'theme-void' },
+  { id: 'theme_anime_cyber',  cat: 'THEMES',   name: 'Neo-Tokyo Cyber',      desc: 'Cyberpunk anime neon pulse theme.',      icon: '🏙️', cost: 25_000_000,  color: '#06b6d4',  unlockKey: 'theme-anime-cyber' },
+  { id: 'theme_anime_sakura', cat: 'THEMES',   name: 'Sakura Shrine',        desc: 'Blossoming pink twilight shrine theme.', icon: '⛩️', cost: 25_000_000,  color: '#f472b6',  unlockKey: 'theme-anime-sakura' },
+  { id: 'theme_anime_fire',   cat: 'THEMES',   name: 'Shonen Flame',         desc: 'Fiery incandescent battle aura theme.',  icon: '💥', cost: 30_000_000,  color: '#f97316',  unlockKey: 'theme-anime-fire' },
+  { id: 'theme_anime_retro',  cat: 'THEMES',   name: 'Retrowave Grid',       desc: '80s synthwave vapor horizon theme.',     icon: '📼', cost: 20_000_000,  color: '#d946ef',  unlockKey: 'theme-anime-retro' },
+  { id: 'theme_anime_space',  cat: 'THEMES',   name: 'Deep Space Stream',    desc: 'Abyssal cosmic star cluster theme.',     icon: '🚀', cost: 35_000_000,  color: '#818cf8',  unlockKey: 'theme-anime-space' },
   // BORDERS (50% Off)
-  { id: 'border_gold',     cat: 'BORDERS',  name: 'Gold Border',          desc: 'Gleaming gold avatar ring.',             icon: '🥇', cost: 2_500_000,   color: '#f5c518',  unlockKey: 'border-gold' },
-  { id: 'border_rainbow',  cat: 'BORDERS',  name: 'Rainbow Border',       desc: 'Animated rainbow avatar ring.',          icon: '🌈', cost: 12_500_000,  color: '#ec4899',  unlockKey: 'border-rainbow' },
-  { id: 'border_fire',     cat: 'BORDERS',  name: 'Fire Border',          desc: 'Blazing fire avatar ring.',              icon: '🔥', cost: 18_750_000,  color: '#f59e0b',  unlockKey: 'border-fire' },
-  { id: 'border_void',     cat: 'BORDERS',  name: 'Void Border',          desc: 'Pulsing purple void avatar ring.',       icon: '💜', cost: 37_500_000,  color: '#a855f7',  unlockKey: 'border-void' },
+  { id: 'border_gold',        cat: 'BORDERS',  name: 'Gold Border',          desc: 'Gleaming gold avatar ring.',             icon: '🥇', cost: 2_500_000,   color: '#f5c518',  unlockKey: 'border-gold' },
+  { id: 'border_rainbow',     cat: 'BORDERS',  name: 'Rainbow Border',       desc: 'Animated rainbow avatar ring.',          icon: '🌈', cost: 12_500_000,  color: '#ec4899',  unlockKey: 'border-rainbow' },
+  { id: 'border_fire',        cat: 'BORDERS',  name: 'Fire Border',          desc: 'Blazing fire avatar ring.',              icon: '🔥', cost: 18_750_000,  color: '#f59e0b',  unlockKey: 'border-fire' },
+  { id: 'border_void',        cat: 'BORDERS',  name: 'Void Border',          desc: 'Pulsing purple void avatar ring.',       icon: '💜', cost: 37_500_000,  color: '#a855f7',  unlockKey: 'border-void' },
+  { id: 'border_butterflies', cat: 'BORDERS',  name: 'Butterflies Border',   desc: 'Luminescent fluttering spirit wings.',    icon: '🦋', cost: 25_000_000,  color: '#38bdf8',  unlockKey: 'border-butterflies' },
+  { id: 'border_sakura',      cat: 'BORDERS',  name: 'Sakura Petals',        desc: 'Falling cherry blossom petals orbit.',   icon: '🌸', cost: 20_000_000,  color: '#f472b6',  unlockKey: 'border-sakura' },
+  { id: 'border_lightning',   cat: 'BORDERS',  name: 'Lightning Arc',        desc: 'Crackling electric blue lightning arcs.',icon: '⚡', cost: 30_000_000,  color: '#38bdf8',  unlockKey: 'border-lightning' },
+  { id: 'border_stardust',    cat: 'BORDERS',  name: 'Stardust Orbit',       desc: 'Prismatic rotating cosmic stardust.',    icon: '✨', cost: 40_000_000,  color: '#c084fc',  unlockKey: 'border-stardust' },
+  // WRAPS (Frame Backgrounds)
+  { id: 'wrap_cyber',         cat: 'WRAPS',    name: 'Cyber Neon Wrap',      desc: 'Electric blue and magenta card frame.',  icon: '💠', cost: 10_000_000,  color: '#06b6d4',  unlockKey: 'wrap-cyber' },
+  { id: 'wrap_gold',          cat: 'WRAPS',    name: 'Gilded Sovereign',     desc: '24k molten gold shimmering frame.',      icon: '👑', cost: 25_000_000,  color: '#f5c518',  unlockKey: 'wrap-gold' },
+  { id: 'wrap_void',          cat: 'WRAPS',    name: 'Abyssal Void Wrap',    desc: 'Deep violet dimensional rift frame.',    icon: '🌌', cost: 35_000_000,  color: '#a855f7',  unlockKey: 'wrap-void' },
+  { id: 'wrap_holo',          cat: 'WRAPS',    name: 'Holographic Prism',    desc: 'Iridescent chromatic shifting boundary.',icon: '💿', cost: 20_000_000,  color: '#38bdf8',  unlockKey: 'wrap-holo' },
+  { id: 'wrap_sakura',        cat: 'WRAPS',    name: 'Sakura Breeze Wrap',   desc: 'Soft pink floral glowing perimeter.',    icon: '🌸', cost: 15_000_000,  color: '#f472b6',  unlockKey: 'wrap-sakura' },
+  // NAME ANIMATIONS
+  { id: 'anim_glitch',        cat: 'ANIMATIONS', name: 'Glitch Effect',      desc: 'RGB channel glitch distortion on name.', icon: '⚡', cost: 15_000_000,  color: '#22d3ee',  unlockKey: 'name-anim-glitch' },
+  { id: 'anim_wave',          cat: 'ANIMATIONS', name: 'Breathing Wave',     desc: 'Hypnotic breathing wave typography.',    icon: '🌊', cost: 12_500_000,  color: '#60a5fa',  unlockKey: 'name-anim-wave' },
+  { id: 'anim_rainbow',       cat: 'ANIMATIONS', name: 'Rainbow Cycle',      desc: 'Smooth flowing spectrum cycle.',          icon: '🌈', cost: 18_000_000,  color: '#ec4899',  unlockKey: 'name-anim-rainbow' },
+  { id: 'anim_flame',         cat: 'ANIMATIONS', name: 'Molten Flame',       desc: 'Flickering fiery heat distortion glow.', icon: '🔥', cost: 20_000_000,  color: '#f97316',  unlockKey: 'name-anim-flame' },
+  { id: 'anim_neon',          cat: 'ANIMATIONS', name: 'Neon Pulse',         desc: 'Electric neon tube electric heartbeat.', icon: '💡', cost: 15_000_000,  color: '#a855f7',  unlockKey: 'name-anim-neon' },
   // FONTS (50% Off)
-  { id: 'font_cinzel',     cat: 'FONTS',    name: 'Cinzel Serif',         desc: 'Majestic roman serif username font.',    icon: '✍️', cost: 1_250_000,   color: '#e5c97e',  unlockKey: 'font-cinzel' },
-  { id: 'font_orbitron',   cat: 'FONTS',    name: 'Orbitron Tech',        desc: 'Futuristic tech username font.',         icon: '🤖', cost: 1_250_000,   color: '#06b6d4',  unlockKey: 'font-orbitron' },
-  { id: 'font_press',      cat: 'FONTS',    name: 'Pixel Press',          desc: 'Retro pixel game username font.',        icon: '👾', cost: 3_750_000,   color: '#a855f7',  unlockKey: 'font-press' },
-  // TITLES (50% Off)
-  { id: 'title_whale',     cat: 'TITLES',   name: 'The Whale',            desc: 'Reserved for big spenders.',             icon: '🐋', cost: 5_000_000,   color: '#06b6d4',  unlockKey: 'The Whale',     titleClass: 'title-celestial' },
-  { id: 'title_mogul',     cat: 'TITLES',   name: 'CNE Mogul',            desc: 'You own this school.',                   icon: '💰', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'CNE Mogul',     titleClass: 'title-mogul' },
-  { id: 'title_god',       cat: 'TITLES',   name: 'CNE God',              desc: 'The highest honour.',                    icon: '⚡', cost: 125_000_000, color: '#10b981',  unlockKey: 'CNE God',       titleClass: 'title-god' },
+  { id: 'font_cinzel',        cat: 'FONTS',    name: 'Cinzel Serif',         desc: 'Majestic roman serif username font.',    icon: '✍️', cost: 1_250_000,   color: '#e5c97e',  unlockKey: 'font-cinzel' },
+  { id: 'font_orbitron',      cat: 'FONTS',    name: 'Orbitron Tech',        desc: 'Futuristic tech username font.',         icon: '🤖', cost: 1_250_000,   color: '#06b6d4',  unlockKey: 'font-orbitron' },
+  { id: 'font_press',         cat: 'FONTS',    name: 'Pixel Press',          desc: 'Retro pixel game username font.',        icon: '👾', cost: 3_750_000,   color: '#a855f7',  unlockKey: 'font-press' },
+  // TITLES (Prestige Badges with Under-Tag Art)
+  { id: 'title_whale',        cat: 'TITLES',   name: 'The Whale',            desc: 'Reserved for big spenders.',             icon: '🐋', cost: 5_000_000,   color: '#06b6d4',  unlockKey: 'The Whale',         titleClass: 'title-whale' },
+  { id: 'title_phoenix',      cat: 'TITLES',   name: 'Phoenix Sovereign',    desc: 'Born from celestial flames.',            icon: '🔥', cost: 20_000_000,  color: '#f97316',  unlockKey: 'Phoenix Sovereign', titleClass: 'title-phoenix' },
+  { id: 'title_dragon',       cat: 'TITLES',   name: 'Dragon Slayer',        desc: 'Conqueror of ancient beasts.',           icon: '🐉', cost: 35_000_000,  color: '#ef4444',  unlockKey: 'Dragon Slayer',     titleClass: 'title-dragon' },
+  { id: 'title_ronin',        cat: 'TITLES',   name: 'Cyber Ronin',          desc: 'Wandering neon blade.',                  icon: '⚔️', cost: 15_000_000,  color: '#06b6d4',  unlockKey: 'Cyber Ronin',       titleClass: 'title-ronin' },
+  { id: 'title_astral',       cat: 'TITLES',   name: 'Astral Archon',        desc: 'Ruler of the infinite cosmos.',          icon: '🌌', cost: 50_000_000,  color: '#a855f7',  unlockKey: 'Astral Archon',     titleClass: 'title-astral' },
+  { id: 'title_mogul',        cat: 'TITLES',   name: 'CNE Mogul',            desc: 'You own this school.',                   icon: '💰', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'CNE Mogul',         titleClass: 'title-mogul' },
+  { id: 'title_god',          cat: 'TITLES',   name: 'CNE God',              desc: 'The highest honour.',                    icon: '⚡', cost: 125_000_000, color: '#10b981',  unlockKey: 'CNE God',           titleClass: 'title-god' },
 ];
 
 let currentShopFilter = 'ALL';
@@ -5082,8 +5693,10 @@ function isShopItemOwned(item) {
   if (item.cat === 'BOOSTERS') return false; // consumable, always purchasable
   if (item.cat === 'THEMES') return (gameState.unlocked_themes || []).includes(item.unlockKey);
   if (item.cat === 'BORDERS') return (gameState.unlocked_borders || []).includes(item.unlockKey);
+  if (item.cat === 'WRAPS') return (gameState.unlocked_wraps || []).includes(item.unlockKey);
+  if (item.cat === 'ANIMATIONS') return (gameState.unlocked_anims || []).includes(item.unlockKey);
   if (item.cat === 'FONTS')   return (gameState.unlocked_fonts || []).includes(item.unlockKey);
-  if (item.cat === 'TITLES')  return (gameState.unlocked_titles || []).includes(item.unlockKey);
+  if (item.cat === 'TITLES')  return (gameState.unlocked_titles || []).some(t => (typeof t === 'string' ? t : t.title) === item.unlockKey);
   return false;
 }
 
@@ -5114,15 +5727,23 @@ function buyShopItem(itemId) {
     if (!gameState.unlocked_borders) gameState.unlocked_borders = [];
     if (!gameState.unlocked_borders.includes(item.unlockKey)) gameState.unlocked_borders.push(item.unlockKey);
     showToast(`Border Unlocked!`, `${item.name} is now available in your profile.`);
+  } else if (item.cat === 'WRAPS') {
+    if (!gameState.unlocked_wraps) gameState.unlocked_wraps = ['wrap-none'];
+    if (!gameState.unlocked_wraps.includes(item.unlockKey)) gameState.unlocked_wraps.push(item.unlockKey);
+    showToast(`Wrap Unlocked!`, `${item.name} is now available in your profile.`);
+  } else if (item.cat === 'ANIMATIONS') {
+    if (!gameState.unlocked_anims) gameState.unlocked_anims = ['anim-none'];
+    if (!gameState.unlocked_anims.includes(item.unlockKey)) gameState.unlocked_anims.push(item.unlockKey);
+    showToast(`Animation Unlocked!`, `${item.name} is now available in your profile.`);
   } else if (item.cat === 'FONTS') {
     if (!gameState.unlocked_fonts) gameState.unlocked_fonts = [];
     if (!gameState.unlocked_fonts.includes(item.unlockKey)) gameState.unlocked_fonts.push(item.unlockKey);
     showToast(`Font Unlocked!`, `${item.name} is now available in your profile.`);
   } else if (item.cat === 'TITLES') {
-    if (!gameState.unlocked_titles) gameState.unlocked_titles = [];
-    if (!gameState.unlocked_titles.includes(item.unlockKey)) {
-      gameState.unlocked_titles.push(item.unlockKey);
-      TITLES.push({ title: item.unlockKey, cssClass: item.titleClass || 'title-novice' });
+    if (!gameState.unlocked_titles) gameState.unlocked_titles = [{ title: "Novice", cssClass: "title-novice" }];
+    const existing = gameState.unlocked_titles.find(t => (typeof t === 'string' ? t : t.title) === item.unlockKey);
+    if (!existing) {
+      gameState.unlocked_titles.push({ title: item.unlockKey, cssClass: item.titleClass || getTitleClassByName(item.unlockKey) });
     }
     showToast(`Title Unlocked!`, `"${item.unlockKey}" is now available as your prestige title.`);
   }
@@ -5157,13 +5778,17 @@ function openShopPreview(itemId) {
   let previewFont = gameState.equipped_font || 'font-outfit';
   let previewTitle = gameState.equipped_title || 'Novice';
   let previewTitleClass = gameState.equipped_title_class || 'title-novice';
+  let previewWrap = gameState.equipped_wrap || 'wrap-none';
+  let previewAnim = gameState.equipped_anim || 'anim-none';
 
   if (item.cat === 'THEMES') previewTheme = item.unlockKey;
   if (item.cat === 'BORDERS') previewBorder = item.unlockKey;
+  if (item.cat === 'WRAPS') previewWrap = item.unlockKey;
+  if (item.cat === 'ANIMATIONS') previewAnim = item.unlockKey;
   if (item.cat === 'FONTS') previewFont = item.unlockKey;
   if (item.cat === 'TITLES') {
     previewTitle = item.unlockKey;
-    previewTitleClass = item.titleClass || 'title-novice';
+    previewTitleClass = item.titleClass || getTitleClassByName(item.unlockKey);
   }
 
   const owned = isShopItemOwned(item);
@@ -5171,7 +5796,7 @@ function openShopPreview(itemId) {
   const handle = currentName.toLowerCase().replace(/[^a-z0-9_]/g, '') || 'summoner';
 
   content.innerHTML = `
-    <div class="discord-profile-card ${previewTheme}">
+    <div class="discord-profile-card ${previewTheme} ${previewWrap}">
       <div style="background:rgba(0,0,0,0.65); padding:8px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08);">
         <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">
           ✨ Shop Live Preview: <span style="color:#fff;">${item.name}</span>
@@ -5197,7 +5822,7 @@ function openShopPreview(itemId) {
 
       <div class="discord-user-header">
         <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-          <div class="discord-display-name ${previewFont}">${currentName}</div>
+          <div class="discord-display-name ${previewFont} ${previewAnim}">${currentName}</div>
           <span style="font-family:'JetBrains Mono'; font-size:0.72rem; color:#949ba4; opacity:0.7;">@${handle}</span>
         </div>
       </div>
@@ -5253,10 +5878,12 @@ function openPlayerProfileModal(uid, row) {
   const fontClass = row.equipped_font || 'font-outfit';
   const borderClass = row.equipped_border || 'border-none';
   const themeClass = row.equipped_theme || 'theme-default';
+  const wrapClass = row.equipped_wrap || 'wrap-none';
+  const animClass = row.equipped_anim || 'anim-none';
   const handle = username.toLowerCase().replace(/[^a-z0-9_]/g, '') || 'summoner';
 
   content.innerHTML = `
-    <div class="discord-profile-card ${themeClass}">
+    <div class="discord-profile-card ${themeClass} ${wrapClass}">
       <div class="discord-banner ${themeClass}">
         <button class="discord-banner-close" onclick="document.getElementById('playerProfileModal').style.display='none'" title="Close">✕</button>
       </div>
@@ -5276,7 +5903,7 @@ function openPlayerProfileModal(uid, row) {
 
       <div class="discord-user-header">
         <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-          <div class="discord-display-name ${fontClass}">${username}</div>
+          <div class="discord-display-name ${fontClass} ${animClass}">${username}</div>
           <span style="font-family:'JetBrains Mono'; font-size:0.72rem; color:#949ba4; opacity:0.7;">@${handle}</span>
         </div>
       </div>
@@ -5337,9 +5964,11 @@ function renderLeaderboardFromCache() {
     const isUser = userSession.token && uid === userSession.token;
     const fontClass = row.equipped_font || 'font-outfit';
     const borderClass = row.equipped_border || 'border-none';
+    const wrapClass = row.equipped_wrap || 'wrap-none';
+    const animClass = row.equipped_anim || 'anim-none';
 
     const tr = document.createElement('tr');
-    if (isUser) tr.className = 'is-me';
+    tr.className = (isUser ? 'is-me ' : '') + wrapClass;
     const titleBadgeHtml = (row.equipped_title || row.title)
       ? `<span class="title-badge ${row.equipped_title_class || row.title_class || 'title-novice'}" style="font-size:0.62rem; margin-left:0.4rem;">${row.equipped_title || row.title}</span>`
       : '';
@@ -5355,7 +5984,7 @@ function renderLeaderboardFromCache() {
             }
           </div>
           <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
-            <span class="${fontClass}" style="font-weight:700; font-size:0.95rem;">${row.username || 'Unknown'}</span>
+            <span class="${fontClass} ${animClass}" style="font-weight:700; font-size:0.95rem;">${row.username || 'Unknown'}</span>
             ${titleBadgeHtml}
             <button class="leaderboard-info-btn" onclick='openPlayerProfileModal("${uid}", ${infoRowData})' title="View Profile" style="margin-left:2px;">
               <i data-lucide="info" style="width:11px;height:11px;"></i>
@@ -5421,6 +6050,8 @@ function saveState() {
         equipped_font: gameState.equipped_font || userSession.name_font || 'font-outfit',
         equipped_border: gameState.equipped_border || userSession.avatar_border || 'border-none',
         equipped_theme: gameState.equipped_theme || userSession.profile_theme || 'theme-default',
+        equipped_wrap: gameState.equipped_wrap || userSession.wrap || 'wrap-none',
+        equipped_anim: gameState.equipped_anim || userSession.anim || 'anim-none',
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).catch(e => console.warn('[Firestore] Leaderboard sync notice:', e.message));
     }
@@ -5493,6 +6124,8 @@ async function saveProfileChanges() {
   const newFont = document.getElementById('editFontInput') ? document.getElementById('editFontInput').value : (gameState.equipped_font || 'font-outfit');
   const newBorder = document.getElementById('editBorderInput') ? document.getElementById('editBorderInput').value : (gameState.equipped_border || 'border-none');
   const newTheme = document.getElementById('editThemeInput') ? document.getElementById('editThemeInput').value : (gameState.equipped_theme || 'theme-default');
+  const newWrap = document.getElementById('editWrapInput') ? document.getElementById('editWrapInput').value : (gameState.equipped_wrap || 'wrap-none');
+  const newAnim = document.getElementById('editAnimInput') ? document.getElementById('editAnimInput').value : (gameState.equipped_anim || 'anim-none');
 
   if (!newName) { showToast('Error', 'Username cannot be empty.'); return; }
 
@@ -5505,11 +6138,15 @@ async function saveProfileChanges() {
   userSession.name_font = newFont;
   userSession.avatar_border = newBorder;
   userSession.profile_theme = newTheme;
+  userSession.wrap = newWrap;
+  userSession.anim = newAnim;
 
   gameState.profile_bio = newBio;
   gameState.equipped_font = newFont;
   gameState.equipped_border = newBorder;
   gameState.equipped_theme = newTheme;
+  gameState.equipped_wrap = newWrap;
+  gameState.equipped_anim = newAnim;
 
   localStorage.setItem('cne_auth_token_v4', JSON.stringify({
     username: newName,
@@ -5518,7 +6155,9 @@ async function saveProfileChanges() {
     bio: newBio,
     name_font: newFont,
     avatar_border: newBorder,
-    profile_theme: newTheme
+    profile_theme: newTheme,
+    wrap: newWrap,
+    anim: newAnim
   }));
 
   const chosenTitle = document.getElementById('editTitleInput') ? (document.getElementById('editTitleInput').value || 'Novice') : (gameState.equipped_title || 'Novice');
@@ -5540,6 +6179,8 @@ async function saveProfileChanges() {
         name_font: newFont,
         avatar_border: newBorder,
         profile_theme: newTheme,
+        wrap: newWrap,
+        anim: newAnim,
         equipped_title: chosenTitle,
         equipped_title_class: gameState.equipped_title_class,
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
@@ -5594,6 +6235,77 @@ function setAuthMode(mode) {
   document.getElementById('authErrorMsg').textContent = '';
 }
 
+async function handlePfpFileSelect(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const fileNameEl = document.getElementById('editPfpFileName');
+  const progressEl = document.getElementById('pfpUploadProgress');
+  if (fileNameEl) fileNameEl.textContent = file.name;
+  if (progressEl) {
+    progressEl.style.display = 'block';
+    progressEl.style.color = '#38bdf8';
+    progressEl.textContent = 'Uploading image/GIF to Firebase...';
+  }
+
+  // Upload to Firebase Storage if available
+  if (useFirebase && firebaseStorage && firebaseAuth && firebaseAuth.currentUser) {
+    try {
+      const uid = firebaseAuth.currentUser.uid;
+      const ext = file.name.split('.').pop() || 'png';
+      const storageRef = firebaseStorage.ref().child(`avatars/${uid}_${Date.now()}.${ext}`);
+      const uploadTask = storageRef.put(file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          if (progressEl) progressEl.textContent = `Uploading: ${progress}%`;
+        },
+        (error) => {
+          console.warn('Storage upload error, using local fallback:', error);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const dataUrl = e.target.result;
+            document.getElementById('editPfpInput').value = dataUrl;
+            if (progressEl) {
+              progressEl.style.color = '#34d399';
+              progressEl.textContent = '✓ Avatar loaded (Local mode)!';
+            }
+            updateProfileLivePreview();
+          };
+          reader.readAsDataURL(file);
+        },
+        async () => {
+          const downloadURL = await storageRef.getDownloadURL();
+          document.getElementById('editPfpInput').value = downloadURL;
+          if (progressEl) {
+            progressEl.style.color = '#34d399';
+            progressEl.textContent = '✓ Saved to Firebase Storage!';
+          }
+          updateProfileLivePreview();
+          showToast('Image Uploaded', 'Avatar uploaded successfully.');
+        }
+      );
+      return;
+    } catch(err) {
+      console.warn('Firebase Storage exception, using data URL fallback:', err);
+    }
+  }
+
+  // Fallback: FileReader Base64 Data URL (supports images & GIFs)
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    document.getElementById('editPfpInput').value = dataUrl;
+    if (progressEl) {
+      progressEl.style.color = '#34d399';
+      progressEl.textContent = '✓ Image/GIF loaded!';
+    }
+    updateProfileLivePreview();
+  };
+  reader.readAsDataURL(file);
+}
+
 function openProfileModal() {
   if (!userSession.token) {
     openAuthModal();
@@ -5602,6 +6314,11 @@ function openProfileModal() {
 
   document.getElementById('editUsernameInput').value = userSession.username;
   document.getElementById('editPfpInput').value = userSession.pfp || "";
+  const pfpNameEl = document.getElementById('editPfpFileName');
+  if (pfpNameEl) pfpNameEl.textContent = userSession.pfp ? 'Avatar configured' : 'No file chosen';
+  const progressEl = document.getElementById('pfpUploadProgress');
+  if (progressEl) progressEl.style.display = 'none';
+
   if (document.getElementById('editBioInput')) {
     document.getElementById('editBioInput').value = userSession.bio || gameState.profile_bio || "";
   }
@@ -5609,6 +6326,8 @@ function openProfileModal() {
   const currentFont = gameState.equipped_font || userSession.name_font || 'font-outfit';
   const currentBorder = gameState.equipped_border || userSession.avatar_border || 'border-none';
   const currentTheme = gameState.equipped_theme || userSession.profile_theme || 'theme-default';
+  const currentWrap = gameState.equipped_wrap || userSession.wrap || 'wrap-none';
+  const currentAnim = gameState.equipped_anim || userSession.anim || 'anim-none';
 
   const fontLabels = {
     'font-outfit': 'Outfit (Default)',
@@ -5621,7 +6340,11 @@ function openProfileModal() {
     'border-gold': '🥇 Gold Ring',
     'border-rainbow': '🌈 Rainbow Prism',
     'border-fire': '🔥 Blazing Fire',
-    'border-void': '💜 Void Aura'
+    'border-void': '💜 Void Aura',
+    'border-butterflies': '🦋 Butterflies Border',
+    'border-sakura': '🌸 Sakura Petals',
+    'border-lightning': '⚡ Lightning Arc',
+    'border-stardust': '✨ Stardust Orbit'
   };
   const themeLabels = {
     'theme-default': '🌑 Default Dark',
@@ -5632,23 +6355,50 @@ function openProfileModal() {
     'theme-void': '🌀 Purple Void',
     'theme-neon': '⚡ Neon',
     'theme-royal': '👑 Royal',
-    'theme-mythic': '💜 Mythic'
+    'theme-mythic': '💜 Mythic',
+    'theme-anime-cyber': '🏙️ Neo-Tokyo Cyber',
+    'theme-anime-sakura': '⛩️ Sakura Shrine',
+    'theme-anime-fire': '💥 Shonen Flame',
+    'theme-anime-retro': '📼 Retrowave Grid',
+    'theme-anime-space': '🚀 Deep Space Stream'
+  };
+  const wrapLabels = {
+    'wrap-none': 'Default Frame',
+    'wrap-cyber': '💠 Cyber Neon Wrap',
+    'wrap-gold': '👑 Gilded Sovereign',
+    'wrap-void': '🌌 Abyssal Void Wrap',
+    'wrap-holo': '💿 Holographic Prism',
+    'wrap-sakura': '🌸 Sakura Breeze'
+  };
+  const animLabels = {
+    'anim-none': 'No Animation',
+    'name-anim-glitch': '⚡ Glitch Effect',
+    'name-anim-wave': '🌊 Breathing Wave',
+    'name-anim-rainbow': '🌈 Rainbow Cycle',
+    'name-anim-flame': '🔥 Molten Flame',
+    'name-anim-neon': '💡 Neon Pulse'
   };
 
   // Populate hidden selects (for saveProfileChanges compatibility)
   const fontSel = document.getElementById('editFontInput');
   const borderSel = document.getElementById('editBorderInput');
   const themeSel = document.getElementById('editThemeInput');
+  const wrapSel = document.getElementById('editWrapInput');
+  const animSel = document.getElementById('editAnimInput');
 
   // Set hidden inputs to current values (used by saveProfileChanges)
   if (fontSel) fontSel.value = currentFont;
   if (borderSel) borderSel.value = currentBorder;
   if (themeSel) themeSel.value = currentTheme;
+  if (wrapSel) wrapSel.value = currentWrap;
+  if (animSel) animSel.value = currentAnim;
 
   // Render custom dropdowns
   renderFontDropdown(currentFont, fontLabels);
   renderBorderDropdown(currentBorder, borderLabels);
   renderThemeDropdown(currentTheme, themeLabels);
+  renderWrapDropdown(currentWrap, wrapLabels);
+  renderAnimDropdown(currentAnim, animLabels);
   renderCustomTitleDropdown();
   updateProfileLivePreview();
   document.getElementById('profileModal').style.display = 'flex';
@@ -5817,6 +6567,108 @@ function selectTheme(t) {
   updateProfileLivePreview();
 }
 
+/* ---- Wrap Dropdown ---- */
+const WRAP_LABELS = {
+  'wrap-none': 'Default Frame',
+  'wrap-cyber': '💠 Cyber Neon Wrap',
+  'wrap-gold': '👑 Gilded Sovereign',
+  'wrap-void': '🌌 Abyssal Void Wrap',
+  'wrap-holo': '💿 Holographic Prism',
+  'wrap-sakura': '🌸 Sakura Breeze'
+};
+
+function renderWrapDropdown(currentWrap, wrapLabels) {
+  const unlocked = gameState.unlocked_wraps || ['wrap-none'];
+  const labels = wrapLabels || WRAP_LABELS;
+  const sel = document.getElementById('wrapDropdownSelected');
+  if (sel) sel.textContent = labels[currentWrap] || currentWrap;
+  const hidden = document.getElementById('editWrapInput');
+  if (hidden) hidden.value = currentWrap;
+  const menu = document.getElementById('wrapDropdownMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  unlocked.forEach(w => {
+    const isSel = w === currentWrap;
+    const item = document.createElement('div');
+    item.className = `custom-dropdown-item ${isSel ? 'active' : ''}`;
+    item.onclick = (e) => { e.stopPropagation(); selectWrap(w); };
+    item.innerHTML = `<span style="flex:1">${labels[w] || w}</span>${isSel ? '<i data-lucide="check" style="width:14px;height:14px;color:var(--accent-gold);"></i>' : ''}`;
+    menu.appendChild(item);
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function toggleWrapDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('wrapDropdownMenu');
+  const chevron = document.getElementById('wrapDropdownChevron');
+  if (!menu) return;
+  menu.classList.toggle('open');
+  if (chevron) chevron.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function selectWrap(w) {
+  const hidden = document.getElementById('editWrapInput');
+  if (hidden) hidden.value = w;
+  const menu = document.getElementById('wrapDropdownMenu');
+  if (menu) menu.classList.remove('open');
+  const chevron = document.getElementById('wrapDropdownChevron');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  renderWrapDropdown(w);
+  updateProfileLivePreview();
+}
+
+/* ---- Animation Dropdown ---- */
+const ANIM_LABELS = {
+  'anim-none': 'No Animation',
+  'name-anim-glitch': '⚡ Glitch Effect',
+  'name-anim-wave': '🌊 Breathing Wave',
+  'name-anim-rainbow': '🌈 Rainbow Cycle',
+  'name-anim-flame': '🔥 Molten Flame',
+  'name-anim-neon': '💡 Neon Pulse'
+};
+
+function renderAnimDropdown(currentAnim, animLabels) {
+  const unlocked = gameState.unlocked_anims || ['anim-none'];
+  const labels = animLabels || ANIM_LABELS;
+  const sel = document.getElementById('animDropdownSelected');
+  if (sel) sel.textContent = labels[currentAnim] || currentAnim;
+  const hidden = document.getElementById('editAnimInput');
+  if (hidden) hidden.value = currentAnim;
+  const menu = document.getElementById('animDropdownMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  unlocked.forEach(a => {
+    const isSel = a === currentAnim;
+    const item = document.createElement('div');
+    item.className = `custom-dropdown-item ${isSel ? 'active' : ''}`;
+    item.onclick = (e) => { e.stopPropagation(); selectAnim(a); };
+    item.innerHTML = `<span style="flex:1">${labels[a] || a}</span>${isSel ? '<i data-lucide="check" style="width:14px;height:14px;color:var(--accent-gold);"></i>' : ''}`;
+    menu.appendChild(item);
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function toggleAnimDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('animDropdownMenu');
+  const chevron = document.getElementById('animDropdownChevron');
+  if (!menu) return;
+  menu.classList.toggle('open');
+  if (chevron) chevron.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function selectAnim(a) {
+  const hidden = document.getElementById('editAnimInput');
+  if (hidden) hidden.value = a;
+  const menu = document.getElementById('animDropdownMenu');
+  if (menu) menu.classList.remove('open');
+  const chevron = document.getElementById('animDropdownChevron');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  renderAnimDropdown(a);
+  updateProfileLivePreview();
+}
+
 /* ---- Close all custom dropdowns on outside click ---- */
 
 function renderCustomTitleDropdown() {
@@ -5886,6 +6738,8 @@ window.addEventListener('click', (e) => {
     { container: 'fontDropdownContainer',  menu: 'fontDropdownMenu',  chevron: 'fontDropdownChevron' },
     { container: 'borderDropdownContainer',menu: 'borderDropdownMenu',chevron: 'borderDropdownChevron' },
     { container: 'themeDropdownContainer', menu: 'themeDropdownMenu', chevron: 'themeDropdownChevron' },
+    { container: 'wrapDropdownContainer',  menu: 'wrapDropdownMenu',  chevron: 'wrapDropdownChevron' },
+    { container: 'animDropdownContainer',  menu: 'animDropdownMenu',  chevron: 'animDropdownChevron' },
   ].forEach(({ container, menu, chevron }) => {
     const c = document.getElementById(container);
     const m = document.getElementById(menu);
@@ -5902,6 +6756,7 @@ function updateProfileLivePreview() {
   const username = (document.getElementById('editUsernameInput')?.value || '').trim() || (userSession.username || 'Player');
   const font = document.getElementById('editFontInput')?.value || (gameState.equipped_font || 'font-outfit');
   const border = document.getElementById('editBorderInput')?.value || (gameState.equipped_border || 'border-none');
+  const anim = document.getElementById('editAnimInput')?.value || (gameState.equipped_anim || 'anim-none');
   const title = gameState.equipped_title || 'Novice';
   const titleClass = gameState.equipped_title_class || getTitleClassByName(title);
 
@@ -5912,7 +6767,7 @@ function updateProfileLivePreview() {
 
   if (previewName) {
     previewName.textContent = username;
-    previewName.className = `discord-display-name ${font}`;
+    previewName.className = `discord-display-name ${font} ${anim}`;
   }
 
   if (previewTitle) {
@@ -5943,7 +6798,8 @@ function updateUserProfileUI() {
   const isAuth = !!userSession.token;
   const nameEl = document.getElementById('userNameDisplay');
   nameEl.textContent = isAuth ? userSession.username : "Sign In";
-  nameEl.className = isAuth ? (gameState.equipped_font || userSession.name_font || 'font-outfit') : '';
+  const anim = isAuth ? (gameState.equipped_anim || userSession.anim || '') : '';
+  nameEl.className = isAuth ? `${gameState.equipped_font || userSession.name_font || 'font-outfit'} ${anim}`.trim() : '';
   document.getElementById('logoutBtn').style.display = isAuth ? 'inline-flex' : 'none';
 
   const badge = document.getElementById('equippedTitleBadge');
