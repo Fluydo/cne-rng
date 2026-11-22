@@ -2347,7 +2347,7 @@ main {
     <div class="pity-wrapper">
       <div class="pity-info">
         <span>LEGENDARY PITY</span>
-        <span id="pityCount">0 / 45</span>
+        <span id="pityCount">0 / 150</span>
       </div>
       <div class="pity-track">
         <div class="pity-fill" id="pityFill" style="width: 0%;"></div>
@@ -2933,7 +2933,7 @@ const TIER_STRENGTH = {
 const COIN_REWARDS = {
   COMMON: 10, RARE: 40, EPIC: 160, LEGENDARY: 640, MYTHIC: 2560, CELESTIAL: 5000, SECRET: 10000, LEGEND: 18000, TRANSCENDENT: 30000
 };
-const PITY_THRESHOLD = 45;
+const PITY_THRESHOLD = 150;
 
 const CHARACTERS = {
   // TRANSCENDENT (10★) - Color: #10b981
@@ -3059,19 +3059,19 @@ const ALL_CHAR_NAMES = Object.keys(CHARACTERS);
 
 const ITEMS = {
   "Master Roll": {
-    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 1000,
+    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 200,
     animClass: "anim-transcendent",
-    desc: "Guarantees 1000x godlike luck multiplier on next single summon."
+    desc: "Infuses the next roll with 200x godlike luck multiplier."
   },
   "Celestial Orb": {
-    tier: "CELESTIAL", stars: 7, luckMultiplier: 100,
+    tier: "CELESTIAL", stars: 7, luckMultiplier: 35,
     animClass: "anim-celestial",
-    desc: "Infuses the next roll with 100x cosmic luck."
+    desc: "Infuses the next roll with 35x cosmic luck."
   },
   "Golden Clover": {
-    tier: "LEGENDARY", stars: 5, luckMultiplier: 10,
+    tier: "LEGENDARY", stars: 5, luckMultiplier: 5,
     animClass: "",
-    desc: "Boosts next roll luck by 10x."
+    desc: "Boosts next roll luck by 5x."
   },
   "Quest Reroll": {
     tier: "RARE", stars: 3, luckMultiplier: 1,
@@ -3079,9 +3079,9 @@ const ITEMS = {
     desc: "Instantly refreshes active quests with brand new objectives and rewards."
   },
   "Silver Horseshoe": {
-    tier: "RARE", stars: 3, luckMultiplier: 3,
+    tier: "RARE", stars: 3, luckMultiplier: 2,
     animClass: "",
-    desc: "Increases next roll luck by 3x."
+    desc: "Increases next roll luck by 2x."
   }
 };
 const ALL_ITEM_NAMES = Object.keys(ITEMS);
@@ -3092,119 +3092,151 @@ const UPGRADE_CONFIGS = {
   spins: { max: 5, base: 350, growth: 2.4 },
 };
 
-/* 12-HOUR ROTATING QUEST POOL (CYCLE-SPECIFIC OBJECTIVES) */
+/* 12-HOUR ROTATING QUEST POOL (HARDCORE OBJECTIVES & TIME DEDICATION) */
 const QUEST_POOL = [
   {
-    id: "cq_15_rolls",
+    id: "cq_150_rolls",
     title: "Cycle Awakening",
-    desc: "Perform 15 summons during this 12h cycle.",
-    progress: (s) => `${Math.min(15, (s.cycle_stats?.rolls || 0))} / 15`,
-    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 15,
-    rewardItem: "Silver Horseshoe", rewardCount: 2, rewardCoins: 300
+    desc: "Perform 150 summons during this 12h cycle.",
+    progress: (s) => `${Math.min(150, (s.cycle_stats?.rolls || 0))} / 150`,
+    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 150,
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 1500
   },
   {
-    id: "cq_35_rolls",
+    id: "cq_350_rolls",
     title: "Rolling Fever",
-    desc: "Perform 35 summons during this 12h cycle.",
-    progress: (s) => `${Math.min(35, (s.cycle_stats?.rolls || 0))} / 35`,
-    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 35,
-    rewardItem: "Quest Reroll", rewardCount: 2, rewardCoins: 600
+    desc: "Perform 350 summons during this 12h cycle.",
+    progress: (s) => `${Math.min(350, (s.cycle_stats?.rolls || 0))} / 350`,
+    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 350,
+    rewardItem: "Quest Reroll", rewardCount: 4, rewardCoins: 3500
   },
   {
-    id: "cq_60_rolls",
+    id: "cq_600_rolls",
     title: "Summoning Storm",
-    desc: "Perform 60 summons during this 12h cycle.",
-    progress: (s) => `${Math.min(60, (s.cycle_stats?.rolls || 0))} / 60`,
-    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 60,
-    rewardItem: "Golden Clover", rewardCount: 1, rewardCoins: 1200
+    desc: "Perform 600 summons during this 12h cycle.",
+    progress: (s) => `${Math.min(600, (s.cycle_stats?.rolls || 0))} / 600`,
+    isDone: (s) => (s.cycle_stats?.rolls || 0) >= 600,
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 7500
   },
   {
-    id: "cq_2_multis",
+    id: "cq_20_multis",
     title: "Multi Roller",
-    desc: "Complete 2 Multi-Pulls during this 12h cycle.",
-    progress: (s) => `${Math.min(2, (s.cycle_stats?.multi_pulls || 0))} / 2`,
-    isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 2,
-    rewardItem: "Quest Reroll", rewardCount: 2, rewardCoins: 750
+    desc: "Complete 20 Multi-Pulls during this 12h cycle.",
+    progress: (s) => `${Math.min(20, (s.cycle_stats?.multi_pulls || 0))} / 20`,
+    isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 20,
+    rewardItem: "Quest Reroll", rewardCount: 4, rewardCoins: 4500
   },
   {
-    id: "cq_4_multis",
+    id: "cq_40_multis",
     title: "Mass Evocation",
-    desc: "Complete 4 Multi-Pulls during this 12h cycle.",
-    progress: (s) => `${Math.min(4, (s.cycle_stats?.multi_pulls || 0))} / 4`,
-    isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 4,
-    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 1500
+    desc: "Complete 40 Multi-Pulls during this 12h cycle.",
+    progress: (s) => `${Math.min(40, (s.cycle_stats?.multi_pulls || 0))} / 40`,
+    isDone: (s) => (s.cycle_stats?.multi_pulls || 0) >= 40,
+    rewardItem: "Golden Clover", rewardCount: 4, rewardCoins: 9000
   },
   {
-    id: "cq_use_items",
-    title: "Item Utilization",
-    desc: "Consume 2 boost items during summons in this cycle.",
-    progress: (s) => `${Math.min(2, (s.cycle_stats?.items_used || 0))} / 2`,
-    isDone: (s) => (s.cycle_stats?.items_used || 0) >= 2,
-    rewardItem: "Silver Horseshoe", rewardCount: 3, rewardCoins: 500
+    id: "cq_50_singles",
+    title: "Manual Discipline",
+    desc: "Perform 50 Single Rolls (individual summons) during this cycle.",
+    progress: (s) => `${Math.min(50, (s.cycle_stats?.single_rolls || 0))} / 50`,
+    isDone: (s) => (s.cycle_stats?.single_rolls || 0) >= 50,
+    rewardItem: "Silver Horseshoe", rewardCount: 6, rewardCoins: 3000
   },
   {
-    id: "cq_coins_1000",
-    title: "Pocket Wealth",
-    desc: "Earn 1,000 Coins from summons during this cycle.",
-    progress: (s) => `${Math.min(1000, (s.cycle_stats?.coins_earned || 0))} / 1000`,
-    isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 1000,
-    rewardItem: "Quest Reroll", rewardCount: 2, rewardCoins: 400
+    id: "cq_time_5m",
+    title: "Campus Attendance",
+    desc: "Spend at least 5 minutes active during this cycle.",
+    progress: (s) => `${Math.floor(Math.min(300, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 5m 00s`,
+    isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 300,
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 2000
   },
   {
-    id: "cq_coins_4000",
-    title: "Coin Overflow",
-    desc: "Earn 4,000 Coins from summons during this cycle.",
-    progress: (s) => `${Math.min(4000, (s.cycle_stats?.coins_earned || 0))} / 4000`,
-    isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 4000,
-    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 1200
+    id: "cq_time_15m",
+    title: "Study Hall Dedication",
+    desc: "Spend at least 15 minutes active during this cycle.",
+    progress: (s) => `${Math.floor(Math.min(900, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 15m 00s`,
+    isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 900,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 5000
   },
   {
-    id: "cq_10_students",
+    id: "cq_time_30m",
+    title: "Honor Roll Scholar",
+    desc: "Spend at least 30 minutes active during this cycle.",
+    progress: (s) => `${Math.floor(Math.min(1800, (s.cycle_stats?.time_spent_seconds || 0)) / 60)}m ${(s.cycle_stats?.time_spent_seconds || 0) % 60}s / 30m 00s`,
+    isDone: (s) => (s.cycle_stats?.time_spent_seconds || 0) >= 1800,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 12000
+  },
+  {
+    id: "cq_use_items_15",
+    title: "Alchemical Mastery",
+    desc: "Consume 15 boost items during summons in this cycle.",
+    progress: (s) => `${Math.min(15, (s.cycle_stats?.items_used || 0))} / 15`,
+    isDone: (s) => (s.cycle_stats?.items_used || 0) >= 15,
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 3000
+  },
+  {
+    id: "cq_coins_25000",
+    title: "Vault Collector",
+    desc: "Earn 25,000 Coins from summons during this cycle.",
+    progress: (s) => `${Math.min(25000, (s.cycle_stats?.coins_earned || 0))} / 25000`,
+    isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 25000,
+    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 3000
+  },
+  {
+    id: "cq_coins_100000",
+    title: "CNE Treasury",
+    desc: "Earn 100,000 Coins from summons during this cycle.",
+    progress: (s) => `${Math.min(100000, (s.cycle_stats?.coins_earned || 0))} / 100000`,
+    isDone: (s) => (s.cycle_stats?.coins_earned || 0) >= 100000,
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 8000
+  },
+  {
+    id: "cq_100_students",
     title: "Student Roll Call",
-    desc: "Summon 10 Students during this cycle.",
-    progress: (s) => `${Math.min(10, (s.cycle_stats?.students_pulled || 0))} / 10`,
-    isDone: (s) => (s.cycle_stats?.students_pulled || 0) >= 10,
-    rewardItem: "Silver Horseshoe", rewardCount: 2, rewardCoins: 500
+    desc: "Summon 100 Students during this cycle.",
+    progress: (s) => `${Math.min(100, (s.cycle_stats?.students_pulled || 0))} / 100`,
+    isDone: (s) => (s.cycle_stats?.students_pulled || 0) >= 100,
+    rewardItem: "Silver Horseshoe", rewardCount: 5, rewardCoins: 3000
   },
   {
-    id: "cq_5_teachers",
+    id: "cq_50_teachers",
     title: "Faculty Chamber",
-    desc: "Summon 5 Teachers during this cycle.",
-    progress: (s) => `${Math.min(5, (s.cycle_stats?.teachers_pulled || 0))} / 5`,
-    isDone: (s) => (s.cycle_stats?.teachers_pulled || 0) >= 5,
-    rewardItem: "Golden Clover", rewardCount: 1, rewardCoins: 1000
+    desc: "Summon 50 Teachers during this cycle.",
+    progress: (s) => `${Math.min(50, (s.cycle_stats?.teachers_pulled || 0))} / 50`,
+    isDone: (s) => (s.cycle_stats?.teachers_pulled || 0) >= 50,
+    rewardItem: "Golden Clover", rewardCount: 3, rewardCoins: 6000
   },
   {
-    id: "cq_auxiliar",
-    title: "School Staff Support",
-    desc: "Summon Mariana das Tessouras (Auxiliar) during this cycle.",
-    progress: (s) => (s.cycle_stats?.auxiliares_pulled || 0) >= 1 ? "1 / 1" : "0 / 1",
-    isDone: (s) => (s.cycle_stats?.auxiliares_pulled || 0) >= 1,
-    rewardItem: "Quest Reroll", rewardCount: 2, rewardCoins: 800
+    id: "cq_10_auxiliares",
+    title: "Staff Support",
+    desc: "Summon 10 Auxiliares / Staff during this cycle.",
+    progress: (s) => `${Math.min(10, (s.cycle_stats?.auxiliares_pulled || 0))} / 10`,
+    isDone: (s) => (s.cycle_stats?.auxiliares_pulled || 0) >= 10,
+    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 4000
   },
   {
-    id: "cq_rare_pull",
+    id: "cq_25_rares",
     title: "Rare Breakthrough",
-    desc: "Summon any Rare or higher discovery during this cycle.",
-    progress: (s) => (s.cycle_stats?.highest_tier || 0) >= 2 ? "1 / 1" : "0 / 1",
-    isDone: (s) => (s.cycle_stats?.highest_tier || 0) >= 2,
-    rewardItem: "Silver Horseshoe", rewardCount: 2, rewardCoins: 350
+    desc: "Summon 25 Rare characters during this cycle.",
+    progress: (s) => `${Math.min(25, (s.cycle_stats?.rares_pulled || 0))} / 25`,
+    isDone: (s) => (s.cycle_stats?.rares_pulled || 0) >= 25,
+    rewardItem: "Silver Horseshoe", rewardCount: 4, rewardCoins: 2500
   },
   {
-    id: "cq_epic_pull",
+    id: "cq_15_epics",
     title: "Purple Radiance",
-    desc: "Summon any Epic or higher discovery during this cycle.",
-    progress: (s) => (s.cycle_stats?.highest_tier || 0) >= 3 ? "1 / 1" : "0 / 1",
-    isDone: (s) => (s.cycle_stats?.highest_tier || 0) >= 3,
-    rewardItem: "Quest Reroll", rewardCount: 2, rewardCoins: 750
+    desc: "Summon 15 Epic characters during this cycle.",
+    progress: (s) => `${Math.min(15, (s.cycle_stats?.epics_pulled || 0))} / 15`,
+    isDone: (s) => (s.cycle_stats?.epics_pulled || 0) >= 15,
+    rewardItem: "Quest Reroll", rewardCount: 3, rewardCoins: 5000
   },
   {
-    id: "cq_legendary_pull",
+    id: "cq_5_legendaries",
     title: "Golden Fortune",
-    desc: "Summon any Legendary or higher discovery during this cycle.",
-    progress: (s) => (s.cycle_stats?.highest_tier || 0) >= 4 ? "1 / 1" : "0 / 1",
-    isDone: (s) => (s.cycle_stats?.highest_tier || 0) >= 4,
-    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 1800
+    desc: "Summon 5 Legendary characters during this cycle.",
+    progress: (s) => `${Math.min(5, (s.cycle_stats?.legendaries_pulled || 0))} / 5`,
+    isDone: (s) => (s.cycle_stats?.legendaries_pulled || 0) >= 5,
+    rewardItem: "Golden Clover", rewardCount: 2, rewardCoins: 8000
   },
   {
     id: "cq_fifa_pull",
@@ -3212,15 +3244,15 @@ const QUEST_POOL = [
     desc: "Summon any FIFA Legend Icon during this cycle.",
     progress: (s) => (s.cycle_stats?.highest_tier || 0) >= 8 ? "1 / 1" : "0 / 1",
     isDone: (s) => (s.cycle_stats?.highest_tier || 0) >= 8,
-    rewardItem: "Master Roll", rewardCount: 1, rewardCoins: 8000
+    rewardItem: "Master Roll", rewardCount: 1, rewardCoins: 15000
   },
   {
-    id: "cq_unique_chars",
+    id: "cq_unique_chars_25",
     title: "Diverse Encounters",
-    desc: "Summon 10 different unique characters during this cycle.",
-    progress: (s) => `${Math.min(10, (s.cycle_stats?.unique_pulled?.length || 0))} / 10`,
-    isDone: (s) => (s.cycle_stats?.unique_pulled?.length || 0) >= 10,
-    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 2500
+    desc: "Summon 25 different unique characters during this cycle.",
+    progress: (s) => `${Math.min(25, (s.cycle_stats?.unique_pulled?.length || 0))} / 25`,
+    isDone: (s) => (s.cycle_stats?.unique_pulled?.length || 0) >= 25,
+    rewardItem: "Celestial Orb", rewardCount: 1, rewardCoins: 10000
   }
 ];
 
@@ -3279,6 +3311,7 @@ function getDefaultGameState() {
     active_quest_ids: [],
     cycle_stats: {
       rolls: 0,
+      single_rolls: 0,
       multi_pulls: 0,
       coins_earned: 0,
       items_used: 0,
@@ -3286,6 +3319,10 @@ function getDefaultGameState() {
       students_pulled: 0,
       teachers_pulled: 0,
       auxiliares_pulled: 0,
+      rares_pulled: 0,
+      epics_pulled: 0,
+      legendaries_pulled: 0,
+      time_spent_seconds: 0,
       unique_pulled: []
     }
   };
@@ -3374,15 +3411,28 @@ const AudioFX = {
 };
 
 /* =========================================================
-   BALANCED MATHEMATICS
+   HARDCORE BALANCED MATHEMATICS (STEEPER EXPONENTIAL RARITY)
    ========================================================= */
+const TIER_EXPONENTS = {
+  COMMON: 0,
+  RARE: 1.2,
+  EPIC: 2.8,
+  LEGENDARY: 4.8,
+  MYTHIC: 7.0,
+  CELESTIAL: 9.5,
+  SECRET: 12.0,
+  LEGEND: 14.5,
+  TRANSCENDENT: 17.5
+};
+
 function calculateTierProbs(luckLevel, itemMultiplier = 1) {
-  const BASE_EXPONENT = 7.2;
-  const luckFactor = (1 + 0.15 * (luckLevel || 0)) * itemMultiplier;
+  const BASE_EXPONENT = 14.0;
+  const luckFactor = (1 + 0.10 * (luckLevel || 0)) * Math.pow(itemMultiplier, 0.75);
 
   const weights = {};
-  TIER_ORDER.forEach((tier, idx) => {
-    weights[tier] = Math.pow(luckFactor / BASE_EXPONENT, idx);
+  TIER_ORDER.forEach((tier) => {
+    const power = TIER_EXPONENTS[tier] || 0;
+    weights[tier] = Math.pow(Math.max(1e-12, luckFactor / BASE_EXPONENT), power);
   });
   const sum = Object.values(weights).reduce((a, b) => a + b, 0);
   const probs = {};
@@ -3428,18 +3478,18 @@ function getCharacterDropOdds(charName, itemMultiplier = 1, luckLevel = null) {
   const totalInTier = ALL_CHAR_NAMES.filter(n => CHARACTERS[n].tier === tier).length;
   const charChance = probs[tier] / totalInTier;
   return {
-    oneIn: Math.round(100 / Math.max(0.0000001, charChance)),
-    percentage: charChance < 0.01 ? charChance.toFixed(5) : charChance.toFixed(2)
+    oneIn: Math.round(100 / Math.max(1e-15, charChance)),
+    percentage: charChance < 0.00001 ? charChance.toExponential(2) : (charChance < 0.01 ? charChance.toFixed(5) : charChance.toFixed(2))
   };
 }
 
 function tryDropRandomItem() {
   const roll = Math.random();
-  if (roll < 0.001) addItemToInventory("Master Roll");
-  else if (roll < 0.01) addItemToInventory("Celestial Orb");
-  else if (roll < 0.035) addItemToInventory("Golden Clover");
-  else if (roll < 0.075) addItemToInventory("Quest Reroll");
-  else if (roll < 0.15) addItemToInventory("Silver Horseshoe");
+  if (roll < 0.0001) addItemToInventory("Master Roll");
+  else if (roll < 0.001) addItemToInventory("Celestial Orb");
+  else if (roll < 0.0035) addItemToInventory("Golden Clover");
+  else if (roll < 0.0075) addItemToInventory("Quest Reroll");
+  else if (roll < 0.015) addItemToInventory("Silver Horseshoe");
 }
 
 function addItemToInventory(itemName, count = 1) {
@@ -3712,16 +3762,20 @@ function performSingleRoll() {
   }
 
   // Update 12-hour cycle stats
-  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, unique_pulled: [] };
+  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
   gameState.cycle_stats.rolls++;
-  if (luckMultiplier > 1) gameState.cycle_stats.items_used++;
+  gameState.cycle_stats.single_rolls = (gameState.cycle_stats.single_rolls || 0) + 1;
+  if (luckMultiplier > 1) gameState.cycle_stats.items_used = (gameState.cycle_stats.items_used || 0) + 1;
   gameState.cycle_stats.coins_earned += COIN_REWARDS[charData.tier];
   if (TIER_STRENGTH[charData.tier] > (gameState.cycle_stats.highest_tier || 0)) {
     gameState.cycle_stats.highest_tier = TIER_STRENGTH[charData.tier];
   }
+  if (charData.tier === 'RARE') gameState.cycle_stats.rares_pulled = (gameState.cycle_stats.rares_pulled || 0) + 1;
+  if (charData.tier === 'EPIC') gameState.cycle_stats.epics_pulled = (gameState.cycle_stats.epics_pulled || 0) + 1;
+  if (charData.tier === 'LEGENDARY') gameState.cycle_stats.legendaries_pulled = (gameState.cycle_stats.legendaries_pulled || 0) + 1;
   if (charData.role === 'Student') gameState.cycle_stats.students_pulled = (gameState.cycle_stats.students_pulled || 0) + 1;
   if (charData.role === 'Teacher') gameState.cycle_stats.teachers_pulled = (gameState.cycle_stats.teachers_pulled || 0) + 1;
-  if (charData.role === 'School Assistant') gameState.cycle_stats.auxiliares_pulled = (gameState.cycle_stats.auxiliares_pulled || 0) + 1;
+  if (charData.role === 'School Assistant' || charData.role === 'Auxiliar') gameState.cycle_stats.auxiliares_pulled = (gameState.cycle_stats.auxiliares_pulled || 0) + 1;
   if (!gameState.cycle_stats.unique_pulled) gameState.cycle_stats.unique_pulled = [];
   if (!gameState.cycle_stats.unique_pulled.includes(winningChar)) {
     gameState.cycle_stats.unique_pulled.push(winningChar);
@@ -3900,7 +3954,7 @@ function performMultiRoll() {
   tryDropRandomItem();
 
   // Update 12-hour cycle stats for multi-roll
-  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, unique_pulled: [] };
+  gameState.cycle_stats = gameState.cycle_stats || { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
   gameState.cycle_stats.multi_pulls++;
   gameState.cycle_stats.rolls += pullCount;
   gameState.cycle_stats.coins_earned += totalCoinGained;
@@ -3909,9 +3963,12 @@ function performMultiRoll() {
   }
   if (!gameState.cycle_stats.unique_pulled) gameState.cycle_stats.unique_pulled = [];
   pulled.forEach(item => {
+    if (item.char.tier === 'RARE') gameState.cycle_stats.rares_pulled = (gameState.cycle_stats.rares_pulled || 0) + 1;
+    if (item.char.tier === 'EPIC') gameState.cycle_stats.epics_pulled = (gameState.cycle_stats.epics_pulled || 0) + 1;
+    if (item.char.tier === 'LEGENDARY') gameState.cycle_stats.legendaries_pulled = (gameState.cycle_stats.legendaries_pulled || 0) + 1;
     if (item.char.role === 'Student') gameState.cycle_stats.students_pulled = (gameState.cycle_stats.students_pulled || 0) + 1;
     if (item.char.role === 'Teacher') gameState.cycle_stats.teachers_pulled = (gameState.cycle_stats.teachers_pulled || 0) + 1;
-    if (item.char.role === 'School Assistant') gameState.cycle_stats.auxiliares_pulled = (gameState.cycle_stats.auxiliares_pulled || 0) + 1;
+    if (item.char.role === 'School Assistant' || item.char.role === 'Auxiliar') gameState.cycle_stats.auxiliares_pulled = (gameState.cycle_stats.auxiliares_pulled || 0) + 1;
     if (!gameState.cycle_stats.unique_pulled.includes(item.name)) gameState.cycle_stats.unique_pulled.push(item.name);
   });
 
@@ -4289,7 +4346,7 @@ function checkAndRefreshQuests(force = false) {
     const shuffled = [...QUEST_POOL].sort(() => 0.5 - Math.random());
     gameState.active_quest_ids = shuffled.slice(0, 10).map(q => q.id);
     gameState.cycle_completed_quests = [];
-    gameState.cycle_stats = { rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, unique_pulled: [] };
+    gameState.cycle_stats = { rolls: 0, single_rolls: 0, multi_pulls: 0, coins_earned: 0, items_used: 0, highest_tier: 1, students_pulled: 0, teachers_pulled: 0, auxiliares_pulled: 0, rares_pulled: 0, epics_pulled: 0, legendaries_pulled: 0, time_spent_seconds: 0, unique_pulled: [] };
     saveState();
   }
 }
@@ -4866,34 +4923,34 @@ window.addEventListener('mousedown', (e) => {
 }, true);
 
 /* =========================================================
-   SHOP (HALVED PRICES & REAL ITEM SVGS)
+   SHOP (75% OFF CONSUMABLES, 50% OFF COSMETICS & REAL SVGS)
    ========================================================= */
 const SHOP_ITEMS = [
-  // BOOSTERS (Halved prices & real SVGs)
-  { id: 'booster_reroll5',  cat: 'BOOSTERS', name: 'Quest Reroll x5',     desc: 'Refresh all active quests 5 times.',      itemName: 'Quest Reroll',     cost: 1_000_000,   color: '#f59e0b' },
-  { id: 'booster_shoe5',   cat: 'BOOSTERS', name: 'Silver Horseshoe x5',  desc: 'Boost luck on 5 rolls.',                 itemName: 'Silver Horseshoe',  cost: 750_000,     color: '#3b82f6' },
-  { id: 'booster_clover3', cat: 'BOOSTERS', name: 'Golden Clover x3',     desc: 'Triple your luck for 3 pulls.',          itemName: 'Golden Clover',     cost: 1_500_000,   color: '#10b981' },
-  { id: 'booster_orb1',    cat: 'BOOSTERS', name: 'Celestial Orb x1',     desc: 'Guarantee a Celestial+ character.',      itemName: 'Celestial Orb',     cost: 5_000_000,   color: '#06b6d4' },
-  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Guarantee a Secret+ character.',         itemName: 'Master Roll',       cost: 12_500_000,  color: '#6366f1' },
-  // THEMES (Halved prices)
-  { id: 'theme_midnight',  cat: 'THEMES',   name: 'Midnight Theme',       desc: 'Deep blue-black Discord card theme.',    icon: '🌙', cost: 2_500_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
-  { id: 'theme_crimson',   cat: 'THEMES',   name: 'Crimson Theme',        desc: 'Fiery red Discord card theme.',          icon: '🔥', cost: 4_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
-  { id: 'theme_emerald',   cat: 'THEMES',   name: 'Emerald Theme',        desc: 'Lush green champion card theme.',        icon: '💚', cost: 4_000_000,   color: '#10b981',  unlockKey: 'theme-emerald' },
-  { id: 'theme_gold',      cat: 'THEMES',   name: 'Gold Theme',           desc: 'Elite golden prestige card theme.',      icon: '🏆', cost: 25_000_000,  color: '#f5c518',  unlockKey: 'theme-gold' },
-  { id: 'theme_void',      cat: 'THEMES',   name: 'Void Theme',           desc: 'Mysterious purple void card theme.',     icon: '🌀', cost: 50_000_000,  color: '#a855f7',  unlockKey: 'theme-void' },
-  // BORDERS (Halved prices)
-  { id: 'border_gold',     cat: 'BORDERS',  name: 'Gold Border',          desc: 'Gleaming gold avatar ring.',             icon: '🥇', cost: 5_000_000,   color: '#f5c518',  unlockKey: 'border-gold' },
-  { id: 'border_rainbow',  cat: 'BORDERS',  name: 'Rainbow Border',       desc: 'Animated rainbow avatar ring.',          icon: '🌈', cost: 25_000_000,  color: '#ec4899',  unlockKey: 'border-rainbow' },
-  { id: 'border_fire',     cat: 'BORDERS',  name: 'Fire Border',          desc: 'Blazing fire avatar ring.',              icon: '🔥', cost: 37_500_000,  color: '#f59e0b',  unlockKey: 'border-fire' },
-  { id: 'border_void',     cat: 'BORDERS',  name: 'Void Border',          desc: 'Pulsing purple void avatar ring.',       icon: '💜', cost: 75_000_000,  color: '#a855f7',  unlockKey: 'border-void' },
-  // FONTS (Halved prices)
-  { id: 'font_cinzel',     cat: 'FONTS',    name: 'Cinzel Serif',         desc: 'Majestic roman serif username font.',    icon: '✍️', cost: 2_500_000,   color: '#e5c97e',  unlockKey: 'font-cinzel' },
-  { id: 'font_orbitron',   cat: 'FONTS',    name: 'Orbitron Tech',        desc: 'Futuristic tech username font.',         icon: '🤖', cost: 2_500_000,   color: '#06b6d4',  unlockKey: 'font-orbitron' },
-  { id: 'font_press',      cat: 'FONTS',    name: 'Pixel Press',          desc: 'Retro pixel game username font.',        icon: '👾', cost: 7_500_000,   color: '#a855f7',  unlockKey: 'font-press' },
-  // TITLES (Halved prices)
-  { id: 'title_whale',     cat: 'TITLES',   name: 'The Whale',            desc: 'Reserved for big spenders.',             icon: '🐋', cost: 10_000_000,  color: '#06b6d4',  unlockKey: 'The Whale',     titleClass: 'title-celestial' },
-  { id: 'title_mogul',     cat: 'TITLES',   name: 'CNE Mogul',            desc: 'You own this school.',                   icon: '💰', cost: 25_000_000,  color: '#f5c518',  unlockKey: 'CNE Mogul',     titleClass: 'title-mogul' },
-  { id: 'title_god',       cat: 'TITLES',   name: 'CNE God',              desc: 'The highest honour.',                    icon: '⚡', cost: 250_000_000, color: '#10b981',  unlockKey: 'CNE God',       titleClass: 'title-god' },
+  // BOOSTERS (75% OFF & Real SVGs)
+  { id: 'booster_reroll5',  cat: 'BOOSTERS', name: 'Quest Reroll x5',     desc: 'Refresh all active quests 5 times.',      itemName: 'Quest Reroll',     cost: 250_000,     color: '#f59e0b' },
+  { id: 'booster_shoe5',   cat: 'BOOSTERS', name: 'Silver Horseshoe x5',  desc: 'Boost luck by 2x on 5 rolls.',           itemName: 'Silver Horseshoe',  cost: 187_500,     color: '#3b82f6' },
+  { id: 'booster_clover3', cat: 'BOOSTERS', name: 'Golden Clover x3',     desc: '5x luck boost for 3 pulls.',             itemName: 'Golden Clover',     cost: 375_000,     color: '#10b981' },
+  { id: 'booster_orb1',    cat: 'BOOSTERS', name: 'Celestial Orb x1',     desc: 'Cosmic 35x luck boost on next roll.',    itemName: 'Celestial Orb',     cost: 1_250_000,   color: '#06b6d4' },
+  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Massive 200x godlike luck boost on roll.',itemName: 'Master Roll',      cost: 3_125_000,   color: '#6366f1' },
+  // THEMES (50% Off)
+  { id: 'theme_midnight',  cat: 'THEMES',   name: 'Midnight Theme',       desc: 'Deep blue-black Discord card theme.',    icon: '🌙', cost: 1_250_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
+  { id: 'theme_crimson',   cat: 'THEMES',   name: 'Crimson Theme',        desc: 'Fiery red Discord card theme.',          icon: '🔥', cost: 2_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
+  { id: 'theme_emerald',   cat: 'THEMES',   name: 'Emerald Theme',        desc: 'Lush green champion card theme.',        icon: '💚', cost: 2_000_000,   color: '#10b981',  unlockKey: 'theme-emerald' },
+  { id: 'theme_gold',      cat: 'THEMES',   name: 'Gold Theme',           desc: 'Elite golden prestige card theme.',      icon: '🏆', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'theme-gold' },
+  { id: 'theme_void',      cat: 'THEMES',   name: 'Void Theme',           desc: 'Mysterious purple void card theme.',     icon: '🌀', cost: 25_000_000,  color: '#a855f7',  unlockKey: 'theme-void' },
+  // BORDERS (50% Off)
+  { id: 'border_gold',     cat: 'BORDERS',  name: 'Gold Border',          desc: 'Gleaming gold avatar ring.',             icon: '🥇', cost: 2_500_000,   color: '#f5c518',  unlockKey: 'border-gold' },
+  { id: 'border_rainbow',  cat: 'BORDERS',  name: 'Rainbow Border',       desc: 'Animated rainbow avatar ring.',          icon: '🌈', cost: 12_500_000,  color: '#ec4899',  unlockKey: 'border-rainbow' },
+  { id: 'border_fire',     cat: 'BORDERS',  name: 'Fire Border',          desc: 'Blazing fire avatar ring.',              icon: '🔥', cost: 18_750_000,  color: '#f59e0b',  unlockKey: 'border-fire' },
+  { id: 'border_void',     cat: 'BORDERS',  name: 'Void Border',          desc: 'Pulsing purple void avatar ring.',       icon: '💜', cost: 37_500_000,  color: '#a855f7',  unlockKey: 'border-void' },
+  // FONTS (50% Off)
+  { id: 'font_cinzel',     cat: 'FONTS',    name: 'Cinzel Serif',         desc: 'Majestic roman serif username font.',    icon: '✍️', cost: 1_250_000,   color: '#e5c97e',  unlockKey: 'font-cinzel' },
+  { id: 'font_orbitron',   cat: 'FONTS',    name: 'Orbitron Tech',        desc: 'Futuristic tech username font.',         icon: '🤖', cost: 1_250_000,   color: '#06b6d4',  unlockKey: 'font-orbitron' },
+  { id: 'font_press',      cat: 'FONTS',    name: 'Pixel Press',          desc: 'Retro pixel game username font.',        icon: '👾', cost: 3_750_000,   color: '#a855f7',  unlockKey: 'font-press' },
+  // TITLES (50% Off)
+  { id: 'title_whale',     cat: 'TITLES',   name: 'The Whale',            desc: 'Reserved for big spenders.',             icon: '🐋', cost: 5_000_000,   color: '#06b6d4',  unlockKey: 'The Whale',     titleClass: 'title-celestial' },
+  { id: 'title_mogul',     cat: 'TITLES',   name: 'CNE Mogul',            desc: 'You own this school.',                   icon: '💰', cost: 12_500_000,  color: '#f5c518',  unlockKey: 'CNE Mogul',     titleClass: 'title-mogul' },
+  { id: 'title_god',       cat: 'TITLES',   name: 'CNE God',              desc: 'The highest honour.',                    icon: '⚡', cost: 125_000_000, color: '#10b981',  unlockKey: 'CNE God',       titleClass: 'title-god' },
 ];
 
 let currentShopFilter = 'ALL';
@@ -5934,7 +5991,11 @@ window.addEventListener('DOMContentLoaded', () => {
   setInterval(() => {
     const label = document.getElementById('questCountdownLabel');
     if (label) label.textContent = getQuestCountdownString();
+    if (gameState && gameState.cycle_stats) {
+      gameState.cycle_stats.time_spent_seconds = (gameState.cycle_stats.time_spent_seconds || 0) + 1;
+    }
     checkAndRefreshQuests();
+    checkMissions();
   }, 1000);
 });
 </script>
