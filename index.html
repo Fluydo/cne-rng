@@ -3059,9 +3059,9 @@ const ALL_CHAR_NAMES = Object.keys(CHARACTERS);
 
 const ITEMS = {
   "Master Roll": {
-    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 200,
+    tier: "TRANSCENDENT", stars: 10, luckMultiplier: 100,
     animClass: "anim-transcendent",
-    desc: "Infuses the next roll with 200x godlike luck multiplier."
+    desc: "Infuses the next roll with 100x godlike luck multiplier."
   },
   "Celestial Orb": {
     tier: "CELESTIAL", stars: 7, luckMultiplier: 35,
@@ -3284,9 +3284,13 @@ const MILESTONES = [
   { id: "m_upgrade_luck", title: "Favored by Gods", desc: "Max out the Luck upgrade.", progress: (s) => `${s.upgrades.luck} / 10`, isDone: (s) => s.upgrades.luck >= 10, titleReward: "Fortune Incarnate", titleClass: "title-fortune" },
 ];
 
+const CURRENT_SEASON_EPOCH = 2;
+const SEASON_RESET_TIMESTAMP_MS = 1795351300000;
+
 function getDefaultGameState() {
   return {
-    coins: 200,
+    save_epoch: CURRENT_SEASON_EPOCH,
+    coins: 0,
     inventory: {},
     items: {},
     discovered_items: [],
@@ -3299,11 +3303,11 @@ function getDefaultGameState() {
     unlocked_titles: [{ title: "Novice", cssClass: "title-novice" }],
     profile_bio: "CNE RNG Summoner",
     equipped_font: "font-outfit",
-    unlocked_fonts: ["font-outfit", "font-syne", "font-jetbrains"],
+    unlocked_fonts: ["font-outfit"],
     equipped_border: "border-none",
-    unlocked_borders: ["border-none", "border-gold"],
+    unlocked_borders: ["border-none"],
     equipped_theme: "theme-default",
-    unlocked_themes: ["theme-default", "theme-neon"],
+    unlocked_themes: ["theme-default"],
     equipped_item: "",
     completed_quests: [],
     completed_milestones: [],
@@ -3346,6 +3350,46 @@ let rollCooldown = false;
 let currentFilter = "ALL";
 let isMuted = false;
 let currentMissionSubTab = "quests";
+
+/* =========================================================
+   NUMBER FORMATTING (k, m, b, t, q, qn, sx, sp, oc, no, dc)
+   ========================================================= */
+const NUMBER_ABBREVIATIONS = [
+  { val: 1e33, sym: 'dc' },
+  { val: 1e30, sym: 'no' },
+  { val: 1e27, sym: 'oc' },
+  { val: 1e24, sym: 'sp' },
+  { val: 1e21, sym: 'sx' },
+  { val: 1e18, sym: 'qn' },
+  { val: 1e15, sym: 'q' },
+  { val: 1e12, sym: 't' },
+  { val: 1e9,  sym: 'b' },
+  { val: 1e6,  sym: 'm' },
+  { val: 1e3,  sym: 'k' },
+];
+
+function formatAbbrev(num) {
+  if (num === null || num === undefined || isNaN(num)) return "0";
+  const abs = Math.abs(num);
+  if (abs < 1000) return num.toString();
+
+  for (let i = 0; i < NUMBER_ABBREVIATIONS.length; i++) {
+    const tier = NUMBER_ABBREVIATIONS[i];
+    if (abs >= tier.val) {
+      const scaled = num / tier.val;
+      let str;
+      if (Math.abs(scaled) >= 100) {
+        str = scaled.toFixed(0);
+      } else if (Math.abs(scaled) >= 10) {
+        str = scaled.toFixed(1).replace(/\.0$/, '');
+      } else {
+        str = scaled.toFixed(2).replace(/\.?0+$/, '');
+      }
+      return str + tier.sym;
+    }
+  }
+  return num.toString();
+}
 
 /* =========================================================
    TOAST HELPER (DYNAMIC ITEM SVG ICON & TITLES)
@@ -3559,7 +3603,9 @@ function switchTab(tabId) {
 }
 
 function updateHeaderStats() {
-  document.getElementById('navCoins').textContent = gameState.coins.toLocaleString();
+  const coinEl = document.getElementById('navCoins');
+  coinEl.textContent = formatAbbrev(gameState.coins);
+  coinEl.title = (gameState.coins || 0).toLocaleString() + ' coins';
   const uniqueCount = Object.keys(gameState.inventory).length;
   document.getElementById('navProgress').textContent = `${uniqueCount} / ${ALL_CHAR_NAMES.length}`;
 
@@ -3884,8 +3930,8 @@ function showRevealCard(charName, isNew, luckMultiplier = 1) {
   
   // Always display base default chance (no luck modifications)
   const odds = getCharacterDropOdds(charName, 1, 0);
-  document.getElementById('revealOdds').textContent = `1 in ${odds.oneIn.toLocaleString()} (${odds.percentage}%)`;
-  document.getElementById('revealCoins').textContent = `+${COIN_REWARDS[char.tier]}`;
+  document.getElementById('revealOdds').textContent = `1 in ${formatAbbrev(odds.oneIn)} (${odds.percentage}%)`;
+  document.getElementById('revealCoins').textContent = `+${formatAbbrev(COIN_REWARDS[char.tier])}`;
 
   document.getElementById('revealStage').style.display = 'block';
 
@@ -3999,7 +4045,8 @@ function performMultiRoll() {
         document.getElementById('multiBestPull').textContent = bestPullName;
         document.getElementById('multiBestPull').className = 'multi-best-pull ' + (CHARACTERS[bestPullName].animClass || '');
         document.getElementById('multiBestPull').style.color = CHARACTERS[bestPullName].color;
-        document.getElementById('multiCoinsGained').textContent = `+${totalCoinGained.toLocaleString()}`;
+        document.getElementById('multiCoinsGained').textContent = `+${formatAbbrev(totalCoinGained)}`;
+        document.getElementById('multiCoinsGained').title = `+${totalCoinGained.toLocaleString()} coins`;
         document.getElementById('multiSummary').style.display = 'flex';
         isRolling = false;
 
@@ -4043,7 +4090,8 @@ function renderUpgradesView() {
       btn.textContent = 'Maxed';
     } else {
       btn.disabled = gameState.coins < cost;
-      costLabel.textContent = cost.toLocaleString();
+      costLabel.textContent = formatAbbrev(cost);
+      costLabel.title = cost.toLocaleString() + ' coins';
     }
   });
 }
@@ -4204,11 +4252,11 @@ function openCharacterInfoModal(charName) {
       </div>
       <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
         <span>Coin Reward</span>
-        <b style="color:var(--accent-gold); font-family:'JetBrains Mono';">+${COIN_REWARDS[c.tier].toLocaleString()}</b>
+        <b style="color:var(--accent-gold); font-family:'JetBrains Mono';">+${formatAbbrev(COIN_REWARDS[c.tier])}</b>
       </div>
       <div style="display:flex; justify-content:space-between;">
         <span>Base Drop Odds</span>
-        <b style="color:#fff; font-family:'JetBrains Mono';">1 in ${odds.oneIn.toLocaleString()}</b>
+        <b style="color:#fff; font-family:'JetBrains Mono';">1 in ${formatAbbrev(odds.oneIn)}</b>
       </div>
     </div>
   `;
@@ -4630,7 +4678,14 @@ function tryInitFirebase(config) {
             const doc = await firebaseDb.collection('game_states').doc(user.uid).get();
             if (doc.exists && doc.data() && doc.data().state_json) {
               const loaded = JSON.parse(doc.data().state_json);
-              gameState = { ...getDefaultGameState(), ...loaded };
+              if (!loaded.save_epoch || loaded.save_epoch < CURRENT_SEASON_EPOCH) {
+                console.log('[Firestore] Previous save detected from old season. Resetting to Season 2 (0 stats).');
+                gameState = getDefaultGameState();
+                isCloudStateLoaded = true;
+                saveState();
+              } else {
+                gameState = { ...getDefaultGameState(), ...loaded };
+              }
               console.log('[Firestore] Game state loaded from cloud:', gameState);
               // Sync cosmetics from gameState back to userSession so profile editor shows them
               if (gameState.equipped_font)   { userSession.name_font = gameState.equipped_font; }
@@ -4642,6 +4697,10 @@ function tryInitFirebase(config) {
               updateUserProfileUI();
               if (typeof renderUpgradesView === 'function') renderUpgradesView();
               if (typeof renderActiveQuests === 'function') renderActiveQuests();
+            } else {
+              gameState = getDefaultGameState();
+              isCloudStateLoaded = true;
+              saveState();
             }
             // Mark cloud state as loaded — saveState() and checkAndRefreshQuests() may now run safely
             isCloudStateLoaded = true;
@@ -4854,8 +4913,18 @@ async function submitAuth() {
           const stateDoc = await firebaseDb.collection('game_states').doc(cred.user.uid).get();
           if (stateDoc.exists && stateDoc.data() && stateDoc.data().state_json) {
             const loaded = JSON.parse(stateDoc.data().state_json);
-            gameState = { ...getDefaultGameState(), ...loaded };
+            if (!loaded.save_epoch || loaded.save_epoch < CURRENT_SEASON_EPOCH) {
+              gameState = getDefaultGameState();
+              isCloudStateLoaded = true;
+              saveState();
+            } else {
+              gameState = { ...getDefaultGameState(), ...loaded };
+            }
             console.log('[Firestore] Game state loaded on login:', gameState);
+          } else {
+            gameState = getDefaultGameState();
+            isCloudStateLoaded = true;
+            saveState();
           }
         } catch(err) {
           console.warn('Firestore state fetch notice:', err.message);
@@ -4931,7 +5000,7 @@ const SHOP_ITEMS = [
   { id: 'booster_shoe5',   cat: 'BOOSTERS', name: 'Silver Horseshoe x5',  desc: 'Boost luck by 2x on 5 rolls.',           itemName: 'Silver Horseshoe',  cost: 187_500,     color: '#3b82f6' },
   { id: 'booster_clover3', cat: 'BOOSTERS', name: 'Golden Clover x3',     desc: '5x luck boost for 3 pulls.',             itemName: 'Golden Clover',     cost: 375_000,     color: '#10b981' },
   { id: 'booster_orb1',    cat: 'BOOSTERS', name: 'Celestial Orb x1',     desc: 'Cosmic 35x luck boost on next roll.',    itemName: 'Celestial Orb',     cost: 1_250_000,   color: '#06b6d4' },
-  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Massive 200x godlike luck boost on roll.',itemName: 'Master Roll',      cost: 3_125_000,   color: '#6366f1' },
+  { id: 'booster_master1', cat: 'BOOSTERS', name: 'Master Roll x1',       desc: 'Massive 100x godlike luck boost on roll.',itemName: 'Master Roll',      cost: 3_125_000,   color: '#6366f1' },
   // THEMES (50% Off)
   { id: 'theme_midnight',  cat: 'THEMES',   name: 'Midnight Theme',       desc: 'Deep blue-black Discord card theme.',    icon: '🌙', cost: 1_250_000,   color: '#3b82f6',  unlockKey: 'theme-midnight' },
   { id: 'theme_crimson',   cat: 'THEMES',   name: 'Crimson Theme',        desc: 'Fiery red Discord card theme.',          icon: '🔥', cost: 2_000_000,   color: '#ef4444',  unlockKey: 'theme-crimson' },
@@ -4964,7 +5033,10 @@ function filterShop(cat) {
 
 function renderShopView() {
   const coinDisp = document.getElementById('shopCoinDisplay');
-  if (coinDisp) coinDisp.textContent = (gameState.coins || 0).toLocaleString() + ' coins';
+  if (coinDisp) {
+    coinDisp.textContent = formatAbbrev(gameState.coins || 0) + ' coins';
+    coinDisp.title = (gameState.coins || 0).toLocaleString() + ' coins';
+  }
 
   const grid = document.getElementById('shopGrid');
   if (!grid) return;
@@ -4992,7 +5064,7 @@ function renderShopView() {
         </div>
       </div>
       <div class="shop-card-bottom" style="margin-top:1rem; display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap;">
-        <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--accent-gold); font-size:0.95rem;">💰 ${item.cost.toLocaleString()}</span>
+        <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--accent-gold); font-size:0.95rem;" title="${item.cost.toLocaleString()} coins">💰 ${formatAbbrev(item.cost)}</span>
         <div style="display:flex; gap:0.4rem; align-items:center;">
           ${isCosmetic ? `<button class="ghost-btn" style="padding:0.35rem 0.65rem; font-size:0.75rem; border:1px solid rgba(255,255,255,0.15);" onclick="openShopPreview('${item.id}')">👁️ Preview</button>` : ''}
           ${owned
@@ -5019,7 +5091,7 @@ function buyShopItem(itemId) {
   if (!userSession.token) { showToast('Sign In Required', 'Please sign in to use the shop.'); return; }
   const item = SHOP_ITEMS.find(i => i.id === itemId);
   if (!item) return;
-  if (gameState.coins < item.cost) { showToast('Not Enough Coins', `You need ${item.cost.toLocaleString()} coins.`); return; }
+  if (gameState.coins < item.cost) { showToast('Not Enough Coins', `You need ${formatAbbrev(item.cost)} coins.`); return; }
 
   gameState.coins -= item.cost;
 
@@ -5140,7 +5212,7 @@ function openShopPreview(itemId) {
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06);">
-          <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--accent-gold); font-size:1rem;">💰 ${item.cost.toLocaleString()}</span>
+          <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--accent-gold); font-size:1rem;" title="${item.cost.toLocaleString()} coins">💰 ${formatAbbrev(item.cost)}</span>
           ${owned
             ? `<button class="btn-action" style="background:rgba(16,185,129,0.15);border-color:#10b981;color:#10b981;padding:0.4rem 1.2rem;font-size:0.82rem;" disabled>✓ Owned</button>`
             : `<button class="btn-action" style="padding:0.4rem 1.2rem;font-size:0.82rem;${!canAfford ? 'opacity:0.4;' : ''}" onclick="buyShopItem('${item.id}'); document.getElementById('shopPreviewModal').style.display='none';" ${!canAfford ? 'disabled' : ''}>Buy Now</button>`
@@ -5221,7 +5293,7 @@ function openPlayerProfileModal(uid, row) {
           </div>
           <div class="discord-stat-cell">
             <div class="discord-stat-label">Total Rolls</div>
-            <div class="discord-stat-value">${totalRolls.toLocaleString()}</div>
+            <div class="discord-stat-value" title="${totalRolls.toLocaleString()}">${formatAbbrev(totalRolls)}</div>
           </div>
           <div class="discord-stat-cell">
             <div class="discord-stat-label">Tag</div>
@@ -5229,7 +5301,7 @@ function openPlayerProfileModal(uid, row) {
           </div>
           <div class="discord-stat-cell">
             <div class="discord-stat-label">Coins</div>
-            <div class="discord-stat-value" style="color:var(--accent-gold);">💰 ${coins.toLocaleString()}</div>
+            <div class="discord-stat-value" style="color:var(--accent-gold);" title="${coins.toLocaleString()}">💰 ${formatAbbrev(coins)}</div>
           </div>
         </div>
       </div>
@@ -5292,9 +5364,9 @@ function renderLeaderboardFromCache() {
         </div>
       </td>
       <td style="padding:0.65rem 0.5rem; font-family:'JetBrains Mono'; font-weight:700;">${row.unique || 0}</td>
-      <td style="padding:0.65rem 0.5rem; font-family:'JetBrains Mono';">${(row.total_rolls || 0).toLocaleString()}</td>
+      <td style="padding:0.65rem 0.5rem; font-family:'JetBrains Mono';" title="${(row.total_rolls || 0).toLocaleString()}">${formatAbbrev(row.total_rolls || 0)}</td>
       <td style="padding:0.65rem 0.5rem;"><span class="rarity-tag bg-tier-${(row.best_pull_tier || 'COMMON').toLowerCase()}">${row.best_pull_tier || 'COMMON'}</span></td>
-      <td style="padding:0.65rem 0.5rem; font-family:'JetBrains Mono'; font-weight:700; color:var(--accent-gold);">${(row.coins || 0).toLocaleString()}</td>
+      <td style="padding:0.65rem 0.5rem; font-family:'JetBrains Mono'; font-weight:700; color:var(--accent-gold);" title="${(row.coins || 0).toLocaleString()} coins">💰 ${formatAbbrev(row.coins || 0)}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -5375,7 +5447,19 @@ async function fetchLeaderboard() {
         tbody.innerHTML = '<tr><td colspan="6" style="padding:1.5rem 0; color:var(--text-muted);">No players yet.</td></tr>';
         return;
       }
-      cachedLeaderboardData = snap.docs.map((doc, i) => ({ uid: doc.id, row: doc.data(), globalRank: i + 1 }));
+      cachedLeaderboardData = snap.docs.map((doc, i) => {
+        const row = doc.data();
+        const rowMs = row.updated_at && typeof row.updated_at.toMillis === 'function' ? row.updated_at.toMillis() : (row.updated_at?.seconds ? row.updated_at.seconds * 1000 : 0);
+        if (rowMs < SEASON_RESET_TIMESTAMP_MS) {
+          row.unique = 0;
+          row.total_rolls = 0;
+          row.coins = 0;
+          row.best_pull_tier = 'COMMON';
+        }
+        return { uid: doc.id, row, globalRank: i + 1 };
+      });
+      cachedLeaderboardData.sort((a, b) => (b.row.unique - a.row.unique) || (b.row.coins - a.row.coins));
+      cachedLeaderboardData.forEach((item, idx) => { item.globalRank = idx + 1; });
       renderLeaderboardFromCache();
     } catch(e) {
       tbody.innerHTML = `<tr><td colspan="6" style="padding:1rem 0; color:#f87171; font-size:0.85rem;">Failed to load: ${e.message}</td></tr>`;
@@ -5885,6 +5969,10 @@ function updateUserProfileUI() {
 }
 
 async function loadSavedState() {
+  if (localStorage.getItem('cne_reset_epoch_v2') !== 'epoch_2') {
+    localStorage.setItem('cne_reset_epoch_v2', 'epoch_2');
+    gameState = getDefaultGameState();
+  }
   const savedAuth = localStorage.getItem('cne_auth_token_v4');
   if (savedAuth) {
     try {
