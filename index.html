@@ -4548,7 +4548,21 @@ function tryInitFirebase(config) {
               const ud = userDoc.data();
               if (ud.username) userSession.username = ud.username;
               if (ud.pfp !== undefined) userSession.pfp = ud.pfp;
-              localStorage.setItem('cne_auth_token_v4', JSON.stringify({ username: userSession.username, token: user.uid, pfp: userSession.pfp }));
+              if (ud.bio) { userSession.bio = ud.bio; gameState.profile_bio = ud.bio; }
+              if (ud.name_font) { userSession.name_font = ud.name_font; gameState.equipped_font = ud.name_font; }
+              if (ud.avatar_border) { userSession.avatar_border = ud.avatar_border; gameState.equipped_border = ud.avatar_border; }
+              if (ud.profile_theme) { userSession.profile_theme = ud.profile_theme; gameState.equipped_theme = ud.profile_theme; }
+              if (ud.equipped_title) { userSession.equipped_title = ud.equipped_title; gameState.equipped_title = ud.equipped_title; }
+              if (ud.equipped_title_class) { gameState.equipped_title_class = ud.equipped_title_class; }
+              localStorage.setItem('cne_auth_token_v4', JSON.stringify({
+                username: userSession.username,
+                token: user.uid,
+                pfp: userSession.pfp,
+                bio: userSession.bio || '',
+                name_font: userSession.name_font || 'font-outfit',
+                avatar_border: userSession.avatar_border || 'border-none',
+                profile_theme: userSession.profile_theme || 'theme-default'
+              }));
               updateUserProfileUI();
             }
           } catch(e) {
@@ -4561,8 +4575,14 @@ function tryInitFirebase(config) {
               const loaded = JSON.parse(doc.data().state_json);
               gameState = { ...getDefaultGameState(), ...loaded };
               console.log('[Firestore] Game state loaded from cloud:', gameState);
+              // Sync cosmetics from gameState back to userSession so profile editor shows them
+              if (gameState.equipped_font)   { userSession.name_font = gameState.equipped_font; }
+              if (gameState.equipped_border)  { userSession.avatar_border = gameState.equipped_border; }
+              if (gameState.equipped_theme)   { userSession.profile_theme = gameState.equipped_theme; }
+              if (gameState.profile_bio)      { userSession.bio = gameState.profile_bio; }
               updateHeaderStats();
               updateEquippedItemDisplay();
+              updateUserProfileUI();
               if (typeof renderUpgradesView === 'function') renderUpgradesView();
               if (typeof renderActiveQuests === 'function') renderActiveQuests();
             }
@@ -5379,6 +5399,8 @@ async function saveProfileChanges() {
         name_font: newFont,
         avatar_border: newBorder,
         profile_theme: newTheme,
+        equipped_title: chosenTitle,
+        equipped_title_class: gameState.equipped_title_class,
         updated_at: firebase.firestore.FieldValue.serverTimestamp()
       }, { merge: true }).catch(e => {
         console.warn('Profile Firestore sync notice:', e.message);
@@ -5477,41 +5499,184 @@ function openProfileModal() {
   const borderSel = document.getElementById('editBorderInput');
   const themeSel = document.getElementById('editThemeInput');
 
-  if (fontSel) {
-    fontSel.innerHTML = '';
-    (gameState.unlocked_fonts || ['font-outfit']).forEach(f => {
-      const o = document.createElement('option');
-      o.value = f;
-      o.textContent = fontLabels[f] || f;
-      if (f === currentFont) o.selected = true;
-      fontSel.appendChild(o);
-    });
-  }
-  if (borderSel) {
-    borderSel.innerHTML = '';
-    (gameState.unlocked_borders || ['border-none']).forEach(b => {
-      const o = document.createElement('option');
-      o.value = b;
-      o.textContent = borderLabels[b] || b;
-      if (b === currentBorder) o.selected = true;
-      borderSel.appendChild(o);
-    });
-  }
-  if (themeSel) {
-    themeSel.innerHTML = '';
-    (gameState.unlocked_themes || ['theme-default']).forEach(t => {
-      const o = document.createElement('option');
-      o.value = t;
-      o.textContent = themeLabels[t] || t;
-      if (t === currentTheme) o.selected = true;
-      themeSel.appendChild(o);
-    });
-  }
+  // Set hidden inputs to current values (used by saveProfileChanges)
+  if (fontSel) fontSel.value = currentFont;
+  if (borderSel) borderSel.value = currentBorder;
+  if (themeSel) themeSel.value = currentTheme;
 
+  // Render custom dropdowns
+  renderFontDropdown(currentFont, fontLabels);
+  renderBorderDropdown(currentBorder, borderLabels);
+  renderThemeDropdown(currentTheme, themeLabels);
   renderCustomTitleDropdown();
   updateProfileLivePreview();
   document.getElementById('profileModal').style.display = 'flex';
 }
+
+/* ---- Font Dropdown ---- */
+const FONT_LABELS = {
+  'font-outfit': 'Outfit (Default)',
+  'font-cinzel': 'Cinzel (Roman Serif)',
+  'font-orbitron': 'Orbitron (Sci-Fi)',
+  'font-press': 'Press Start 2P (Pixel)'
+};
+const FONT_FAMILIES = {
+  'font-outfit': "'Outfit', sans-serif",
+  'font-cinzel': "'Cinzel', serif",
+  'font-orbitron': "'Orbitron', sans-serif",
+  'font-press': "'Press Start 2P', monospace"
+};
+
+function renderFontDropdown(currentFont, fontLabels) {
+  const unlocked = gameState.unlocked_fonts || ['font-outfit'];
+  const labels = fontLabels || FONT_LABELS;
+  const sel = document.getElementById('fontDropdownSelected');
+  if (sel) {
+    sel.textContent = labels[currentFont] || currentFont;
+    sel.style.fontFamily = FONT_FAMILIES[currentFont] || '';
+  }
+  const hidden = document.getElementById('editFontInput');
+  if (hidden) hidden.value = currentFont;
+  const menu = document.getElementById('fontDropdownMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  unlocked.forEach(f => {
+    const isSel = f === currentFont;
+    const item = document.createElement('div');
+    item.className = `custom-dropdown-item ${isSel ? 'active' : ''}`;
+    item.style.fontFamily = FONT_FAMILIES[f] || '';
+    item.onclick = (e) => { e.stopPropagation(); selectFont(f); };
+    item.innerHTML = `<span style="flex:1;font-family:${FONT_FAMILIES[f] || 'inherit'}">${labels[f] || f}</span>${isSel ? '<i data-lucide="check" style="width:14px;height:14px;color:var(--accent-gold);"></i>' : ''}`;
+    menu.appendChild(item);
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function toggleFontDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('fontDropdownMenu');
+  const chevron = document.getElementById('fontDropdownChevron');
+  if (!menu) return;
+  menu.classList.toggle('open');
+  if (chevron) chevron.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function selectFont(f) {
+  const hidden = document.getElementById('editFontInput');
+  if (hidden) hidden.value = f;
+  const menu = document.getElementById('fontDropdownMenu');
+  if (menu) menu.classList.remove('open');
+  const chevron = document.getElementById('fontDropdownChevron');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  renderFontDropdown(f);
+  updateProfileLivePreview();
+}
+
+/* ---- Border Dropdown ---- */
+const BORDER_LABELS = {
+  'border-none': 'No Border',
+  'border-gold': '🥇 Gold Ring',
+  'border-rainbow': '🌈 Rainbow Prism',
+  'border-fire': '🔥 Blazing Fire',
+  'border-void': '💜 Void Aura'
+};
+
+function renderBorderDropdown(currentBorder, borderLabels) {
+  const unlocked = gameState.unlocked_borders || ['border-none'];
+  const labels = borderLabels || BORDER_LABELS;
+  const sel = document.getElementById('borderDropdownSelected');
+  if (sel) sel.textContent = labels[currentBorder] || currentBorder;
+  const hidden = document.getElementById('editBorderInput');
+  if (hidden) hidden.value = currentBorder;
+  const menu = document.getElementById('borderDropdownMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  unlocked.forEach(b => {
+    const isSel = b === currentBorder;
+    const item = document.createElement('div');
+    item.className = `custom-dropdown-item ${isSel ? 'active' : ''}`;
+    item.onclick = (e) => { e.stopPropagation(); selectBorder(b); };
+    item.innerHTML = `<span style="flex:1">${labels[b] || b}</span>${isSel ? '<i data-lucide="check" style="width:14px;height:14px;color:var(--accent-gold);"></i>' : ''}`;
+    menu.appendChild(item);
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function toggleBorderDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('borderDropdownMenu');
+  const chevron = document.getElementById('borderDropdownChevron');
+  if (!menu) return;
+  menu.classList.toggle('open');
+  if (chevron) chevron.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function selectBorder(b) {
+  const hidden = document.getElementById('editBorderInput');
+  if (hidden) hidden.value = b;
+  const menu = document.getElementById('borderDropdownMenu');
+  if (menu) menu.classList.remove('open');
+  const chevron = document.getElementById('borderDropdownChevron');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  renderBorderDropdown(b);
+  updateProfileLivePreview();
+}
+
+/* ---- Theme Dropdown ---- */
+const THEME_LABELS = {
+  'theme-default': '🌑 Default Dark',
+  'theme-midnight': '🌙 Midnight Blue',
+  'theme-crimson': '🔥 Crimson Red',
+  'theme-emerald': '💚 Emerald Green',
+  'theme-gold': '🏆 Elite Gold',
+  'theme-void': '🌀 Purple Void',
+  'theme-neon': '⚡ Neon',
+  'theme-royal': '👑 Royal',
+  'theme-mythic': '💜 Mythic'
+};
+
+function renderThemeDropdown(currentTheme, themeLabels) {
+  const unlocked = gameState.unlocked_themes || ['theme-default'];
+  const labels = themeLabels || THEME_LABELS;
+  const sel = document.getElementById('themeDropdownSelected');
+  if (sel) sel.textContent = labels[currentTheme] || currentTheme;
+  const hidden = document.getElementById('editThemeInput');
+  if (hidden) hidden.value = currentTheme;
+  const menu = document.getElementById('themeDropdownMenu');
+  if (!menu) return;
+  menu.innerHTML = '';
+  unlocked.forEach(t => {
+    const isSel = t === currentTheme;
+    const item = document.createElement('div');
+    item.className = `custom-dropdown-item ${isSel ? 'active' : ''}`;
+    item.onclick = (e) => { e.stopPropagation(); selectTheme(t); };
+    item.innerHTML = `<span style="flex:1">${labels[t] || t}</span>${isSel ? '<i data-lucide="check" style="width:14px;height:14px;color:var(--accent-gold);"></i>' : ''}`;
+    menu.appendChild(item);
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function toggleThemeDropdown(e) {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('themeDropdownMenu');
+  const chevron = document.getElementById('themeDropdownChevron');
+  if (!menu) return;
+  menu.classList.toggle('open');
+  if (chevron) chevron.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function selectTheme(t) {
+  const hidden = document.getElementById('editThemeInput');
+  if (hidden) hidden.value = t;
+  const menu = document.getElementById('themeDropdownMenu');
+  if (menu) menu.classList.remove('open');
+  const chevron = document.getElementById('themeDropdownChevron');
+  if (chevron) chevron.style.transform = 'rotate(0deg)';
+  renderThemeDropdown(t);
+  updateProfileLivePreview();
+}
+
+/* ---- Close all custom dropdowns on outside click ---- */
 
 function renderCustomTitleDropdown() {
   const titles = gameState.unlocked_titles || [{ title: "Novice", cssClass: "title-novice" }];
@@ -5573,15 +5738,22 @@ function selectCustomTitle(title, cssClass) {
   updateProfileLivePreview();
 }
 
-// Close dropdown on outside click
+// Close all custom dropdowns on outside click
 window.addEventListener('click', (e) => {
-  const container = document.getElementById('titleDropdownContainer');
-  const menu = document.getElementById('titleDropdownMenu');
-  if (container && menu && !container.contains(e.target)) {
-    menu.classList.remove('open');
-    const chevron = document.getElementById('titleDropdownChevron');
-    if (chevron) chevron.style.transform = 'rotate(0deg)';
-  }
+  [
+    { container: 'titleDropdownContainer', menu: 'titleDropdownMenu', chevron: 'titleDropdownChevron' },
+    { container: 'fontDropdownContainer',  menu: 'fontDropdownMenu',  chevron: 'fontDropdownChevron' },
+    { container: 'borderDropdownContainer',menu: 'borderDropdownMenu',chevron: 'borderDropdownChevron' },
+    { container: 'themeDropdownContainer', menu: 'themeDropdownMenu', chevron: 'themeDropdownChevron' },
+  ].forEach(({ container, menu, chevron }) => {
+    const c = document.getElementById(container);
+    const m = document.getElementById(menu);
+    if (c && m && !c.contains(e.target)) {
+      m.classList.remove('open');
+      const ch = document.getElementById(chevron);
+      if (ch) ch.style.transform = 'rotate(0deg)';
+    }
+  });
 });
 
 function updateProfileLivePreview() {
@@ -5664,6 +5836,11 @@ async function loadSavedState() {
         userSession.token = sess.token;
         userSession.username = sess.username || 'Player';
         userSession.pfp = sess.pfp || '';
+        // Restore cosmetics from localStorage (populated on save)
+        if (sess.bio)           { userSession.bio = sess.bio; gameState.profile_bio = sess.bio; }
+        if (sess.name_font)     { userSession.name_font = sess.name_font; gameState.equipped_font = sess.name_font; }
+        if (sess.avatar_border) { userSession.avatar_border = sess.avatar_border; gameState.equipped_border = sess.avatar_border; }
+        if (sess.profile_theme) { userSession.profile_theme = sess.profile_theme; gameState.equipped_theme = sess.profile_theme; }
       }
     } catch(e) {}
   }
