@@ -17,6 +17,14 @@
       }
     },
     {
+      "src": "/nameplates_data.js",
+      "dest": "/nameplates_data.js"
+    },
+    {
+      "src": "/nameplates/(.*)",
+      "dest": "/nameplates/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

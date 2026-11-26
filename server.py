@@ -234,6 +234,12 @@ def leaderboard():
                 "coins": coins,
                 "title": s.get("equipped_title", "Novice"),
                 "title_class": s.get("equipped_title_class", "title-novice"),
+                "equipped_nameplate": s.get("equipped_nameplate", ""),
+                "equipped_wrap": s.get("equipped_wrap", "wrap-none"),
+                "equipped_anim": s.get("equipped_anim", "anim-none"),
+                "equipped_font": s.get("equipped_font", "font-outfit"),
+                "equipped_border": s.get("equipped_border", "border-none"),
+                "equipped_theme": s.get("equipped_theme", "theme-default"),
                 "inventory": inv
             })
         except Exception:
@@ -244,6 +250,18 @@ def leaderboard():
     return result[:50]
 
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+nameplates_dir = os.path.join(os.path.dirname(__file__), "nameplates")
+if os.path.isdir(nameplates_dir):
+    app.mount("/nameplates", StaticFiles(directory=nameplates_dir), name="nameplates")
+
+@app.get("/nameplates_data.js")
+def get_nameplates_data():
+    p = os.path.join(os.path.dirname(__file__), "nameplates_data.js")
+    if os.path.exists(p):
+        return FileResponse(p, media_type="application/javascript")
+    raise HTTPException(404, "File not found")
 
 @app.get("/")
 def root():
